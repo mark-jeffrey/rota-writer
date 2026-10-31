@@ -11,8 +11,10 @@
 #' * [check_rota()]: list every rule a rota breaks
 #' * [summarise_doctors()]: per-doctor totals and fair shares
 #' * [write_check_report()]: save the results as a workbook
+#' * [solve_rota()]: write a rota that meets the hard rules (in progress)
+#' * [write_rota()]: save a rota as a workbook
 #'
 #' @keywords internal
 #' @import dplyr purrr tidyr
-#' @importFrom rlang .data .env
+#' @importFrom rlang .data .env %||%
 "_PACKAGE"

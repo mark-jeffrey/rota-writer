@@ -228,8 +228,7 @@ validate_inputs <- function(inputs) {
 }
 
 shift_clock_hours <- function(start, end) {
-  to_h <- \(x) as.numeric(substr(x, 1, 2)) + as.numeric(substr(x, 4, 5)) / 60
-  (to_h(end) - to_h(start)) %% 24
+  (hhmm_hours(end) - hhmm_hours(start)) %% 24
 }
 
 # Every in-post day should be covered by a placement

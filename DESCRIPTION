@@ -10,7 +10,9 @@ Encoding: UTF-8
 Depends: R (>= 4.3)
 Imports:
     dplyr (>= 1.1.0),
+    highs,
     lubridate,
+    Matrix,
     openxlsx2,
     purrr,
     readxl,
@@ -19,7 +21,8 @@ Imports:
     tibble,
     tidyr
 Suggests:
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
 Config/roxygen2/version: 8.1.0

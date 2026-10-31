@@ -19,6 +19,8 @@ workbook
 \item \code{\link[=check_rota]{check_rota()}}: list every rule a rota breaks
 \item \code{\link[=summarise_doctors]{summarise_doctors()}}: per-doctor totals and fair shares
 \item \code{\link[=write_check_report]{write_check_report()}}: save the results as a workbook
+\item \code{\link[=solve_rota]{solve_rota()}}: write a rota that meets the hard rules (in progress)
+\item \code{\link[=write_rota]{write_rota()}}: save a rota as a workbook
 }
 }
 \author{

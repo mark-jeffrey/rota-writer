@@ -15,15 +15,15 @@ rules are penalised in the objective function with the weight given in the
 | rule_id | Rule | Parameter | Type | How modelled |
 |---|---|---|---|---|
 | `AVG_HOURS` | Average weekly working hours over the rota reference period | ≤ 48 h × WTE (≤ 56 h if opted out of the Working Time Regulations) | Hard | Sum of shift hours per doctor ≤ limit × weeks in post |
-| `MAX_7DAY` | Maximum hours in any 168-hour period | ≤ 72 h | Hard | Sliding 7-day window over day index: Σ hours ≤ 72 |
+| `MAX_7DAY` | Maximum hours in any 168-hour period | ≤ 72 h | Hard | Windows starting at each shift start time on every day, with each shift's hours inside the window: Σ ≤ 72. The worst 168 h always starts at a shift start. |
 | `MAX_SHIFT` | Maximum shift length | ≤ 13 h | Hard | Checked on the `shifts` sheet at load time; no shift may exceed it |
 | `MIN_REST` | Minimum rest between shifts | ≥ 11 h | Hard | Pre-computed table of incompatible shift pairs on consecutive days (e.g. night → any day shift next day) |
-| `MAX_CONSEC_SHIFTS` | Maximum consecutive shifts | ≤ 7, then 48 h rest | Hard | Any 8-day window has ≤ 7 working days; after 7 days in a row, the next 2 days are off |
+| `MAX_CONSEC_SHIFTS` | Maximum consecutive shifts | ≤ 7, then 48 h rest | Hard | Any 8-day window has ≤ 7 working days. After a run of 7, no shift may start within 48 h of the last one ending (clock time). |
 | `MAX_CONSEC_LONG` | Maximum consecutive long shifts (> 10 h) | ≤ 4, then 48 h rest | Hard | Sliding window on `is_long` shifts that are not nights (nights have their own rules), plus forced rest days |
 | `MAX_CONSEC_LATE` | Maximum consecutive long evening shifts (finishing after 23:00) | ≤ 4, then 48 h rest | Hard | Same pattern on `is_late` shifts. Not used by the test shift set, but kept for completeness |
 | `MAX_CONSEC_NIGHTS` | Maximum consecutive night shifts | ≤ 4 | Hard | Any 5-day window has ≤ 4 nights |
-| `REST_AFTER_NIGHTS` | Rest after any run of nights | ≥ 46 h | Hard | If night on *d* and no night on *d+1*, then no shift on *d+1* or *d+2* |
-| `WEEKEND_MAX` | Weekend working frequency | no more than 1 in 2 | Hard | A weekend is worked if any shift falls between 00:00 Saturday and 24:00 Sunday (so Friday nights count). The checker tests the frequency over the doctor's weekends in post. The solver may use the stricter "never two weekends in a row" form, which implies the frequency rule. |
+| `REST_AFTER_NIGHTS` | Rest after any run of nights | ≥ 46 h | Hard | If night on *d* and no night on *d+1*, no shift may start within 46 h of it ending (clock time); with the test shifts this means *d+1* and *d+2* off |
+| `WEEKEND_MAX` | Weekend working frequency | no more than 1 in 2 | Hard | A weekend is worked if any shift falls between 00:00 Saturday and 24:00 Sunday (so Friday nights count). The checker tests the frequency over the doctor's weekends in post. The solver uses the same frequency form: weekends worked ≤ weekends in post / 2. |
 | `WEEKEND_TARGET` | Weekend frequency target | no more than 1 in 3 | Soft | Penalty per weekend worked above 1 in 3 over the doctor's weekends in post (more than this triggers the weekend allowance) |
 | `BREAKS` | Breaks within shifts | 30 min per 5 h worked (approx.) | Not modelled | Managed on the day; outside the rota |
 
