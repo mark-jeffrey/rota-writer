@@ -1,0 +1,25 @@
+Package: rotawriter
+Title: Contract-Compliant On-Call Rotas for Resident Doctors
+Version: 0.0.0.9000
+Authors@R: person("Mark", "Jeffrey", email = "mark@markjeffrey.com", role = c("aut", "cre"))
+Description: Reads rota inputs from a spreadsheet, checks rotas against the
+    2016 TCS for resident doctors in England, and (later) writes rotas by
+    mixed-integer optimisation.
+License: TBD (not yet chosen)
+Encoding: UTF-8
+Depends: R (>= 4.3)
+Imports:
+    dplyr (>= 1.1.0),
+    lubridate,
+    openxlsx2,
+    purrr,
+    readxl,
+    rlang,
+    stringr,
+    tibble,
+    tidyr
+Suggests:
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+Config/roxygen2/version: 8.1.0

@@ -1,0 +1,10 @@
+# R session and IDE files
+.Rhistory
+.RData
+.Rproj.user/
+*.Rcheck/
+rotawriter_*.tar.gz
+
+# Lock files left by Excel / LibreOffice while a workbook is open
+~$*.xlsx
+.~lock.*#
