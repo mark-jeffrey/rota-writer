@@ -195,17 +195,21 @@ test_that("requests are penalised by their own weight", {
   expect_equal(sort(v$penalty[v$rule_id == "REQUESTS"]), c(2, 3, 5))
 })
 
-test_that("skill mix flags nights without an ST5+ in a first on-call tier", {
-  rota <- rota_of(c("D12", "D13", "D14"), "2027-02-01", c("ICU1_N", "ANA1_N", "OBS_N"))
-  v <- check_rota(rota, test_inputs())
-  sm1 <- v[v$rule_id == "SKILL_MIX" & grepl("^SM1", v$detail) & v$start_date == as.Date("2027-02-01"), ]
-  expect_equal(nrow(sm1), 1)
-  expect_equal(sm1$penalty, 1000)
+test_that("skill mix wants an ST3+, ideally ST5+, across ICU1/ANA2/OBS at night", {
+  night_sm <- function(doctors) {
+    rota <- rota_of(doctors, "2027-02-01", c("ICU1_N", "ANA2_N", "OBS_N"))
+    v <- check_rota(rota, test_inputs())
+    v <- v[v$rule_id == "SKILL_MIX" & v$start_date == as.Date("2027-02-01") &
+             grepl("at night", v$detail), ]
+    set_names(v$penalty, substr(v$detail, 1, 3))
+  }
 
-  rota$doctor_id[1] <- "D01"
-  v <- check_rota(rota, test_inputs())
-  expect_false(any(v$rule_id == "SKILL_MIX" & grepl("^SM1", v$detail) &
-                     v$start_date == as.Date("2027-02-01")))
+  # CT2, CT2, CT3: no ST3+ at all
+  expect_equal(night_sm(c("D19", "D20", "D16")), c(SM1 = 1000, SM2 = 100))
+  # An ST3 on OBS meets the minimum, but no ST5+
+  expect_equal(night_sm(c("D19", "D20", "D12")), c(SM2 = 100))
+  # An ST8 on ICU1 meets both
+  expect_length(night_sm(c("D01", "D20", "D16")), 0)
 })
 
 test_that("disabled rules are not reported", {

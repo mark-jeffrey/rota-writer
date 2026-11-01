@@ -70,8 +70,8 @@ them from the project root.
 |---|---|---|
 | ICU 1st on-call (anaesthetist, airway competent) | `ICU1` | long day `ICU1_LD`, night `ICU1_N` |
 | ICU 2nd on-call (FY/IMT/ACCS pool) | `ICU2` | `ICU2_LD`, `ICU2_N` |
-| Anaesthesia 1st on-call | `ANA1` | `ANA1_LD`, `ANA1_N` |
-| Anaesthesia 2nd on-call | `ANA2` | `ANA2_LD`, `ANA2_N` |
+| Theatre on-call | `ANA1` | `ANA1_LD`, `ANA1_N` |
+| Senior anaesthetic tier, supporting theatres, ICU and obstetrics (ICU1 and OBS competent) | `ANA2` | `ANA2_LD`, `ANA2_N` |
 | Obstetric anaesthesia | `OBS` | `OBS_LD`, `OBS_N` |
 | Normal working days | `ICU_DAY`, `ANA_DAY` | 08:00–17:00 on weekdays; one `ICU_DAY` at weekends and bank holidays |
 
@@ -113,10 +113,9 @@ These come from TCS Schedule 3. Full details, parameters and sources are in
   advice) are never given nights.
 
 ### Soft: weighted in the objective
-- **Skill mix** (`skill_mix` sheet). For example, at least one ST5+ across the 1st on-call tiers
-  (ICU1/ANA1/OBS) every night, at least one ST4+ across ICU1/ANA1 every long day, and at least one
-  ST3+ in theatre/labour ward at night. These have heavy weights,
-  so a shortfall is reported rather than making the model infeasible.
+- **Skill mix** (`skill_mix` sheet). For example, at least one ST3+ across ICU1/ANA2/OBS on every
+  long day and night (heavy weight), ideally an ST5+ (lighter weight). A shortfall is reported
+  rather than making the model infeasible.
 - **Fairness:** on-calls, nights and weekends deviate as little as possible from each doctor's
   WTE-weighted share of their pool's total. The share is taken among doctors in the pool who can
   work that category at all (e.g. nights-exempt doctors are left out of nights). A blank `pool`
@@ -341,10 +340,12 @@ Rscript -e 'pkgload::load_all(); testthat::test_dir("tests/testthat", load_packa
 ## Roadmap
 
 **Done:** input workbook and validation, independent compliance checker, solver with hard and soft
-rules, coordinator workbook, compliance report and `.ics` calendars. On the test data, a 30-minute
-solve fills every slot with no hard violations, no skill-mix shortfalls and no requested leave
-refused. Every doctor is within 0.8 h a week of their contracted hours. No run is longer than 5
-shifts, 3 nights are single and 10 weekends are split, out of about 500 runs and 160 night runs.
+rules, coordinator workbook, compliance report and `.ics` calendars, and separate staffing pools
+with their own fair shares. On the test data (42 doctors in two pools), a 30-minute solve fills
+every slot with no hard violations. Every long day and night has an ST3+ across ICU1/ANA2/OBS,
+and all but 7 have an ST5+. 1 requested leave day is refused. Every doctor is within 1.3 h a
+week of their contracted hours. 1 run is 6 shifts long, 10 nights are single and 16 weekends are
+split, out of about 600 runs and 170 night runs.
 That rota, its compliance report and the calendars are in
 [`examples/test-data/`](examples/test-data/).
 

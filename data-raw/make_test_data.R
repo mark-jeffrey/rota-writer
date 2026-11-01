@@ -157,10 +157,13 @@ bank_holidays <- tribble(
 # second pool of foundation, internal medicine and ACCS emergency medicine
 # trainees covers ICU2. Both pools work ICU short days.
 #
-# Anaesthetics competencies follow grade: CT1s lack obstetric sign-off and
-# airway competence for ICU1, ANA1 needs CT3+ with experience, LEDs vary.
-# The anaesthetists are still signed off for ICU2, but placement_roles keeps
-# them off it. All names are fictional.
+# Anaesthetics competencies follow grade: some CT1s lack obstetric sign-off,
+# ICU1 needs airway competence, LEDs vary. ANA1 is the theatre on-call, open
+# to every anaesthetist bar the ICU-only fellows. ANA2 is the senior tier,
+# supporting theatres, ICU and obstetrics, so it needs ICU1 and OBS sign-off
+# (though not necessarily the most senior grade on shift). The anaesthetists
+# are still signed off for ICU2, but placement_roles keeps them off it. All
+# names are fictional.
 
 first_names <- c(
   "Ada", "Ben", "Cara", "Dev", "Eli", "Fern", "Gus", "Hana", "Ivo", "Jade",
@@ -192,28 +195,28 @@ anaesthetics <- tribble(
   "ST4",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
   "ST4",   1.0,  NA,     TRUE,  FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE,  # nights exempt (occupational health)
   "ST3",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
-  "ST3",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,
+  "ST3",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  TRUE,  FALSE, TRUE,
   "ST3",   0.8,  "Thu",  FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
   "ST3",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
   # Core trainees
   "CT3",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
-  "CT3",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,
-  "CT3",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  TRUE,
-  "CT2",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  FALSE, TRUE,  TRUE,
-  "CT2",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  FALSE, TRUE,  TRUE,
-  "CT2",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  TRUE,
-  "CT2",   0.8,  "Tue",  FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  TRUE,
-  "CT2",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  TRUE,
-  "CT1",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  FALSE, # no obstetric sign-off yet
-  "CT1",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  FALSE, # no obstetric sign-off yet
-  "CT1",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  TRUE,
+  "CT3",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  TRUE,  FALSE, TRUE,
+  "CT3",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  TRUE,  FALSE, TRUE,
+  "CT2",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
+  "CT2",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
+  "CT2",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  TRUE,  FALSE, TRUE,
+  "CT2",   0.8,  "Tue",  FALSE, FALSE, FALSE, TRUE,  TRUE,  FALSE, TRUE,
+  "CT2",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  TRUE,  FALSE, TRUE,
+  "CT1",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  TRUE,  FALSE, FALSE, # no obstetric sign-off yet
+  "CT1",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  TRUE,  FALSE, FALSE, # no obstetric sign-off yet
+  "CT1",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  TRUE,  FALSE, TRUE,
   # Locally employed doctors
   "LED-S", 1.0,  NA,     FALSE, TRUE,  TRUE,  TRUE,  FALSE, FALSE, FALSE, # ICU-only fellow
   "LED-S", 1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
   "LED-J", 1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  FALSE, FALSE, FALSE, # ICU-only fellow
-  "LED-J", 1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  TRUE,
-  "LED-J", 1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  FALSE,
-  "LED-J", 0.6,  "Fri",  FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  FALSE,
+  "LED-J", 1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  TRUE,  FALSE, TRUE,
+  "LED-J", 1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  TRUE,  FALSE, FALSE,
+  "LED-J", 0.6,  "Fri",  FALSE, FALSE, FALSE, TRUE,  TRUE,  FALSE, FALSE,
   # Changeover: one leaves mid-rota, one starts mid-rota
   "ST4",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
   "ST3",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE
@@ -375,12 +378,14 @@ requests <- staff |>
 
 # Skill mix ---------------------------------------------------------------
 
+# One senior across the ICU1, ANA2 and obstetric tiers on every shift: ST3+
+# is required (heavy weight), ST5+ preferred
 skill_mix <- tribble(
-  ~rule_id, ~description,                                           ~shifts,                  ~min_grade, ~min_count, ~weight,
-  "SM1",    "At least one ST5+ across the 1st on-call tiers at night", "ICU1_N;ANA1_N;OBS_N",  "ST5",      1,          1000,
-  "SM2",    "At least one ST4+ across ICU1/ANA1 every long day",    "ICU1_LD;ANA1_LD",        "ST4",      1,          500,
-  "SM3",    "At least one ST3+ in theatres/labour ward at night",   "ANA1_N;ANA2_N;OBS_N",    "ST3",      1,          500,
-  "SM4",    "ICU night team has at least one ST3+ (not two cores)", "ICU1_N;ICU2_N",          "ST3",      1,          500
+  ~rule_id, ~description,                                        ~shifts,                  ~min_grade, ~min_count, ~weight,
+  "SM1",    "At least one ST3+ across ICU1/ANA2/OBS at night",   "ICU1_N;ANA2_N;OBS_N",    "ST3",      1,          1000,
+  "SM2",    "Ideally one ST5+ across ICU1/ANA2/OBS at night",    "ICU1_N;ANA2_N;OBS_N",    "ST5",      1,          100,
+  "SM3",    "At least one ST3+ across ICU1/ANA2/OBS on long days", "ICU1_LD;ANA2_LD;OBS_LD", "ST3",    1,          1000,
+  "SM4",    "Ideally one ST5+ across ICU1/ANA2/OBS on long days", "ICU1_LD;ANA2_LD;OBS_LD", "ST5",     1,          100
 )
 
 # Capacity check ----------------------------------------------------------
