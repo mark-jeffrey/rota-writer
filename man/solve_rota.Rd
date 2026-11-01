@@ -4,7 +4,13 @@
 \alias{solve_rota}
 \title{Solve the rota}
 \usage{
-solve_rota(inputs, time_limit = NULL, seed = 1, verbose = FALSE)
+solve_rota(
+  inputs,
+  time_limit = NULL,
+  seed = 1,
+  verbose = FALSE,
+  progress = NULL
+)
 }
 \arguments{
 \item{inputs}{The rota inputs, as returned by \code{\link[=read_rota_inputs]{read_rota_inputs()}}, or a
@@ -16,6 +22,12 @@ path to an inputs workbook.}
 \item{seed}{Random seed for phase 2, so the same inputs give the same rota.}
 
 \item{verbose}{If \code{TRUE}, report each improvement as it is found.}
+
+\item{progress}{Optional function called as \code{progress(seconds, objective)}
+with the time so far and the best penalty: once the first rota is found,
+then after every search step. If it returns \code{TRUE}, the search stops
+early and returns the best rota so far. Use it to show progress, or to
+let someone stop a long solve.}
 }
 \value{
 A \code{rota_solution}: a list with

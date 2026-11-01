@@ -30,6 +30,11 @@
 #'   `solver_time_limit_s` in the `settings` sheet.
 #' @param seed Random seed for phase 2, so the same inputs give the same rota.
 #' @param verbose If `TRUE`, report each improvement as it is found.
+#' @param progress Optional function called as `progress(seconds, objective)`
+#'   with the time so far and the best penalty: once the first rota is found,
+#'   then after every search step. If it returns `TRUE`, the search stops
+#'   early and returns the best rota so far. Use it to show progress, or to
+#'   let someone stop a long solve.
 #'
 #' @returns A `rota_solution`: a list with
 #'   \describe{
@@ -57,7 +62,7 @@
 #' solution <- solve_rota(inputs, time_limit = 120)
 #' check_rota(solution$rota, inputs)
 #' }
-solve_rota <- function(inputs, time_limit = NULL, seed = 1, verbose = FALSE) {
+solve_rota <- function(inputs, time_limit = NULL, seed = 1, verbose = FALSE, progress = NULL) {
   inputs <- as_rota_inputs(inputs)
   setting <- set_names(inputs$settings$value, inputs$settings$key)
   time_limit <- time_limit %||% as.numeric(setting["solver_time_limit_s"])
@@ -91,12 +96,14 @@ solve_rota <- function(inputs, time_limit = NULL, seed = 1, verbose = FALSE) {
   }
   history <- tibble::tibble(seconds = elapsed(), objective = best$objective_value)
   if (verbose) message(sprintf("%5.0f s  first rota, penalty %g", elapsed(), best$objective_value))
+  stop_now <- \() !is.null(progress) && isTRUE(progress(elapsed(), best$objective_value))
+  stopped <- stop_now()
 
   withr::with_seed(seed, {
     stalled <- 0
     step <- 0
     step_time <- 5
-    while (time_limit - elapsed() > 1 && best$objective_value > 1e-6) {
+    while (!stopped && time_limit - elapsed() > 1 && best$objective_value > 1e-6) {
       step <- step + 1
       free <- neighbourhood(model, step)
       tried <- solve(cost = model$vars$cost, time_limit = min(step_time, time_limit - elapsed()),
@@ -112,6 +119,7 @@ solve_rota <- function(inputs, time_limit = NULL, seed = 1, verbose = FALSE) {
           step_time <- min(2 * step_time, 20)
         }
       }
+      stopped <- stop_now()
     }
   })
 

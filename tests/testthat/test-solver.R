@@ -60,6 +60,23 @@ test_that("ICU1 comes from anaesthetics, ICU2 from the tier 2 pool, and each poo
                   paste("FAIR_ONCALL total", c("anaesthetics", "icu_tier2")))
 })
 
+test_that("progress is reported, and returning TRUE stops the search with a compliant rota", {
+  inputs <- two_weeks()
+  calls <- list()
+  solution <- solve_rota(inputs, time_limit = 120, progress = \(seconds, objective) {
+    calls[[length(calls) + 1]] <<- c(seconds = seconds, objective = objective)
+    length(calls) >= 3
+  })
+
+  expect_length(calls, 3)
+  objective <- vapply(calls, \(x) x[["objective"]], numeric(1))
+  expect_true(all(diff(objective) <= 0))
+  expect_lt(solution$seconds, 120)
+  expect_equal(solution$status, "Feasible")
+  v <- check_rota(solution$rota, inputs)
+  expect_equal(sum(v$hard_soft == "hard"), 0)
+})
+
 test_that("slots that cannot be filled are left empty and reported", {
   inputs <- hard_only(two_weeks())
   inputs$staff$can_OBS <- FALSE
