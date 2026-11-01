@@ -8,3 +8,6 @@ rotawriter_*.tar.gz
 # Lock files left by Excel / LibreOffice while a workbook is open
 ~$*.xlsx
 .~lock.*#
+
+# Solver output from your own runs (the example output is in examples/)
+out/
