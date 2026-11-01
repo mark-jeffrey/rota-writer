@@ -22,7 +22,13 @@ Imports:
     tidyr,
     withr
 Suggests:
-    testthat (>= 3.0.0)
+    bslib (>= 0.6.0),
+    callr,
+    pkgload,
+    reactable,
+    shiny (>= 1.8.0),
+    testthat (>= 3.0.0),
+    zip
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
 Config/roxygen2/version: 8.1.0
