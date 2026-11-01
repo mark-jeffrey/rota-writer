@@ -332,10 +332,10 @@ Rscript -e 'pkgload::load_all(); testthat::test_dir("tests/testthat", load_packa
 
 **Done:** input workbook and validation, independent compliance checker, solver with hard and soft
 rules, coordinator workbook, compliance report and `.ics` calendars. On the test data, a 30-minute
-solve fills every slot with no hard violations and no skill-mix shortfalls. Every doctor is within
-0.4 h a week of their contracted hours. One run is longer than 5 shifts, 4 nights are single and
-9 weekends are split, out of about 490 runs and 165 night runs. 6 days of requested leave are
-refused. That rota, its compliance report and the calendars are in
+solve fills every slot with no hard violations, no skill-mix shortfalls and no requested leave
+refused. Every doctor is within 0.8 h a week of their contracted hours. No run is longer than 5
+shifts, 3 nights are single and 10 weekends are split, out of about 500 runs and 160 night runs.
+That rota, its compliance report and the calendars are in
 [`examples/test-data/`](examples/test-data/).
 
 **Next:**

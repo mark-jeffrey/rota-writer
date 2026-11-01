@@ -60,7 +60,7 @@ rules <- tribble(
   "PLACEMENT_AVOID",    "Discouraged placement roles (penalty per shift in placement_roles)", NA, "",  "soft",     1,       "Y",
   "NIGHTS_EXEMPT",      "Nights-exempt doctors never rostered nights",               NA,     "",         "hard",     NA,      "Y",
   "LEAVE_APPROVED",     "Approved leave honoured",                                   NA,     "",         "hard",     NA,      "Y",
-  "LEAVE_REQUESTED",    "Requested leave honoured (penalty per day not granted)",    NA,     "",         "soft",     200,     "Y",
+  "LEAVE_REQUESTED",    "Requested leave honoured (penalty per day not granted)",    NA,     "",         "soft",     500,     "Y",
   "REQUESTS",           "Preference requests (weight per row in requests sheet)",    NA,     "",         "soft",     1,       "Y",
   "SKILL_MIX",          "Skill mix rules (weight per row in skill_mix sheet)",       NA,     "",         "soft",     1,       "Y",
   "FAIR_ONCALL",        "On-call shifts close to WTE-weighted share",                NA,     "",         "soft",     10,      "Y",

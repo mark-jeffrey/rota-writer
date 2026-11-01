@@ -160,7 +160,7 @@ test_that("approved leave is hard and requested leave is soft", {
   v <- hits(rota_of("D01", c("2027-02-02", "2027-02-08"), "ICU_DAY"), inputs)
 
   expect_equal(v$hard_soft[v$rule_id == "LEAVE_APPROVED"], "hard")
-  expect_equal(v$penalty[v$rule_id == "LEAVE_REQUESTED"], 200)
+  expect_equal(v$penalty[v$rule_id == "LEAVE_REQUESTED"], 500)
 })
 
 test_that("a night may not finish on a leave day, but a long day the day before is fine", {
