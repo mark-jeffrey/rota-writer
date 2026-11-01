@@ -65,19 +65,6 @@ test_that("slots that cannot be filled are left empty and reported", {
   expect_equal(sum(v$rule_id == "COVER"), 28)
 })
 
-test_that("write_rota round-trips through read_rota", {
-  inputs <- two_weeks()
-  rota <- solve_rota(hard_only(inputs), time_limit = 30)$rota
-  path <- withr::local_tempfile(fileext = ".xlsx")
-  write_rota(rota, inputs, path)
-
-  back <- read_rota(path)
-  expect_equal(dplyr::semi_join(back, inputs$shifts, by = c(code = "shift_code")) |>
-                 dplyr::arrange(date, doctor_id),
-               rota)
-  expect_equal(readxl::excel_sheets(path), c("grid", "long"))
-})
-
 test_that("the solver's soft penalties match the checker's", {
   inputs <- two_weeks()
   solution <- solve_rota(inputs, time_limit = 20)

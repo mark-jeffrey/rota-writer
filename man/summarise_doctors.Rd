@@ -27,7 +27,8 @@ in post (leave counts as zero).}
 \item{on_calls, nights, weekends}{Counts. A weekend is worked if any
 shift falls between 00:00 Saturday and 24:00 Sunday.}
 \item{fair_on_calls, fair_nights, fair_weekends}{WTE-weighted fair
-share of the department total.}
+share of the department total. Nights-exempt doctors have no share
+of the nights.}
 }
 }
 \description{

@@ -25,7 +25,8 @@ ones yellow. It has three sheets:
 \item \code{summary}: violations and total penalty per rule
 \item \code{violations}: one row per violation
 \item \code{doctors}: per-doctor hours, on-calls, nights and weekends against fair
-shares
+shares, with the difference from each share (\verb{*_vs_fair}) shaded blue
+(fewer than fair) to red (more than fair)
 }
 }
 \examples{

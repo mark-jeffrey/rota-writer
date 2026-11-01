@@ -7,7 +7,7 @@
 \title{rotawriter: contract-compliant on-call rotas for resident doctors}
 \description{
 Reads rota inputs from a spreadsheet, checks rotas against the 2016 TCS
-for resident doctors in England, and (later) writes rotas by
+for resident doctors in England, and writes rotas by
 mixed-integer optimisation.
 }
 \details{
@@ -19,8 +19,10 @@ workbook
 \item \code{\link[=check_rota]{check_rota()}}: list every rule a rota breaks
 \item \code{\link[=summarise_doctors]{summarise_doctors()}}: per-doctor totals and fair shares
 \item \code{\link[=write_check_report]{write_check_report()}}: save the results as a workbook
-\item \code{\link[=solve_rota]{solve_rota()}}: write a rota that meets the hard rules (in progress)
-\item \code{\link[=write_rota]{write_rota()}}: save a rota as a workbook
+\item \code{\link[=solve_rota]{solve_rota()}}: write a rota that meets the hard rules and minimises
+the soft-rule penalties
+\item \code{\link[=write_rota]{write_rota()}}: save a rota as a workbook for the coordinator
+\item \code{\link[=write_calendars]{write_calendars()}}: one \code{.ics} calendar per doctor
 }
 }
 \author{

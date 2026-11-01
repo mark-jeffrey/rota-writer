@@ -494,7 +494,8 @@ check_requests <- function(si, inputs) {
 #'     \item{on_calls, nights, weekends}{Counts. A weekend is worked if any
 #'       shift falls between 00:00 Saturday and 24:00 Sunday.}
 #'     \item{fair_on_calls, fair_nights, fair_weekends}{WTE-weighted fair
-#'       share of the department total.}
+#'       share of the department total. Nights-exempt doctors have no share
+#'       of the nights.}
 #'   }
 #'
 #' @export
@@ -516,7 +517,7 @@ doctor_summary <- function(si, inputs) {
 
   inputs$staff |>
     transmute(
-      doctor_id, grade, wte, opted_out_wtr,
+      doctor_id, grade, wte, opted_out_wtr, nights_exempt,
       from = pmax(start_date, inputs$period$start),
       to = pmin(end_date, inputs$period$end),
       weeks_in_post = as.numeric(to - from + 1) / 7
@@ -527,11 +528,13 @@ doctor_summary <- function(si, inputs) {
       across(c(hours, on_calls, nights, weekends), \(x) coalesce(x, 0)),
       avg_weekly_hours = hours / weeks_in_post,
       share = wte * weeks_in_post / sum(wte * weeks_in_post),
+      # Nights-exempt doctors take no share of the nights
+      night_share = if_else(nights_exempt %in% TRUE, 0, wte * weeks_in_post),
       fair_on_calls = share * sum(on_calls),
-      fair_nights = share * sum(nights),
+      fair_nights = night_share / sum(night_share) * sum(nights),
       fair_weekends = share * sum(weekends),
       across(c(fair_on_calls, fair_nights, fair_weekends), \(x) round(x, 1)),
       avg_weekly_hours = round(avg_weekly_hours, 1)
     ) |>
-    select(-share)
+    select(-share, -night_share, -nights_exempt)
 }

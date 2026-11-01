@@ -8,7 +8,8 @@
 #' * `summary`: violations and total penalty per rule
 #' * `violations`: one row per violation
 #' * `doctors`: per-doctor hours, on-calls, nights and weekends against fair
-#'   shares
+#'   shares, with the difference from each share (`*_vs_fair`) shaded blue
+#'   (fewer than fair) to red (more than fair)
 #'
 #' @param violations Output of [check_rota()].
 #' @param doctors Output of [summarise_doctors()].
@@ -37,6 +38,12 @@ write_check_report <- function(violations, doctors, path) {
     openxlsx2::wb_add_dxfs_style(name = "hard", bg_fill = openxlsx2::wb_color("FFF4C7C3")) |>
     openxlsx2::wb_add_dxfs_style(name = "soft", bg_fill = openxlsx2::wb_color("FFFFF2CC"))
 
+  measures <- intersect(c("on_calls", "nights", "weekends"), names(doctors))
+  measures <- measures[paste0("fair_", measures) %in% names(doctors)]
+  for (m in measures) {
+    doctors[[paste0(m, "_vs_fair")]] <- round(doctors[[m]] - doctors[[paste0("fair_", m)]], 1)
+  }
+
   sheets <- list(summary = summary, violations = violations, doctors = doctors)
   for (name in names(sheets)) {
     x <- sheets[[name]]
@@ -54,6 +61,13 @@ write_check_report <- function(violations, doctors, path) {
         )
       }
     }
+  }
+
+  for (col in match(paste0(measures, "_vs_fair"), names(doctors))) {
+    wb <- openxlsx2::wb_add_conditional_formatting(
+      wb, "doctors", dims = openxlsx2::wb_dims(rows = seq_len(max(nrow(doctors), 1)) + 1, cols = col),
+      type = "colorScale", style = c("FF5A8AC6", "FFFFFFFF", "FFF8696B"), rule = c(-4, 0, 4)
+    )
   }
 
   openxlsx2::wb_save(wb, path, overwrite = TRUE)

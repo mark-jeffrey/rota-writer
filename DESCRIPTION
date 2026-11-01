@@ -3,7 +3,7 @@ Title: Contract-Compliant On-Call Rotas for Resident Doctors
 Version: 0.0.0.9000
 Authors@R: person("Mark", "Jeffrey", email = "mark@markjeffrey.com", role = c("aut", "cre"))
 Description: Reads rota inputs from a spreadsheet, checks rotas against the
-    2016 TCS for resident doctors in England, and (later) writes rotas by
+    2016 TCS for resident doctors in England, and writes rotas by
     mixed-integer optimisation.
 License: TBD (not yet chosen)
 Encoding: UTF-8
