@@ -4,8 +4,9 @@ Write contract-compliant, fair on-call rotas for resident doctors in **Anaesthes
 using constrained optimisation (mixed-integer linear programming) in R.
 
 > **Status:** early development. The input format, test data and compliance checker are in place,
-> and the solver writes rotas that meet every hard rule. Soft rules (fairness, requests, skill mix)
-> are not optimised yet (see [Roadmap](#roadmap)).
+> and the solver writes rotas that meet every hard rule and minimise the soft-rule penalties
+> (fairness, requests, skill mix). Next: diagnosing infeasible inputs, then outputs and the app
+> (see [Roadmap](#roadmap)).
 
 ## Aims
 
@@ -65,7 +66,10 @@ These come from TCS Schedule 3. Full details, parameters and sources are in
   ST3+ in theatre/labour ward at night. These have heavy weights,
   so a shortfall is reported rather than making the model infeasible.
 - **Fairness:** on-calls, nights and weekends deviate as little as possible from each doctor's
-  WTE-weighted share
+  WTE-weighted share. The share is taken among doctors who can work that category at all (e.g.
+  nights-exempt doctors are left out of nights). The penalty grows with the distance: the *k*-th
+  shift away from the share costs (2*k* − 1) × weight, roughly quadratic. So two doctors one
+  shift off cost less than one doctor two shifts off.
 - **Requested** (not yet approved) leave, and preference requests (`requests` sheet, with
   per-request weights)
 - **Discouraged placement roles** (`penalty` column in `placement_roles`). For example, doctors on
@@ -75,6 +79,8 @@ These come from TCS Schedule 3. Full details, parameters and sources are in
 - Avoid isolated single nights and fragmented patterns
 
 The penalty weights are in the `rules` and `skill_mix` sheets, so users can tune them without code.
+Each soft rule except fairness is scored exactly as the checker scores it (the row's weight times
+the rule's weight), so the solver's penalty for each rule equals the checker's.
 
 ## Modelling approach
 
@@ -95,14 +101,22 @@ The penalty weights are in the `rules` and `skill_mix` sheets, so users can tune
     checker without hard-coding shift patterns.
 - **Weekends:** an indicator `w[d, k]` is 1 if doctor *d* works any shift touching weekend *k*
   (this includes Friday night). Then `Σ_k w[d,k] ≤ weekends in post / 2` enforces 1 in 2.
-- **Objective:** minimise the weighted sum of soft-constraint violations (slack variables) and the
-  fairness deviations.
+- **Objective:** minimise the weighted sum of soft-constraint violations and the fairness
+  deviations. Each soft rule has a helper variable, e.g. `short[rule, date] ≥ 1 − Σ senior x`
+  for skill mix or `single[d,t] ≥ night[t] − night[t−1] − night[t+1]` for isolated nights, with
+  a cost in the objective.
 - **Solver:** [HiGHS](https://highs.dev) via `highs::highs_solve()`. The model is built as tidy
   tables with dplyr (one row per variable, one per constraint, one per non-zero) and turned into a
   sparse matrix only at solve time. This avoids ompr's slow model building at this size. Variables
   a doctor may never use (wrong competency or placement, leave, LTFT day, not in post) are left
-  out, so the test data has about 10k binaries rather than 37k. The full 13-week test rota
-  solves in under 10 s.
+  out, so the test data has about 10k binaries rather than 37k.
+- **Solve strategy:** HiGHS finds a rota that meets every hard rule in under 10 s. Minimising
+  the penalties over the whole 13 weeks at once is too slow: the root LP relaxation alone takes
+  minutes. So `solve_rota()` improves the first rota by *large neighbourhood search*. It
+  repeatedly frees one week, or a random group of 10 doctors, fixes everything else, and
+  re-solves that part for up to 5 s. Each step solves the full model, so hard rules always hold
+  and fairness is judged over the whole rota. The search is seeded, so the same inputs give the
+  same rota.
 - **Independent checker:** a separate, deliberately simple function re-checks any rota against
   every rule. It does not trust the solver, and it also checks rotas that have been edited by hand.
 
@@ -185,7 +199,10 @@ From R:
 ```r
 solution <- solve_rota(inputs)          # time limit from the settings sheet
 solution$rota                           # long format: doctor_id, date, code
-check_rota(solution$rota, inputs)       # should have no hard violations
+solution$penalties                      # penalty per soft rule
+solution$history                        # penalty after each improvement
+check_rota(solution$rota, inputs)       # no hard violations; soft ones match the penalties
+summarise_doctors(solution$rota, inputs)  # fairness: counts against fair shares
 write_rota(solution$rota, inputs, "rota.xlsx")
 build_rota_model(inputs)                # the model itself: sizes per rule
 ```
@@ -228,7 +245,7 @@ Rscript -e 'pkgload::load_all(); testthat::test_dir("tests/testthat", load_packa
 ## Requirements
 
 R ≥ 4.3 with `tidyverse`, `lubridate`, `readxl`, `openxlsx2`, `pkgload` and `testthat`. The solver
-also needs `highs` and `Matrix`. `highs` builds from source and needs `cmake`
+also needs `highs`, `Matrix` and `withr`. `highs` builds from source and needs `cmake`
 (`sudo pacman -S cmake` / `apt install cmake`).
 
 ## Roadmap
@@ -238,9 +255,12 @@ also needs `highs` and `Matrix`. `highs` builds from source and needs `cmake`
    every rule. It catches every planted violation in the example.
 3. **Core MILP** ✓. Hard constraints only. Finds a rota for the test data that passes the checker
    with no hard violations, including when contract limits are tightened.
-4. **Soft constraints** ← *next*: fairness, requests, skill mix, weights. Report which soft rules were broken
-   and why. Slack on cover and weekends will also turn infeasible inputs into a report of what
-   could not be met.
+4. **Soft constraints** ✓ (mostly): fairness, requests, skill mix, weekends, single nights and
+   discouraged placements, weighted from the spreadsheet. The solver reports the penalty per rule,
+   and it matches the checker. On the test data, a 10-minute solve gives no hard violations, no
+   skill-mix shortfalls and no requested leave refused. **Still to do:** slack on cover and
+   weekends, so that infeasible inputs give a report of what could not be met rather than just
+   "Infeasible".
 5. **Outputs:** coordinator grid (xlsx), per-doctor calendars (`.ics`/PDF), and a compliance and
    fairness report.
 6. **No-code interface.** A Shiny app (bslib, editable tables) to upload the workbook, edit

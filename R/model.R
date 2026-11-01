@@ -8,17 +8,26 @@
 #
 # The model stays as tidy tables until it is solved: `vars` has one row per
 # variable (column j), `terms` one row per non-zero coefficient (row i,
-# column j), and `rows` the bounds lo <= row <= hi. Each constraint family
-# below returns terms with columns rule, con (a key unique within the rule),
-# j, coef, lo and hi. Rules switched off in the `rules` sheet are left out.
+# column j), and `rows` the bounds lo <= row <= hi. Each hard constraint
+# family below returns terms with columns rule, con (a key unique within the
+# rule), j, coef, lo and hi. Soft rules (R/soft.R) also add helper variables
+# and objective costs. Rules switched off in the `rules` sheet are left out.
 
 #' Build the rota optimisation model
 #'
 #' Turns the inputs into a mixed-integer linear programme with one binary
-#' variable per doctor, day and shift that the doctor may work. Only hard
-#' rules are modelled so far: cover, one shift per day, in post, competency,
-#' placement, nights-exempt, LTFT fixed days, approved leave, and the TCS
-#' Schedule 3 limits on hours, rest, consecutive shifts, nights and weekends.
+#' variable per doctor, day and shift that the doctor may work.
+#'
+#' Hard rules are constraints: cover, one shift per day, in post,
+#' competency, placement, nights-exempt, LTFT fixed days, approved leave, and
+#' the TCS Schedule 3 limits on hours, rest, consecutive shifts, nights and
+#' weekends. Soft rules are penalties in the objective, scored as in
+#' [check_rota()]: requested leave, requests, discouraged placement roles,
+#' skill mix, the 1-in-3 weekend target and isolated single nights. Fairness
+#' (`FAIR_ONCALL`, `FAIR_NIGHTS`, `FAIR_WEEKENDS`) penalises each doctor's
+#' distance from their WTE-weighted share, with the cost per shift rising the
+#' further they are from it, so the solver spreads work evenly.
+#'
 #' Most users want [solve_rota()], which calls this.
 #'
 #' @inheritParams check_rota
@@ -26,12 +35,17 @@
 #' @returns A `rota_model`: a list of tibbles.
 #'   \describe{
 #'     \item{vars}{One row per variable: `j`, `kind` (`"x"` for doctor/day/
-#'       shift, `"weekend"` for weekend-worked indicators), `type` (`"I"`
-#'       or `"C"`), bounds and `cost`. Shift variables also have `doctor_id`,
-#'       `date`, `t` and `shift_code`.}
+#'       shift, `"weekend"` for weekend-worked indicators, `"aux"` for other
+#'       helper variables), `type` (`"I"` or `"C"`), bounds and `cost`. Shift
+#'       variables also have `doctor_id`, `date`, `t` and `shift_code`.}
 #'     \item{rows}{One row per constraint: `i`, `rule` (matching the
 #'       `rules` sheet where there is one), `con` and the bounds `lo`, `hi`.}
 #'     \item{terms}{Non-zero coefficients: `i`, `j`, `coef`.}
+#'     \item{costs}{Objective coefficients by soft rule: `rule`, `j`, `coef`.
+#'       `vars$cost` is their sum per variable.}
+#'     \item{offset}{Constant objective terms by rule (`rule`, `value`), e.g.
+#'       the penalty for a `prefer_oncall` request, cancelled by working an
+#'       on-call that day.}
 #'   }
 #'
 #' @export
@@ -43,18 +57,21 @@ build_rota_model <- function(inputs) {
   shifts <- shift_times(inputs$shifts)
   n_days <- length(rota_dates(inputs))
 
-  x <- shift_vars(inputs, shifts)
+  x <- shift_vars(inputs, shifts) |>
+    mutate(j = row_number())
   check_fillable(x, inputs)
 
   run_rules <- run_rule_table(inputs, shifts)
+  touches <- weekend_touches(x)
   vars <- bind_rows(
     mutate(x, kind = "x", type = "I"),
-    weekend_vars(inputs) |> mutate(kind = "weekend", type = "C")
+    weekend_vars(inputs, touches) |> mutate(kind = "weekend", type = "C")
   ) |>
-    mutate(j = row_number(), lower = 0, upper = 1, cost = 0)
+    mutate(j = row_number(), lower = 0, upper = 1) # shift variables keep their j
   x <- filter(vars, kind == "x")
+  weekend <- filter(vars, kind == "weekend")
 
-  terms <- list(
+  hard <- list(
     cover_terms(x, inputs),
     one_shift_terms(x),
     if (rule_on(inputs, "MIN_REST")) min_rest_terms(x, shifts, rule_value(inputs, "MIN_REST")),
@@ -62,18 +79,53 @@ build_rota_model <- function(inputs) {
     if (rule_on(inputs, "AVG_HOURS")) avg_hours_terms(x, inputs),
     run_terms(x, run_rules, shifts, n_days),
     night_terms(x, shifts, inputs, n_days),
-    if (rule_on(inputs, "WEEKEND_MAX")) weekend_terms(x, vars, rule_value(inputs, "WEEKEND_MAX"))
-  ) |>
-    list_rbind() |>
-    mutate(i = cur_group_id(), .by = c(rule, con))
+    weekend_terms(x, weekend, touches, inputs)
+  )
+  soft <- soft_parts(x, weekend, inputs, n_days)
 
+  assemble_model(vars, c(map(hard, \(terms) list(terms = terms)), soft))
+}
+
+# Combine model parts, each a list of optional tibbles: `vars` (new helper
+# variables, keyed by `aux`), `terms`, `costs` and `offset`. Terms and costs
+# refer to variables by `j`, or to new helper variables by `aux`.
+assemble_model <- function(vars, parts) {
+  pick <- \(name) list_rbind(map(parts, name))
+  aux <- pick("vars")
+  if (nrow(aux) > 0) {
+    vars <- bind_rows(vars, mutate(aux, kind = "aux", j = nrow(vars) + row_number()))
+  }
+  resolve <- function(df) {
+    if (!"aux" %in% names(df)) {
+      return(df)
+    }
+    if (!"j" %in% names(df)) df$j <- NA_integer_
+    df |>
+      mutate(j = coalesce(j, vars$j[match(aux, vars$aux)])) |>
+      select(-aux)
+  }
+
+  terms <- pick("terms") |>
+    resolve() |>
+    mutate(i = cur_group_id(), .by = c(rule, con))
   rows <- terms |>
     distinct(i, rule, con, lo, hi) |>
     arrange(i)
-  stopifnot(!anyDuplicated(rows$i))
+  stopifnot(!anyDuplicated(rows$i), !anyNA(terms$j))
+
+  costs <- resolve(pick("costs"))
+  costs <- if (nrow(costs) == 0) tibble::tibble(rule = character(), j = integer(), coef = numeric()) else
+    summarise(costs, coef = sum(coef), .by = c(rule, j))
+  offset <- pick("offset")
+  offset <- if (nrow(offset) == 0) tibble::tibble(rule = character(), value = numeric()) else
+    summarise(offset, value = sum(value), .by = rule)
+
+  vars$cost <- 0
+  by_var <- summarise(costs, coef = sum(coef), .by = j)
+  vars$cost[by_var$j] <- by_var$coef
 
   structure(
-    list(vars = vars, rows = rows, terms = select(terms, i, j, coef)),
+    list(vars = vars, rows = rows, terms = select(terms, i, j, coef), costs = costs, offset = offset),
     class = c("rota_model", "list")
   )
 }
@@ -133,12 +185,19 @@ shift_vars <- function(inputs, shifts) {
                       is_long, is_late),
                by = "shift_code")
 
+  # Unlisted roles are forbidden; listed ones may carry a soft penalty
+  allowed <- inputs$placements |>
+    inner_join(inputs$placement_roles, by = "placement", relationship = "many-to-many") |>
+    select(doctor_id, role, p_start = start_date, p_end = end_date, placement_penalty = penalty)
+  x <- x |>
+    left_join(allowed, join_by(doctor_id, role, between(date, p_start, p_end)),
+              relationship = "many-to-many") |>
+    select(-p_start, -p_end) |>
+    arrange(placement_penalty)
   if (rule_on(inputs, "PLACEMENT")) {
-    allowed <- inputs$placements |>
-      inner_join(inputs$placement_roles, by = "placement", relationship = "many-to-many") |>
-      select(doctor_id, role, p_start = start_date, p_end = end_date)
-    x <- semi_join(x, allowed, join_by(doctor_id, role, between(date, p_start, p_end)))
+    x <- filter(x, !is.na(placement_penalty))
   }
+  x <- mutate(x, placement_penalty = coalesce(placement_penalty, 0))
 
   if (rule_on(inputs, "COMPETENCY")) {
     cannot <- staff |>
@@ -215,11 +274,25 @@ counted_weekends <- function(inputs) {
     select(doctor_id, sat)
 }
 
-weekend_vars <- function(inputs) {
-  if (!rule_on(inputs, "WEEKEND_MAX")) {
-    return(NULL)
-  }
-  counted_weekends(inputs)
+# Weekends each shift variable touches: any time between 00:00 Saturday and
+# 24:00 Sunday, so Friday nights count
+weekend_touches <- function(x) {
+  x |>
+    select(doctor_id, date, start_h, end_h, x_j = j) |>
+    mutate(sat = floor_saturday(date)) |>
+    cross_join(tibble::tibble(next_sat = c(0, 7))) |>
+    mutate(sat = sat + next_sat, k = as.numeric(date - sat)) |>
+    filter(24 * k + start_h < 48, 24 * k + end_h > 0) |>
+    select(doctor_id, sat, date, x_j)
+}
+
+# weekend[d, sat] = 1 if the doctor works any shift touching that weekend.
+# `counted` marks the weekends WEEKEND_MAX and WEEKEND_TARGET count.
+weekend_vars <- function(inputs, touches) {
+  touches |>
+    distinct(doctor_id, sat) |>
+    left_join(mutate(counted_weekends(inputs), counted = TRUE), by = c("doctor_id", "sat")) |>
+    mutate(counted = coalesce(counted, FALSE))
 }
 
 # Rules of the form "at most n consecutive days of <category>, then <rest>
@@ -448,32 +521,35 @@ night_terms <- function(x, shifts, inputs, n_days) {
   bind_rows(max_nights, rest_after)
 }
 
-# weekend[d, sat] >= any shift touching 00:00 Saturday to 24:00 Sunday
-# (so Friday nights count), and at most 1 in `one_in` counted weekends worked
-weekend_terms <- function(x, vars, one_in) {
-  weekend <- vars |>
-    filter(kind == "weekend") |>
-    select(doctor_id, sat, w_j = j)
+# weekend[d, sat] is 1 exactly when the doctor works a shift touching the
+# weekend: at least each day's shifts, at most all of them. At most 1 in
+# `WEEKEND_MAX` counted weekends worked.
+weekend_terms <- function(x, weekend, touches, inputs) {
+  touches <- touches |>
+    inner_join(select(weekend, doctor_id, sat, w_j = j), by = c("doctor_id", "sat"))
 
-  touches <- x |>
-    select(doctor_id, date, start_h, end_h, j) |>
-    mutate(sat = floor_saturday(date)) |>
-    cross_join(tibble::tibble(next_sat = c(0, 7))) |>
-    mutate(sat = sat + next_sat, k = as.numeric(date - sat)) |>
-    filter(24 * k + start_h < 48, 24 * k + end_h > 0) |>
-    inner_join(weekend, by = c("doctor_id", "sat"))
-
-  worked <- bind_rows(
-    transmute(touches, con = paste(doctor_id, sat, date), j, coef = 1),
-    touches |> distinct(doctor_id, sat, date, w_j) |>
+  at_least <- bind_rows(
+    transmute(touches, con = paste(doctor_id, sat, date), j = x_j, coef = 1),
+    touches |>
+      distinct(doctor_id, sat, date, w_j) |>
       transmute(con = paste(doctor_id, sat, date), j = w_j, coef = -1)
   ) |>
     constraint("WEEKEND_WORKED", hi = 0)
+  at_most <- bind_rows(
+    transmute(touches, con = paste(doctor_id, sat), j = x_j, coef = -1),
+    transmute(weekend, con = paste(doctor_id, sat), j, coef = 1)
+  ) |>
+    constraint("WEEKEND_WORKED_MAX", hi = 0)
+  if (!rule_on(inputs, "WEEKEND_MAX")) {
+    return(bind_rows(at_least, at_most))
+  }
 
-  frequency <- weekend |>
-    mutate(hi = floor(n() / one_in), .by = doctor_id) |>
-    transmute(con = doctor_id, j = w_j, coef = 1, hi) |>
+  one_in <- rule_value(inputs, "WEEKEND_MAX")
+  frequency <- counted_weekends(inputs) |>
+    count(doctor_id, name = "total") |>
+    inner_join(filter(weekend, counted), by = "doctor_id") |>
+    transmute(con = doctor_id, j, coef = 1, hi = floor(total / one_in)) |>
     constraint("WEEKEND_MAX")
 
-  bind_rows(worked, frequency)
+  bind_rows(at_least, at_most, frequency)
 }

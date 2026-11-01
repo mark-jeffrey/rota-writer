@@ -14,20 +14,34 @@ path to an inputs workbook.}
 A \code{rota_model}: a list of tibbles.
 \describe{
 \item{vars}{One row per variable: \code{j}, \code{kind} (\code{"x"} for doctor/day/
-shift, \code{"weekend"} for weekend-worked indicators), \code{type} (\code{"I"}
-or \code{"C"}), bounds and \code{cost}. Shift variables also have \code{doctor_id},
-\code{date}, \code{t} and \code{shift_code}.}
+shift, \code{"weekend"} for weekend-worked indicators, \code{"aux"} for other
+helper variables), \code{type} (\code{"I"} or \code{"C"}), bounds and \code{cost}. Shift
+variables also have \code{doctor_id}, \code{date}, \code{t} and \code{shift_code}.}
 \item{rows}{One row per constraint: \code{i}, \code{rule} (matching the
 \code{rules} sheet where there is one), \code{con} and the bounds \code{lo}, \code{hi}.}
 \item{terms}{Non-zero coefficients: \code{i}, \code{j}, \code{coef}.}
+\item{costs}{Objective coefficients by soft rule: \code{rule}, \code{j}, \code{coef}.
+\code{vars$cost} is their sum per variable.}
+\item{offset}{Constant objective terms by rule (\code{rule}, \code{value}), e.g.
+the penalty for a \code{prefer_oncall} request, cancelled by working an
+on-call that day.}
 }
 }
 \description{
 Turns the inputs into a mixed-integer linear programme with one binary
-variable per doctor, day and shift that the doctor may work. Only hard
-rules are modelled so far: cover, one shift per day, in post, competency,
-placement, nights-exempt, LTFT fixed days, approved leave, and the TCS
-Schedule 3 limits on hours, rest, consecutive shifts, nights and weekends.
+variable per doctor, day and shift that the doctor may work.
+}
+\details{
+Hard rules are constraints: cover, one shift per day, in post,
+competency, placement, nights-exempt, LTFT fixed days, approved leave, and
+the TCS Schedule 3 limits on hours, rest, consecutive shifts, nights and
+weekends. Soft rules are penalties in the objective, scored as in
+\code{\link[=check_rota]{check_rota()}}: requested leave, requests, discouraged placement roles,
+skill mix, the 1-in-3 weekend target and isolated single nights. Fairness
+(\code{FAIR_ONCALL}, \code{FAIR_NIGHTS}, \code{FAIR_WEEKENDS}) penalises each doctor's
+distance from their WTE-weighted share, with the cost per shift rising the
+further they are from it, so the solver spreads work evenly.
+
 Most users want \code{\link[=solve_rota]{solve_rota()}}, which calls this.
 }
 \examples{

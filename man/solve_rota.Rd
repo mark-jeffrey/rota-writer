@@ -4,39 +4,58 @@
 \alias{solve_rota}
 \title{Solve the rota}
 \usage{
-solve_rota(inputs, time_limit = NULL, verbose = FALSE)
+solve_rota(inputs, time_limit = NULL, seed = 1, verbose = FALSE)
 }
 \arguments{
 \item{inputs}{The rota inputs, as returned by \code{\link[=read_rota_inputs]{read_rota_inputs()}}, or a
 path to an inputs workbook.}
 
-\item{time_limit}{Seconds before the solver stops and returns the best
-rota found. Defaults to \code{solver_time_limit_s} in the \code{settings} sheet.}
+\item{time_limit}{Seconds to spend in total. Defaults to
+\code{solver_time_limit_s} in the \code{settings} sheet.}
 
-\item{verbose}{If \code{TRUE}, print the solver log.}
+\item{seed}{Random seed for phase 2, so the same inputs give the same rota.}
+
+\item{verbose}{If \code{TRUE}, report each improvement as it is found.}
 }
 \value{
 A \code{rota_solution}: a list with
 \describe{
 \item{rota}{The rota in long format (\code{doctor_id}, \code{date}, \code{code}), as
 used by \code{\link[=check_rota]{check_rota()}}, or \code{NULL} if no rota was found.}
-\item{status}{The solver's status, e.g. \code{"Optimal"} or
-\code{"Infeasible"}.}
-\item{objective}{Objective value (0 while there are no soft rules).}
+\item{status}{\code{"Feasible"} if a rota was found, otherwise the solver's
+reason, e.g. \code{"Infeasible"} (the hard rules cannot all be met) or
+\code{"Time limit reached"}.}
+\item{objective}{Total penalty of the rota.}
+\item{penalties}{Penalty by soft rule (\code{rule}, \code{penalty}). Apart from
+the \verb{FAIR_*} rules, these match the totals from \code{\link[=check_rota]{check_rota()}}.}
+\item{history}{Penalty after each improvement (\code{seconds},
+\code{objective}).}
 \item{seconds}{Time spent building and solving.}
 \item{model}{The \code{rota_model} that was solved.}
 }
 }
 \description{
 Builds the model with \code{\link[=build_rota_model]{build_rota_model()}} and solves it with the HiGHS
-MILP solver. So far only the hard rules are modelled, so the result is a
-compliant rota but not yet a fair one: on-calls, requests and skill mix
-are not balanced. Check the result with \code{\link[=check_rota]{check_rota()}}.
+MILP solver in two phases:
+\enumerate{
+\item Find any rota that meets every hard rule. This takes seconds.
+\item Improve it by large neighbourhood search: repeatedly free one week, or
+a random group of doctors, fix the rest of the rota, and re-solve that
+part to lower the soft-rule penalties. Every step solves the full model,
+so the hard rules always hold and fairness is judged over the whole
+rota.
+}
+}
+\details{
+Phase 2 runs until the time limit, until the penalty is 0, or until many
+steps in a row fail to improve it. It does not prove the rota is the best
+possible, but in practice gets close; give it longer for a better rota.
+Check the result with \code{\link[=check_rota]{check_rota()}}.
 }
 \examples{
 \dontrun{
 inputs <- read_rota_inputs(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"))
-solution <- solve_rota(inputs)
+solution <- solve_rota(inputs, time_limit = 120)
 check_rota(solution$rota, inputs)
 }
 }
