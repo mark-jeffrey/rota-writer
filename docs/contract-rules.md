@@ -75,3 +75,7 @@ rules are penalised in the objective function with the weight given in the
 - East Sussex Healthcare NHS Trust, [Rota rules at a glance factsheet](https://www.esht.nhs.uk/medical-education/wp-content/uploads/2019/03/Factsheet-rota-rules-at-a-glance.pdf)
 - Lancashire Teaching Hospitals, [Exception reporting fact sheet](https://healthacademy.lancsteachinghospitals.nhs.uk/app/uploads/2021/03/Appendix-1-Exception-Reporting-Fact-Sheet.pdf)
 - GOV.UK, [Junior doctors contract offer: main points](https://www.gov.uk/government/publications/junior-doctors-contract-offer-main-points/junior-doctors-contract-offer-main-points)
+
+---
+
+This document is licensed under [CC BY-SA 4.0](../LICENSE-docs.md).

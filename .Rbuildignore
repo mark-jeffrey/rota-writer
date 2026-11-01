@@ -2,3 +2,5 @@
 ^docs$
 ^scripts$
 ^README\.md$
+^LICENSE\.md$
+^LICENSE-docs\.md$

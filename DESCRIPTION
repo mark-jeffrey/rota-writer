@@ -5,7 +5,7 @@ Authors@R: person("Mark", "Jeffrey", email = "mark@markjeffrey.com", role = c("a
 Description: Reads rota inputs from a spreadsheet, checks rotas against the
     2016 TCS for resident doctors in England, and writes rotas by
     mixed-integer optimisation.
-License: TBD (not yet chosen)
+License: AGPL (>= 3)
 Encoding: UTF-8
 Depends: R (>= 4.3)
 Imports:

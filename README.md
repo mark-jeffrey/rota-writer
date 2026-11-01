@@ -251,6 +251,8 @@ The project is an R package (`rotawriter`), loaded with `pkgload::load_all()` du
 
 ```
 README.md
+LICENSE.md                    AGPL-3.0-or-later (code)
+LICENSE-docs.md               CC BY-SA 4.0 (documentation)
 DESCRIPTION, NAMESPACE        package metadata
 R/read_inputs.R               read_rota_inputs(), validate_inputs(), read_rota()
 R/check_rota.R                check_rota(), summarise_doctors()
@@ -325,3 +327,18 @@ There is no maintained open-source NHS rota **optimiser** that we know of. Relat
 This is not an official BMA or NHS Employers tool. Any rota it produces must still be reviewed by
 the rota coordinator and be consistent with the generic work schedule. Concerns go to the
 Guardian of Safe Working. All names in the test data are fictional.
+
+## Licence
+
+Copyright © 2026 Mark Jeffrey.
+
+- **Code** (everything not listed below, including the R package, scripts, tests, test data and
+  generated help pages) is licensed under the
+  [GNU Affero General Public License v3.0 or later](LICENSE.md) (`AGPL-3.0-or-later`). If you run
+  a modified version as a service that others use over a network (for example a hosted rota app),
+  you must offer those users its source code.
+- **Documentation** (`README.md` and the `docs/` folder) is licensed under
+  [Creative Commons Attribution-ShareAlike 4.0 International](LICENSE-docs.md) (`CC-BY-SA-4.0`).
+
+Rotas, reports and calendars produced with the tool belong to whoever produces them and are not
+covered by either licence.
