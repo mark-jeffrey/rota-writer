@@ -23,3 +23,10 @@ hits <- function(rota, inputs = test_inputs()) {
 }
 
 days_from <- function(start, n) as.Date(start) + seq_len(n) - 1
+
+# The first two weeks of the rota
+two_weeks <- function(inputs = read_rota_inputs(system.file("extdata", "rota_inputs.xlsx",
+                                                            package = "rotawriter"))) {
+  inputs$period$end <- inputs$period$start + 13
+  inputs
+}

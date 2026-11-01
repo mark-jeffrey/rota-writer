@@ -87,3 +87,35 @@ test_that("the report shows each doctor's distance from their fair share", {
   expect_true(all(c("nights_vs_fair", "weekends_vs_fair") %in% names(doctors)))
   expect_equal(doctors$hours_vs_contracted, round(doctors$avg_weekly_hours - doctors$contracted_hours, 1))
 })
+
+test_that("patterns count runs, single nights, split weekends and single days off", {
+  inputs <- two_weeks(test_inputs())
+  # Same D01 rota as the model-vs-checker test, plus 3 nights for D06
+  rota <- dplyr::bind_rows(
+    rota_of("D01", days_from("2027-02-01", 5), "ICU_DAY"),
+    rota_of("D01", c("2027-02-06", "2027-02-08", "2027-02-09", "2027-02-11"),
+            c("ICU1_LD", "ICU_DAY", "ICU_DAY", "ICU1_N")),
+    rota_of("D06", days_from("2027-02-01", 3), "ANA1_N")
+  )
+  p <- summarise_patterns(rota, inputs)
+  d01 <- p[p$doctor_id == "D01", ]
+  expect_equal(d01$shift_runs, 3)
+  expect_equal(d01$longest_run, 6)
+  expect_equal(d01$long_runs, 1)
+  expect_equal(d01$single_nights, 1)
+  expect_equal(d01$icu_runs, 2) # Mon 1 - Sat 6, Mon 8 - Tue 9
+  expect_equal(d01$short_icu_runs, 1) # Mon 8 - Tue 9; the night is not an ICU day shift
+  expect_equal(d01$split_weekends, 1)
+  expect_equal(d01$single_days_off, 2)
+  expect_equal(p$longest_night_run[p$doctor_id == "D06"], 3)
+
+  all <- p[p$doctor_id == "All", ]
+  expect_equal(all$night_runs, 2)
+  expect_equal(all$longest_run, 6)
+  expect_equal(nrow(p), nrow(inputs$staff) + 1)
+
+  path <- withr::local_tempfile(fileext = ".xlsx")
+  write_check_report(check_rota(rota, inputs), summarise_doctors(rota, inputs), path,
+                     patterns = p)
+  expect_true("patterns" %in% readxl::excel_sheets(path))
+})

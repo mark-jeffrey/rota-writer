@@ -67,7 +67,7 @@ check_rota <- function(rota, inputs) {
     check_nights_exempt, check_ltft_day, check_leave, check_max_shift,
     check_min_rest, check_max_7day, check_avg_hours, check_consecutive,
     check_nights, check_weekends, check_requests, check_skill_mix,
-    check_hours_target, check_normal_day_spread
+    check_hours_target, check_normal_day_spread, check_wellbeing
   )
 
   map(checks, \(check) check(si, inputs)) |>
@@ -461,7 +461,20 @@ check_consecutive <- function(si, inputs) {
                                          rest_after, n, what, rest)))
     )
   }) |>
-    list_rbind()
+    list_rbind() |>
+    bind_rows(run_target(run_rules$MAX_CONSEC_SHIFTS, inputs, "LONG_RUN", "shifts"))
+}
+
+# Soft: each day of a run beyond the rule's value costs the weight
+run_target <- function(runs, inputs, id, what) {
+  target <- rule_value(inputs, id)
+  if (length(target) == 0 || is.na(target)) {
+    return(NULL)
+  }
+  runs |>
+    filter(n > target) |>
+    with(violations(id, doctor_id, first, last, weight = n - target,
+                    detail = sprintf("%d consecutive %s (target %g)", n, what, target)))
 }
 
 check_nights <- function(si, inputs) {
@@ -480,8 +493,61 @@ check_nights <- function(si, inputs) {
                       detail = sprintf("%.1f h rest after nights (min %g)", rest_after, rest))),
     runs |>
       filter(n == 1) |>
-      with(violations("SINGLE_NIGHT", doctor_id, first, last, detail = "Isolated single night"))
+      with(violations("SINGLE_NIGHT", doctor_id, first, last, detail = "Isolated single night")),
+    run_target(runs, inputs, "LONG_NIGHT_RUN", "nights")
   )
+}
+
+# Soft rules on the shape of each doctor's pattern: ICU runs too short for
+# continuity, single days off between working days, and split weekends
+check_wellbeing <- function(si, inputs) {
+  short_n <- rule_value(inputs, "ICU_SHORT_RUN")
+  short <- if (length(short_n) == 1 && !is.na(short_n)) {
+    short_icu_runs(si, inputs, short_n) |>
+      with(violations("ICU_SHORT_RUN", doctor_id, first, last, weight = short_n - n,
+                      detail = sprintf("%d-day ICU run (target at least %g)", n, short_n)))
+  }
+  day_off <- isolated_days_off(si, inputs) |>
+    with(violations("ISOLATED_DAY_OFF", doctor_id, date, detail = "Single day off between shifts"))
+  split <- split_weekends(si, inputs) |>
+    with(violations("SPLIT_WEEKEND", doctor_id, sat, sat + 1, detail = "Works one day of the weekend"))
+
+  # Rules added after older workbooks were made are skipped if missing
+  filter(bind_rows(short, day_off, split), rule_id %in% inputs$rules$rule_id)
+}
+
+# Runs of ICU day shifts shorter than n, with a day outside the run on each
+# side inside the rota period
+short_icu_runs <- function(si, inputs, n) {
+  day_runs(si, !is_night & stringr::str_starts(role, "ICU")) |>
+    filter(n < .env$n, first > inputs$period$start, last < inputs$period$end)
+}
+
+# Days with no shift and no leave between two working days
+isolated_days_off <- function(si, inputs) {
+  worked <- distinct(si, doctor_id, date)
+  worked |>
+    mutate(date = date + 1) |>
+    filter(date < inputs$period$end) |>
+    semi_join(mutate(worked, date = date - 1), by = c("doctor_id", "date")) |>
+    anti_join(worked, by = c("doctor_id", "date")) |>
+    anti_join(distinct(leave_days(inputs), doctor_id, date), by = c("doctor_id", "date"))
+}
+
+# Weekends (by their Saturday) with working time on only one of the two
+# days. A night counts on the morning it ends too.
+split_weekends <- function(si, inputs) {
+  period <- inputs$period
+  bind_rows(
+    select(si, doctor_id, day = date),
+    si |> filter(end_dt > as.POSIXct(date + 1)) |> transmute(doctor_id, day = date + 1)
+  ) |>
+    mutate(sat = floor_saturday(day)) |>
+    filter(day <= sat + 1, sat >= period$start, sat + 1 <= period$end) |>
+    distinct(doctor_id, sat, day) |>
+    count(doctor_id, sat) |>
+    filter(n == 1) |>
+    select(doctor_id, sat)
 }
 
 # Weekends ---------------------------------------------------------------
@@ -594,6 +660,70 @@ check_requests <- function(si, inputs) {
 summarise_doctors <- function(rota, inputs) {
   inputs <- as_rota_inputs(inputs)
   doctor_summary(shift_instances(as_rota(rota), inputs), inputs)
+}
+
+#' Summarise each doctor's rota pattern
+#'
+#' Counts the patterns the run-length and wellbeing rules look at, so a
+#' coordinator can see how the rota feels to work. They are counted whether
+#' or not the matching rule is switched on, against the rule's value where
+#' it has one.
+#'
+#' @inheritParams check_rota
+#'
+#' @returns A tibble with one row per doctor in the staff list, then a row
+#'   with `doctor_id` `"All"` holding the totals (and the longest runs):
+#'   \describe{
+#'     \item{shift_runs, longest_run}{Runs of consecutive days with a shift,
+#'       and the longest.}
+#'     \item{long_runs}{Runs longer than the `LONG_RUN` value (5 if blank).}
+#'     \item{night_runs, single_nights, longest_night_run}{Runs of nights,
+#'       those of a single night, and the longest.}
+#'     \item{icu_runs, short_icu_runs}{Runs of ICU day shifts, and those
+#'       shorter than the `ICU_SHORT_RUN` value (3 if blank), not counting
+#'       runs at either end of the rota.}
+#'     \item{split_weekends}{Weekends with working time on only one day.}
+#'     \item{single_days_off}{Single days off (not leave) between shifts.}
+#'   }
+#'
+#' @export
+#' @examples
+#' summarise_patterns(
+#'   system.file("extdata", "example_rota_output.xlsx", package = "rotawriter"),
+#'   system.file("extdata", "rota_inputs.xlsx", package = "rotawriter")
+#' )
+summarise_patterns <- function(rota, inputs) {
+  inputs <- as_rota_inputs(inputs)
+  si <- shift_instances(as_rota(rota), inputs)
+  value_or <- function(id, default) {
+    value <- rule_value(inputs, id)
+    if (length(value) == 1 && !is.na(value)) value else default
+  }
+  long_n <- value_or("LONG_RUN", 5)
+
+  runs <- day_runs(si, TRUE) |>
+    summarise(shift_runs = n(), longest_run = max(n), long_runs = sum(n > long_n), .by = doctor_id)
+  nights <- day_runs(si, is_night) |>
+    summarise(night_runs = n(), single_nights = sum(n == 1), longest_night_run = max(n),
+              .by = doctor_id)
+  icu <- day_runs(si, !is_night & stringr::str_starts(role, "ICU")) |>
+    count(doctor_id, name = "icu_runs") |>
+    left_join(count(short_icu_runs(si, inputs, value_or("ICU_SHORT_RUN", 3)), doctor_id,
+                    name = "short_icu_runs"), by = "doctor_id")
+
+  doctors <- select(inputs$staff, doctor_id) |>
+    left_join(runs, by = "doctor_id") |>
+    left_join(nights, by = "doctor_id") |>
+    left_join(icu, by = "doctor_id") |>
+    left_join(count(split_weekends(si, inputs), doctor_id, name = "split_weekends"), by = "doctor_id") |>
+    left_join(count(isolated_days_off(si, inputs), doctor_id, name = "single_days_off"), by = "doctor_id") |>
+    mutate(across(-doctor_id, \(x) as.integer(coalesce(x, 0L))))
+
+  longest <- c("longest_run", "longest_night_run")
+  total <- doctors |>
+    summarise(across(-all_of(c("doctor_id", longest)), sum), across(all_of(longest), max)) |>
+    mutate(doctor_id = "All")
+  bind_rows(doctors, total)
 }
 
 doctor_summary <- function(si, inputs) {

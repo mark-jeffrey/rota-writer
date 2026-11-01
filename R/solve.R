@@ -18,9 +18,11 @@
 #' with the right competencies, or everyone on leave), the rota leaves them
 #' empty rather than break a contract rule, and `unfilled` lists them.
 #'
-#' Phase 2 runs until the time limit, until the penalty is 0, or until many
-#' steps in a row fail to improve it. It does not prove the rota is the best
-#' possible, but in practice gets close; give it longer for a better rota.
+#' Phase 2 runs until the time limit or until the penalty is 0. Each step
+#' gets 5 s to start with, doubling (up to 20 s) after every 10 steps in a
+#' row that fail to improve the rota, so harder neighbourhoods get longer.
+#' It does not prove the rota is the best possible, but in practice gets
+#' close; give it longer for a better rota.
 #' Check the result with [check_rota()].
 #'
 #' @inheritParams check_rota
@@ -93,10 +95,11 @@ solve_rota <- function(inputs, time_limit = NULL, seed = 1, verbose = FALSE) {
   withr::with_seed(seed, {
     stalled <- 0
     step <- 0
-    while (time_limit - elapsed() > 1 && best$objective_value > 1e-6 && stalled < 40) {
+    step_time <- 5
+    while (time_limit - elapsed() > 1 && best$objective_value > 1e-6) {
       step <- step + 1
       free <- neighbourhood(model, step)
-      tried <- solve(cost = model$vars$cost, time_limit = min(5, time_limit - elapsed()),
+      tried <- solve(cost = model$vars$cost, time_limit = min(step_time, time_limit - elapsed()),
                      fix = !free, current = best$primal_solution)
       if (is_feasible(tried) && tried$objective_value < best$objective_value - 1e-6) {
         best <- tried
@@ -105,6 +108,9 @@ solve_rota <- function(inputs, time_limit = NULL, seed = 1, verbose = FALSE) {
         if (verbose) message(sprintf("%5.0f s  penalty %g", elapsed(), best$objective_value))
       } else {
         stalled <- stalled + 1
+        if (stalled %% 10 == 0) {
+          step_time <- min(2 * step_time, 20)
+        }
       }
     }
   })

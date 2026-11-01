@@ -18,6 +18,7 @@ workbook
 \item \code{\link[=read_rota]{read_rota()}}: load a rota
 \item \code{\link[=check_rota]{check_rota()}}: list every rule a rota breaks
 \item \code{\link[=summarise_doctors]{summarise_doctors()}}: per-doctor totals and fair shares
+\item \code{\link[=summarise_patterns]{summarise_patterns()}}: per-doctor run lengths and wellbeing patterns
 \item \code{\link[=write_check_report]{write_check_report()}}: save the results as a workbook
 \item \code{\link[=solve_rota]{solve_rota()}}: write a rota that meets the hard rules and minimises
 the soft-rule penalties

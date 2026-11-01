@@ -4,7 +4,7 @@
 \alias{write_check_report}
 \title{Write a compliance report workbook}
 \usage{
-write_check_report(violations, doctors, path)
+write_check_report(violations, doctors, path, patterns = NULL)
 }
 \arguments{
 \item{violations}{Output of \code{\link[=check_rota]{check_rota()}}.}
@@ -13,6 +13,9 @@ write_check_report(violations, doctors, path)
 
 \item{path}{Path of the \code{.xlsx} file to write. An existing file is
 overwritten.}
+
+\item{patterns}{Output of \code{\link[=summarise_patterns]{summarise_patterns()}}, or \code{NULL} to leave the
+sheet out.}
 }
 \value{
 \code{path}, invisibly.
@@ -20,7 +23,7 @@ overwritten.}
 \description{
 Saves the results of \code{\link[=check_rota]{check_rota()}} and \code{\link[=summarise_doctors]{summarise_doctors()}} as an Excel
 workbook for rota coordinators, with hard violations shaded red and soft
-ones yellow. It has three sheets:
+ones yellow. It has three sheets, and a fourth if \code{patterns} is given:
 \itemize{
 \item \code{summary}: violations and total penalty per rule
 \item \code{violations}: one row per violation
@@ -28,6 +31,8 @@ ones yellow. It has three sheets:
 nights and weekends against fair shares. The differences
 (\code{hours_vs_contracted}, in hours a week, and \verb{*_vs_fair}) are shaded
 blue (fewer) to red (more)
+\item \code{patterns}: per-doctor run lengths, single nights, split weekends and
+single days off, with department totals
 }
 }
 \examples{
@@ -37,6 +42,7 @@ rota <- read_rota(system.file("extdata", "example_rota_output.xlsx", package = "
 write_check_report(
   check_rota(rota, inputs),
   summarise_doctors(rota, inputs),
-  tempfile(fileext = ".xlsx")
+  tempfile(fileext = ".xlsx"),
+  patterns = summarise_patterns(rota, inputs)
 )
 }

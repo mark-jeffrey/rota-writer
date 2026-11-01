@@ -56,9 +56,11 @@ If the inputs make some slots impossible to fill (e.g. too few doctors
 with the right competencies, or everyone on leave), the rota leaves them
 empty rather than break a contract rule, and \code{unfilled} lists them.
 
-Phase 2 runs until the time limit, until the penalty is 0, or until many
-steps in a row fail to improve it. It does not prove the rota is the best
-possible, but in practice gets close; give it longer for a better rota.
+Phase 2 runs until the time limit or until the penalty is 0. Each step
+gets 5 s to start with, doubling (up to 20 s) after every 10 steps in a
+row that fail to improve the rota, so harder neighbourhoods get longer.
+It does not prove the rota is the best possible, but in practice gets
+close; give it longer for a better rota.
 Check the result with \code{\link[=check_rota]{check_rota()}}.
 }
 \examples{

@@ -1,12 +1,6 @@
 # Short horizons keep these fast. Hard-rule tests switch the soft rules off,
 # so the solver stops at the first compliant rota.
 
-two_weeks <- function(inputs = read_rota_inputs(system.file("extdata", "rota_inputs.xlsx",
-                                                            package = "rotawriter"))) {
-  inputs$period$end <- inputs$period$start + 13
-  inputs
-}
-
 hard_only <- function(inputs) {
   inputs$rules$enabled[inputs$rules$hard_soft == "soft"] <- FALSE
   inputs
@@ -80,6 +74,46 @@ test_that("the solver's soft penalties match the checker's", {
   expect_equal(solved$rule, checked$rule)
   expect_equal(solved$penalty, checked$penalty)
   expect_equal(sum(solution$penalties$penalty), solution$objective, tolerance = 1e-6)
+})
+
+# Each soft rule's penalty for a fixed rota, as the model scores it: every
+# shift variable fixed, helper variables solved for their cheapest values
+model_penalties <- function(rota, inputs) {
+  model <- build_rota_model(inputs)
+  on <- paste(model$vars$doctor_id, model$vars$date, model$vars$shift_code) %in%
+    paste(rota$doctor_id, as.Date(rota$date), rota$code)
+  stopifnot(sum(on & model$vars$kind == "x") == nrow(rota))
+  result <- polish(highs_solver(model), model, as.numeric(on & model$vars$kind == "x"))
+  dplyr::transmute(model$costs, rule, penalty = coef * result$primal_solution[j]) |>
+    dplyr::bind_rows(dplyr::rename(model$offset, penalty = value)) |>
+    dplyr::summarise(penalty = round(sum(penalty), 6), .by = rule) |>
+    dplyr::filter(!startsWith(rule, "FAIR_"), rule != "COVER", penalty != 0) |>
+    dplyr::arrange(rule)
+}
+
+test_that("the model scores a fixed rota exactly as the checker does", {
+  inputs <- two_weeks(test_inputs())
+  inputs$rules$enabled[inputs$rules$rule_id == "LONG_NIGHT_RUN"] <- TRUE
+  # D01 (ICU block): 6 shifts in a row, a split weekend (Sat 6 only), a
+  # single day off (Sun 7), a 2-day ICU run (Mon 8 - Tue 9), another single
+  # day off (Wed 10) and a single night (Thu 11). D06: 3 nights in a row.
+  rota <- dplyr::bind_rows(
+    rota_of("D01", days_from("2027-02-01", 5), "ICU_DAY"),
+    rota_of("D01", c("2027-02-06", "2027-02-08", "2027-02-09", "2027-02-11"),
+            c("ICU1_LD", "ICU_DAY", "ICU_DAY", "ICU1_N")),
+    rota_of("D06", days_from("2027-02-01", 3), "ANA1_N")
+  )
+  checked <- check_rota(rota, inputs) |>
+    dplyr::filter(hard_soft == "soft") |>
+    dplyr::summarise(penalty = sum(penalty), .by = rule_id) |>
+    dplyr::arrange(rule_id)
+  expect_true(all(c("LONG_RUN", "SPLIT_WEEKEND", "ISOLATED_DAY_OFF", "ICU_SHORT_RUN",
+                    "SINGLE_NIGHT", "LONG_NIGHT_RUN") %in% checked$rule_id))
+  expect_equal(nrow(dplyr::filter(check_rota(rota, inputs), hard_soft == "hard", rule_id != "COVER")), 0)
+
+  modelled <- model_penalties(rota, inputs)
+  expect_equal(modelled$rule, checked$rule_id)
+  expect_equal(modelled$penalty, checked$penalty)
 })
 
 test_that("requests and requested leave are honoured when the hard rules allow", {

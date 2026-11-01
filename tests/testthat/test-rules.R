@@ -38,6 +38,41 @@ test_that("night rules: max 4 in a row, 46 h rest after, single nights soft", {
   expect_false("REST_AFTER_NIGHTS" %in% v$rule_id)
 })
 
+test_that("runs beyond the LONG_RUN and LONG_NIGHT_RUN targets cost per extra day", {
+  v <- hits(rota_of("D01", days_from("2027-02-01", 7), "ICU_DAY"))
+  expect_equal(v$penalty[v$rule_id == "LONG_RUN"], 2 * 150)
+  expect_match(v$detail[v$rule_id == "LONG_RUN"], "7 consecutive shifts \\(target 5\\)")
+
+  v <- hits(rota_of("D01", days_from("2027-02-01", 5), "ICU_DAY"))
+  expect_false("LONG_RUN" %in% v$rule_id)
+
+  # Off in the test workbook
+  inputs <- test_inputs()
+  inputs$rules$enabled[inputs$rules$rule_id == "LONG_NIGHT_RUN"] <- TRUE
+  v <- hits(rota_of("D01", days_from("2027-02-01", 4), "ICU1_N"), inputs)
+  expect_equal(v$penalty[v$rule_id == "LONG_NIGHT_RUN"], 2 * 50)
+
+  v <- hits(rota_of("D01", days_from("2027-02-01", 2), "ICU1_N"), inputs)
+  expect_false(any(c("LONG_NIGHT_RUN", "SINGLE_NIGHT") %in% v$rule_id))
+})
+
+test_that("wellbeing rules: short ICU runs, single days off, split weekends", {
+  # Wed only: a 1-day ICU run costs 2 x 5; Tue-Thu is long enough
+  v <- hits(rota_of("D01", "2027-02-03", "ICU1_LD"))
+  expect_equal(v$penalty[v$rule_id == "ICU_SHORT_RUN"], 2 * 5)
+  v <- hits(rota_of("D01", days_from("2027-02-02", 3), "ICU_DAY"))
+  expect_false("ICU_SHORT_RUN" %in% v$rule_id)
+
+  v <- hits(rota_of("D01", c("2027-02-01", "2027-02-03", "2027-02-04", "2027-02-05"), "ICU_DAY"))
+  expect_equal(v$start_date[v$rule_id == "ISOLATED_DAY_OFF"], as.Date("2027-02-02"))
+
+  # Sat 6 Feb only; a Friday night alone ends on Saturday morning
+  expect_true("SPLIT_WEEKEND" %in% hits(rota_of("D01", "2027-02-06", "ICU1_LD"))$rule_id)
+  expect_true("SPLIT_WEEKEND" %in% hits(rota_of("D01", "2027-02-05", "ICU1_N"))$rule_id)
+  v <- hits(rota_of("D01", c("2027-02-05", "2027-02-06"), "ICU1_N"))
+  expect_false("SPLIT_WEEKEND" %in% v$rule_id)
+})
+
 test_that("MAX_7DAY counts hours in any 168 h", {
   v <- hits(rota_of("D01", days_from("2027-02-01", 6), "ICU1_LD"))
   expect_match(v$detail[v$rule_id == "MAX_7DAY"], "75.0 h")

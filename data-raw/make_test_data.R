@@ -66,7 +66,12 @@ rules <- tribble(
   "FAIR_ONCALL",        "On-call shifts close to WTE-weighted share",                NA,     "",         "soft",     10,      "Y",
   "FAIR_NIGHTS",        "Nights close to WTE-weighted share",                        NA,     "",         "soft",     10,      "Y",
   "FAIR_WEEKENDS",      "Weekends close to WTE-weighted share",                      NA,     "",         "soft",     10,      "Y",
-  "SINGLE_NIGHT",       "Avoid isolated single nights",                              NA,     "",         "soft",     20,      "Y",
+  "SINGLE_NIGHT",       "Avoid isolated single nights",                              NA,     "",         "soft",     100,     "Y",
+  "LONG_RUN",           "Consecutive shifts target (weight per shift beyond it)",    5,      "shifts",   "soft",     150,     "Y",
+  "LONG_NIGHT_RUN",     "Consecutive nights target (weight per night beyond it)",    2,      "shifts",   "soft",     50,      "N",
+  "ICU_SHORT_RUN",      "ICU day-shift runs at least this long, for continuity (weight per day short)", 3, "shifts", "soft", 5, "Y",
+  "ISOLATED_DAY_OFF",   "Avoid single days off between shifts",                      NA,     "",         "soft",     30,      "Y",
+  "SPLIT_WEEKEND",      "Avoid working only one day of a weekend",                   NA,     "",         "soft",     150,      "Y",
   "HOURS_TARGET",       "Average weekly hours close to contracted (value: default hours x WTE if staff contracted_hours blank; weight per hour short)", 45, "hours", "soft", 5, "Y",
   "NORMAL_DAY_SPREAD",  "Normal-day staffing even across the rota (weight per doctor-day from the average)", NA, "", "soft", 10, "Y"
 )

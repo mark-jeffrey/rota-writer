@@ -4,16 +4,20 @@
 #'
 #' Saves the results of [check_rota()] and [summarise_doctors()] as an Excel
 #' workbook for rota coordinators, with hard violations shaded red and soft
-#' ones yellow. It has three sheets:
+#' ones yellow. It has three sheets, and a fourth if `patterns` is given:
 #' * `summary`: violations and total penalty per rule
 #' * `violations`: one row per violation
 #' * `doctors`: per-doctor hours against contracted hours, and on-calls,
 #'   nights and weekends against fair shares. The differences
 #'   (`hours_vs_contracted`, in hours a week, and `*_vs_fair`) are shaded
 #'   blue (fewer) to red (more)
+#' * `patterns`: per-doctor run lengths, single nights, split weekends and
+#'   single days off, with department totals
 #'
 #' @param violations Output of [check_rota()].
 #' @param doctors Output of [summarise_doctors()].
+#' @param patterns Output of [summarise_patterns()], or `NULL` to leave the
+#'   sheet out.
 #' @param path Path of the `.xlsx` file to write. An existing file is
 #'   overwritten.
 #'
@@ -27,9 +31,10 @@
 #' write_check_report(
 #'   check_rota(rota, inputs),
 #'   summarise_doctors(rota, inputs),
-#'   tempfile(fileext = ".xlsx")
+#'   tempfile(fileext = ".xlsx"),
+#'   patterns = summarise_patterns(rota, inputs)
 #' )
-write_check_report <- function(violations, doctors, path) {
+write_check_report <- function(violations, doctors, path, patterns = NULL) {
   summary <- violations |>
     summarise(n = n(), doctors = n_distinct(doctor_id, na.rm = TRUE),
               penalty = sum(penalty), .by = c(hard_soft, rule_id)) |>
@@ -52,7 +57,8 @@ write_check_report <- function(violations, doctors, path) {
     diffs <- c("hours_vs_contracted", diffs)
   }
 
-  sheets <- list(summary = summary, violations = violations, doctors = doctors)
+  sheets <- list(summary = summary, violations = violations, doctors = doctors, patterns = patterns) |>
+    compact()
   for (name in names(sheets)) {
     x <- sheets[[name]]
     wb <- wb |>

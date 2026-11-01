@@ -129,7 +129,20 @@ These come from TCS Schedule 3. Full details, parameters and sources are in
   `ANA_DAY` stays close to a common level, rather than piling normal days onto some days. Each
   doctor-day away from the level (the median) costs the weight.
 - Weekends no more than 1 in 3 where possible (this avoids the weekend allowance)
-- Avoid isolated single nights and fragmented patterns
+- **Run lengths** (`SINGLE_NIGHT`, `LONG_RUN`, `LONG_NIGHT_RUN`): no single nights, and no more
+  than 5 shifts in a row. Each isolated single night costs the `SINGLE_NIGHT` weight, and each
+  shift beyond 5 in a row (the `LONG_RUN` value) costs the `LONG_RUN` weight, more than a normal
+  day short of contracted hours. `LONG_NIGHT_RUN` (off in the test workbook) does the same for
+  nights beyond 2 in a row, for departments that want nights in pairs. The hard limits (7 shifts,
+  4 nights) still apply.
+- **Wellbeing** (`ISOLATED_DAY_OFF`, `SPLIT_WEEKEND`): days off together and whole weekends,
+  following the BMA / NHS Employers Good Rostering Guide and the Association of Anaesthetists'
+  fatigue guidance. Each single day off between two shifts (leave days aside) and each weekend
+  with working time on only Saturday or only Sunday (a Friday night counts as Saturday) costs
+  the weight.
+- **ICU continuity** (`ICU_SHORT_RUN`): runs of ICU day shifts (`ICU_DAY` and the ICU long days)
+  of at least 3 days, so the same doctors follow ICU patients. Each day a run falls short costs
+  the weight. With `LONG_RUN`, ICU runs are 3 to 5 days where possible.
 
 The penalty weights are in the `rules` and `skill_mix` sheets, so users can tune them without code.
 Each soft rule except fairness is scored exactly as the checker scores it (the row's weight times
@@ -156,8 +169,8 @@ the rule's weight), so the solver's penalty for each rule equals the checker's.
   (this includes Friday night). Then `Σ_k w[d,k] ≤ weekends in post / 2` enforces 1 in 2.
 - **Objective:** minimise the weighted sum of soft-constraint violations and the fairness
   deviations. Each soft rule has a helper variable, e.g. `short[rule, date] ≥ 1 − Σ senior x`
-  for skill mix or `single[d,t] ≥ night[t] − night[t−1] − night[t+1]` for isolated nights, with
-  a cost in the objective.
+  for skill mix, `single[d,t] ≥ night[t] − night[t−1] − night[t+1]` for isolated nights, or
+  `excess[d,w] ≥ Σ x[d, w … w+5] − 5` for runs longer than 5 shifts, with a cost in the objective.
 - **Solver:** [HiGHS](https://highs.dev) via `highs::highs_solve()`. The model is built as tidy
   tables with dplyr (one row per variable, one per constraint, one per non-zero) and turned into a
   sparse matrix only at solve time. Variables
@@ -172,7 +185,8 @@ the rule's weight), so the solver's penalty for each rule equals the checker's.
   the penalties over the whole 13 weeks at once is too slow: the root LP relaxation alone takes
   minutes. So `solve_rota()` improves the first rota by *large neighbourhood search*. It
   repeatedly frees one week, or a random group of 10 doctors, fixes everything else, and
-  re-solves that part for up to 5 s. Each step solves the full model, so hard rules always hold
+  re-solves that part for up to 5 s (up to 20 s once steps keep failing to improve it), until the
+  time limit. Each step solves the full model, so hard rules always hold
   and fairness is judged over the whole rota. The search is seeded, so the same inputs give the
   same rota. If not every slot can be filled, the first rota is instead built a week at a time,
   filling as many slots as possible, before the search improves it.
@@ -226,6 +240,7 @@ validate_inputs(inputs)                 # zero rows = inputs are consistent
 rota <- read_rota("inst/extdata/example_rota_output.xlsx")
 violations <- check_rota(rota, inputs)
 doctors <- summarise_doctors(rota, inputs)
+patterns <- summarise_patterns(rota, inputs)  # run lengths, single nights, split weekends
 
 # File paths work too
 check_rota("out/rota.xlsx", "inst/extdata/rota_inputs.xlsx")
@@ -244,7 +259,7 @@ This solves the rota, runs the checker on it, and writes to `out/`:
 | File | Contents |
 |---|---|
 | `rota.xlsx` | `grid`: dates down, doctors across, with shift and leave codes (`AL`, `SL`, `EX`, `PL` for approved leave). Weekends and bank holidays are shaded; nights and long days are coloured. `by_shift`: dates down, shifts across, showing who is on, with `UNFILLED` where cover is short. `doctors`: each doctor's hours against contracted hours, and on-calls, nights and weekends against their fair share. `key`: what the codes mean. `long`: the format the checker reads, so a hand-edited rota can be re-checked. |
-| `report.xlsx` | The checker's compliance and fairness report: violations by rule, one row per violation, and per-doctor totals with each doctor's distance from their contracted hours (`hours_vs_contracted`, hours a week) and fair shares, shaded blue (fewer) to red (more). |
+| `report.xlsx` | The checker's compliance and fairness report: violations by rule, one row per violation, and per-doctor totals with each doctor's distance from their contracted hours (`hours_vs_contracted`, hours a week) and fair shares, shaded blue (fewer) to red (more). A `patterns` sheet counts each doctor's runs of shifts, nights and ICU days, single nights, split weekends and single days off, with department totals. |
 | `calendars/` | One `.ics` file per doctor with their shifts and approved leave, to import into Outlook, Google Calendar or Apple Calendar. |
 
 It exits with status 1 if no rota was found or it breaks a hard rule, including leaving slots
@@ -260,9 +275,10 @@ solution$penalties                      # penalty per soft rule
 solution$history                        # penalty after each improvement
 check_rota(solution$rota, inputs)       # no hard violations; soft ones match the penalties
 summarise_doctors(solution$rota, inputs)  # fairness: counts against fair shares
+summarise_patterns(solution$rota, inputs) # run lengths and wellbeing patterns
 write_rota(solution$rota, inputs, "rota.xlsx")
 write_check_report(check_rota(solution$rota, inputs), summarise_doctors(solution$rota, inputs),
-                   "report.xlsx")
+                   "report.xlsx", patterns = summarise_patterns(solution$rota, inputs))
 write_calendars(solution$rota, inputs, "calendars")
 build_rota_model(inputs)                # the model itself: sizes per rule
 ```
@@ -283,7 +299,7 @@ LICENSE.md                    AGPL-3.0-or-later (code)
 LICENSE-docs.md               CC BY-SA 4.0 (documentation)
 DESCRIPTION, NAMESPACE        package metadata
 R/read_inputs.R               read_rota_inputs(), validate_inputs(), read_rota()
-R/check_rota.R                check_rota(), summarise_doctors()
+R/check_rota.R                check_rota(), summarise_doctors(), summarise_patterns()
 R/report.R                    write_check_report()
 R/model.R                     build_rota_model(): the MILP as tidy tables
 R/soft.R                      soft rules: objective penalties
@@ -315,14 +331,15 @@ Rscript -e 'pkgload::load_all(); testthat::test_dir("tests/testthat", load_packa
 ## Roadmap
 
 **Done:** input workbook and validation, independent compliance checker, solver with hard and soft
-rules, coordinator workbook, compliance report and `.ics` calendars. On the test data, a 10-minute
-solve fills every slot with no hard violations, no skill-mix shortfalls and no requested leave
-refused, and every doctor is within 1.5 h a week of their contracted hours.
+rules, coordinator workbook, compliance report and `.ics` calendars. On the test data, a 30-minute
+solve fills every slot with no hard violations and no skill-mix shortfalls. Every doctor is within
+0.4 h a week of their contracted hours. One run is longer than 5 shifts, 4 nights are single and
+9 weekends are split, out of about 490 runs and 165 night runs. 6 days of requested leave are
+refused.
 
 **Next:**
 1. A Shiny app to upload the workbook, edit requests, solve and download, without using R.
-2. PDF calendars.
-3. Re-solving mid-rota with existing shifts fixed, swaps, and non-resident on-call.
+2. Re-solving mid-rota with existing shifts fixed, swaps, and non-resident on-call.
 
 ## Prior art
 

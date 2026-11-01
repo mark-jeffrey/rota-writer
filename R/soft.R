@@ -17,6 +17,11 @@ soft_parts <- function(x, weekend, inputs, n_days) {
     skill_mix_part(x, inputs),
     weekend_target_part(weekend, inputs),
     single_night_part(x, inputs, n_days),
+    run_target_part(x, inputs, n_days, "LONG_RUN", TRUE),
+    run_target_part(x, inputs, n_days, "LONG_NIGHT_RUN", x$is_night),
+    short_run_part(x, inputs, n_days, "ICU_SHORT_RUN", is_icu_day(x)),
+    isolated_day_off_part(x, inputs, n_days),
+    split_weekend_part(x, inputs),
     fair_part(filter(x, is_on_call), inputs, "FAIR_ONCALL"),
     fair_part(filter(x, is_night), inputs, "FAIR_NIGHTS"),
     fair_part(weekend, inputs, "FAIR_WEEKENDS"),
@@ -26,9 +31,9 @@ soft_parts <- function(x, weekend, inputs, n_days) {
     compact()
 }
 
-# Rule weight, or 0 if the rule is switched off
+# Rule weight, or 0 if the rule is switched off or not in the rules sheet
 soft_weight <- function(inputs, id) {
-  if (!rule_on(inputs, id)) {
+  if (!rule_on(inputs, id) || !id %in% inputs$rules$rule_id) {
     return(0)
   }
   coalesce(inputs$rules$weight[match(id, inputs$rules$rule_id)], 1)
@@ -187,6 +192,157 @@ single_night_part <- function(x, inputs, n_days) {
     ) |>
       mutate(rule = "SINGLE_NIGHT", lo = -Inf, hi = 0),
     costs = transmute(singles, rule = "SINGLE_NIGHT", aux, coef = weight)
+  )
+}
+
+# Runs longer than the rule's value n, of any shift (LONG_RUN) or of nights
+# (LONG_NIGHT_RUN). A run of L days fills L - n windows of n + 1 days, so
+# each day beyond n costs the weight:
+#   excess[d, w] >= sum(x on days w ... w + n) - n
+run_target_part <- function(x, inputs, n_days, rule, keep) {
+  weight <- soft_weight(inputs, rule)
+  n <- rule_value(inputs, rule)
+  x <- x[keep, ]
+  if (weight == 0 || length(n) == 0 || is.na(n) || nrow(x) == 0) {
+    return(NULL)
+  }
+  in_window <- x |>
+    select(doctor_id, t, j) |>
+    cross_join(tibble::tibble(back = 0:n)) |>
+    mutate(w = t - back) |>
+    filter(w >= 1, w + n <= n_days) |>
+    mutate(con = paste(rule, doctor_id, w))
+  # Windows with a day the doctor cannot work can never be full
+  windows <- in_window |>
+    summarise(days = n_distinct(t), .by = con) |>
+    filter(days > n)
+  in_window <- semi_join(in_window, windows, by = "con")
+
+  list(
+    vars = aux_vars(windows$con),
+    terms = bind_rows(
+      transmute(in_window, con, j, coef = 1),
+      transmute(windows, con, aux = con, coef = -1)
+    ) |>
+      mutate(rule = rule, lo = -Inf, hi = n),
+    costs = transmute(windows, rule = rule, aux = con, coef = weight)
+  )
+}
+
+# ICU day-time shifts (normal and long days), whose runs give continuity
+is_icu_day <- function(shifts) {
+  !shifts$is_night & stringr::str_starts(shifts$role, "ICU")
+}
+
+# Runs of L < n days (the rule's value), with a day outside the run on each
+# side inside the rota, cost (n - L) x weight:
+#   short[d, t, L] >= sum(x on days t ... t + L - 1) - x[t - 1] - x[t + L] - (L - 1)
+short_run_part <- function(x, inputs, n_days, rule, keep) {
+  weight <- soft_weight(inputs, rule)
+  n <- rule_value(inputs, rule)
+  x <- x[keep, ]
+  if (weight == 0 || length(n) == 0 || is.na(n) || n < 2 || nrow(x) == 0) {
+    return(NULL)
+  }
+  days <- distinct(x, doctor_id, t)
+  runs <- days |>
+    tidyr::crossing(len = seq_len(n - 1)) |>
+    filter(t > 1, t + len <= n_days) |>
+    cross_join(tibble::tibble(i = 0:(n - 2))) |>
+    filter(i < len) |>
+    mutate(day = t + i) |>
+    semi_join(days, by = c("doctor_id", day = "t")) |>
+    summarise(days = n(), .by = c(doctor_id, t, len)) |>
+    filter(days == len) |>
+    mutate(aux = paste(rule, doctor_id, t, len))
+  cells <- runs |>
+    tidyr::crossing(day = -1:(n - 1)) |>
+    filter(day <= len) |>
+    transmute(aux, doctor_id, t = t + day, coef = if_else(day == -1 | day == len, -1, 1))
+
+  list(
+    vars = aux_vars(runs$aux),
+    terms = bind_rows(
+      cells |>
+        inner_join(select(x, doctor_id, t, j), by = c("doctor_id", "t"),
+                   relationship = "many-to-many") |>
+        transmute(con = aux, j, coef),
+      transmute(runs, con = aux, aux, coef = -1)
+    ) |>
+      mutate(hi = runs$len[match(con, runs$aux)] - 1, rule = rule, lo = -Inf),
+    costs = transmute(runs, rule = rule, aux, coef = (n - len) * weight)
+  )
+}
+
+# A single day off (not leave) between two working days:
+#   single[d, t] >= x[t - 1] + x[t + 1] - x[t] - 1
+isolated_day_off_part <- function(x, inputs, n_days) {
+  weight <- soft_weight(inputs, "ISOLATED_DAY_OFF")
+  if (weight == 0 || nrow(x) == 0) {
+    return(NULL)
+  }
+  days <- distinct(x, doctor_id, t)
+  on_leave <- leave_days(inputs) |>
+    transmute(doctor_id, t = as.integer(date - inputs$period$start) + 1L)
+  gaps <- days |>
+    mutate(t = t + 1L) |>
+    filter(t < n_days) |>
+    semi_join(mutate(days, t = t - 1L), by = c("doctor_id", "t")) |>
+    anti_join(on_leave, by = c("doctor_id", "t")) |>
+    mutate(aux = paste("ISOLATED_DAY_OFF", doctor_id, t))
+  cells <- gaps |>
+    tidyr::crossing(day = -1:1) |>
+    transmute(aux, doctor_id, t = t + day, coef = if_else(day == 0, -1, 1))
+
+  list(
+    vars = aux_vars(gaps$aux),
+    terms = bind_rows(
+      cells |>
+        inner_join(select(x, doctor_id, t, j), by = c("doctor_id", "t"),
+                   relationship = "many-to-many") |>
+        transmute(con = aux, j, coef),
+      transmute(gaps, con = aux, aux, coef = -1)
+    ) |>
+      mutate(rule = "ISOLATED_DAY_OFF", lo = -Inf, hi = 1),
+    costs = transmute(gaps, rule = "ISOLATED_DAY_OFF", aux, coef = weight)
+  )
+}
+
+# Working (any time on) Saturday or Sunday but not both. For each shift a
+# touching one day, with B the shifts touching the other:
+#   split[d, sat] >= x[a] - sum(x[B])
+split_weekend_part <- function(x, inputs) {
+  weight <- soft_weight(inputs, "SPLIT_WEEKEND")
+  if (weight == 0 || nrow(x) == 0) {
+    return(NULL)
+  }
+  touch <- bind_rows(
+    select(x, doctor_id, day = date, j),
+    x |> filter(end_h > 24) |> transmute(doctor_id, day = date + 1, j)
+  ) |>
+    mutate(sat = floor_saturday(day), is_sat = day == sat) |>
+    filter(day <= sat + 1, sat >= inputs$period$start, sat + 1 <= inputs$period$end) |>
+    mutate(aux = paste("SPLIT_WEEKEND", doctor_id, sat))
+  weekends <- distinct(touch, aux)
+  a <- mutate(touch, con = paste(aux, j, is_sat))
+
+  list(
+    vars = aux_vars(weekends$aux),
+    terms = bind_rows(
+      transmute(a, con, j, coef = 1),
+      a |>
+        select(con, aux, is_sat) |>
+        inner_join(select(touch, aux, other = is_sat, j), by = "aux",
+                   relationship = "many-to-many") |>
+        filter(other != is_sat) |>
+        transmute(con, j, coef = -1),
+      transmute(a, con, aux, coef = -1)
+    ) |>
+      # a Saturday night touches both days, so it cancels out of its own row
+      summarise(coef = sum(coef), .by = c(con, j, aux)) |>
+      filter(coef != 0) |>
+      mutate(rule = "SPLIT_WEEKEND", lo = -Inf, hi = 0),
+    costs = transmute(weekends, rule = "SPLIT_WEEKEND", aux, coef = weight)
   )
 }
 

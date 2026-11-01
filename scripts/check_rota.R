@@ -34,7 +34,7 @@ message(sprintf("%d hard violations, %d soft (total penalty %g)",
 print(summary, n = Inf)
 
 if (length(args) >= 3) {
-  write_check_report(violations, doctors, args[3])
+  write_check_report(violations, doctors, args[3], patterns = summarise_patterns(rota, inputs))
   message("Report written to ", args[3])
 }
 

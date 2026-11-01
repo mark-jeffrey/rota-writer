@@ -41,7 +41,9 @@ only happens when the other hard rules leave no way to fill it, so
 impossible inputs still give a rota, with the gaps showing which slots
 could not be filled. Soft rules are penalties in the objective, scored as in
 \code{\link[=check_rota]{check_rota()}}: requested leave, requests, discouraged placement roles,
-skill mix, the 1-in-3 weekend target and isolated single nights. Fairness
+skill mix, the 1-in-3 weekend target, isolated single nights and runs of
+shifts or nights longer than their targets, short ICU runs, single days off
+and split weekends. Fairness
 (\code{FAIR_ONCALL}, \code{FAIR_NIGHTS}, \code{FAIR_WEEKENDS}) penalises each doctor's
 distance from their WTE-weighted share, with the cost per shift rising the
 further they are from it, so the solver spreads work evenly.

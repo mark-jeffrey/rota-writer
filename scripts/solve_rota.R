@@ -37,7 +37,8 @@ dir.create(out, recursive = TRUE, showWarnings = FALSE)
 violations <- check_rota(solution$rota, inputs)
 
 write_rota(solution$rota, inputs, file.path(out, "rota.xlsx"))
-write_check_report(violations, summarise_doctors(solution$rota, inputs), file.path(out, "report.xlsx"))
+write_check_report(violations, summarise_doctors(solution$rota, inputs), file.path(out, "report.xlsx"),
+                   patterns = summarise_patterns(solution$rota, inputs))
 calendars <- write_calendars(solution$rota, inputs, file.path(out, "calendars"))
 message(sprintf("Wrote rota.xlsx, report.xlsx and %d calendars to %s", length(calendars), out))
 

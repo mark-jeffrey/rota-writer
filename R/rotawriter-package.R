@@ -10,6 +10,7 @@
 #' * [read_rota()]: load a rota
 #' * [check_rota()]: list every rule a rota breaks
 #' * [summarise_doctors()]: per-doctor totals and fair shares
+#' * [summarise_patterns()]: per-doctor run lengths and wellbeing patterns
 #' * [write_check_report()]: save the results as a workbook
 #' * [solve_rota()]: write a rota that meets the hard rules and minimises
 #'   the soft-rule penalties
