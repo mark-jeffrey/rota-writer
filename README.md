@@ -44,6 +44,10 @@ anywhere. In the app you:
 4. **Check a rota:** upload a rota workbook, such as one edited by hand, to check it against the
    inputs.
 
+![The Solve tab: a progress bar and the best penalty so far, falling over a 3-minute solve](docs/images/app-solve.png)
+
+![The results for the example rota: no hard rules broken, every shift covered, and the rota grid coloured by shift](docs/images/app-results.png)
+
 If the package is installed (`R CMD INSTALL .`), `rotawriter::run_app()` starts it from any R
 session. On Windows, `inst/launchers/rota-writer.bat` can be copied to the desktop as a
 double-click launcher.
