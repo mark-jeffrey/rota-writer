@@ -335,7 +335,7 @@ rules, coordinator workbook, compliance report and `.ics` calendars. On the test
 solve fills every slot with no hard violations and no skill-mix shortfalls. Every doctor is within
 0.4 h a week of their contracted hours. One run is longer than 5 shifts, 4 nights are single and
 9 weekends are split, out of about 490 runs and 165 night runs. 6 days of requested leave are
-refused.
+refused. That rota, its compliance report and the calendars are in [`out/`](out/).
 
 **Next:**
 1. A Shiny app to upload the workbook, edit requests, solve and download, without using R.
