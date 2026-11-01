@@ -66,7 +66,9 @@ rules <- tribble(
   "FAIR_ONCALL",        "On-call shifts close to WTE-weighted share",                NA,     "",         "soft",     10,      "Y",
   "FAIR_NIGHTS",        "Nights close to WTE-weighted share",                        NA,     "",         "soft",     10,      "Y",
   "FAIR_WEEKENDS",      "Weekends close to WTE-weighted share",                      NA,     "",         "soft",     10,      "Y",
-  "SINGLE_NIGHT",       "Avoid isolated single nights",                              NA,     "",         "soft",     20,      "Y"
+  "SINGLE_NIGHT",       "Avoid isolated single nights",                              NA,     "",         "soft",     20,      "Y",
+  "HOURS_TARGET",       "Average weekly hours close to contracted (value: default hours x WTE if staff contracted_hours blank; weight per hour short)", 45, "hours", "soft", 5, "Y",
+  "NORMAL_DAY_SPREAD",  "Normal-day staffing even across the rota (weight per doctor-day from the average)", NA, "", "soft", 10, "Y"
 )
 
 # Grades ------------------------------------------------------------------
@@ -110,22 +112,19 @@ shifts <- tribble(
     is_late    = "N" # no shift starts before 16:00 and finishes after 23:00
   )
 
-# On weekdays ICU2 and ANA2 are covered by normal-day staff until 17:00,
-# so only ICU1, ANA1 and OBS run long days. Weekends/bank holidays: all tiers.
+# Every on-call tier runs a long day and a night every day. Normal days have
+# a minimum and no maximum (blank n_max): the solver adds normal days to
+# bring doctors up to their contracted hours.
 cover <- bind_rows(
   shifts |>
     filter(is_on_call == "Y") |>
     select(shift_code) |>
     crossing(day_type = c("weekday", "weekend", "bank_holiday")) |>
-    mutate(
-      n = if_else(day_type == "weekday" & shift_code %in% c("ICU2_LD", "ANA2_LD"), 0, 1),
-      n_min = n, n_max = n
-    ) |>
-    select(-n),
+    mutate(n_min = 1, n_max = 1),
   tribble(
     ~shift_code, ~day_type,      ~n_min, ~n_max,
-    "ICU_DAY",   "weekday",      2,      6,
-    "ANA_DAY",   "weekday",      5,      14,
+    "ICU_DAY",   "weekday",      2,      NA,
+    "ANA_DAY",   "weekday",      5,      NA,
     "ICU_DAY",   "weekend",      0,      0,
     "ANA_DAY",   "weekend",      0,      0,
     "ICU_DAY",   "bank_holiday", 0,      0,
@@ -208,7 +207,8 @@ staff <- tribble(
     across(c(nights_exempt, opted_out_wtr, ICU1:OBS), yn)
   ) |>
   rename_with(\(x) paste0("can_", x), ICU1:OBS) |>
-  select(doctor_id, name, grade, wte, ltft_fixed_day_off, start_date, end_date,
+  mutate(contracted_hours = 45 * wte) |>
+  select(doctor_id, name, grade, wte, contracted_hours, ltft_fixed_day_off, start_date, end_date,
          nights_exempt, opted_out_wtr, starts_with("can_"))
 
 # Placements --------------------------------------------------------------

@@ -19,7 +19,9 @@ soft_parts <- function(x, weekend, inputs, n_days) {
     single_night_part(x, inputs, n_days),
     fair_part(filter(x, is_on_call), inputs, "FAIR_ONCALL"),
     fair_part(filter(x, is_night), inputs, "FAIR_NIGHTS"),
-    fair_part(weekend, inputs, "FAIR_WEEKENDS")
+    fair_part(weekend, inputs, "FAIR_WEEKENDS"),
+    hours_target_part(x, inputs),
+    normal_day_spread_part(x, inputs)
   ) |>
     compact()
 }
@@ -227,5 +229,82 @@ fair_part <- function(items, inputs, rule, steps = 3) {
     ) |>
       mutate(rule = rule, lo = 0, hi = 0),
     costs = transmute(segments, rule = rule, aux, coef = cost)
+  )
+}
+
+# Each doctor's hours (rostered plus approved leave, see leave_hours())
+# close to contracted hours x weeks in post:
+#   rostered hours + short - over = contracted total - leave hours
+# Hours short cost more for each further normal day short (the k-th day's
+# hours cost (2k - 1) x weight each), so a shortfall is shared between
+# doctors. Hours over cost 10 x weight each, so doctors go over their
+# contracted hours only when cover needs it.
+hours_target_part <- function(x, inputs, steps = 3) {
+  weight <- soft_weight(inputs, "HOURS_TARGET")
+  if (weight == 0) {
+    return(NULL)
+  }
+  normal_day <- inputs$shifts$hours[inputs$shifts$shift_type == "normal_day"]
+  day_hours <- if (length(normal_day) > 0) max(normal_day) else 8
+
+  target <- inputs$staff |>
+    transmute(doctor_id, total = contracted_hours(inputs) * weeks_in_post(inputs)) |>
+    filter(!is.na(total), doctor_id %in% x$doctor_id) |>
+    left_join(leave_hours(inputs), by = "doctor_id") |>
+    mutate(total = total - coalesce(leave_hours, 0), con = paste("HOURS_TARGET", doctor_id))
+  short <- target |>
+    tidyr::crossing(step = seq_len(steps + 1)) |>
+    mutate(aux = paste(con, "short", step),
+           upper = if_else(step > steps, Inf, day_hours),
+           cost = weight * (2 * step - 1))
+  over <- mutate(target, aux = paste(con, "over"))
+
+  list(
+    vars = bind_rows(aux_vars(short$aux, upper = short$upper), aux_vars(over$aux, upper = Inf)),
+    terms = bind_rows(
+      x |>
+        inner_join(select(target, doctor_id, con), by = "doctor_id") |>
+        transmute(con, j, coef = hours),
+      transmute(short, con, aux, coef = 1),
+      transmute(over, con, aux, coef = -1)
+    ) |>
+      left_join(select(target, con, total), by = "con") |>
+      transmute(rule = "HOURS_TARGET", con, j, aux, coef, lo = total, hi = total),
+    costs = bind_rows(
+      transmute(short, rule = "HOURS_TARGET", aux, coef = cost),
+      transmute(over, rule = "HOURS_TARGET", aux, coef = 10 * weight)
+    )
+  )
+}
+
+# Normal-day staffing even across the rota: each day's count of each
+# normal-day shift close to a common level for that shift, chosen by the
+# solver. Each doctor-day above or below the level costs `weight`.
+normal_day_spread_part <- function(x, inputs) {
+  weight <- soft_weight(inputs, "NORMAL_DAY_SPREAD")
+  normal <- inputs$shifts$shift_code[inputs$shifts$shift_type == "normal_day"]
+  if (weight == 0 || length(normal) == 0) {
+    return(NULL)
+  }
+  days <- expected_cover(inputs) |>
+    filter(shift_code %in% normal, n_max > 0) |>
+    transmute(date, shift_code, con = paste("NORMAL_DAY_SPREAD", shift_code, date),
+              level = paste("NORMAL_DAY_SPREAD", shift_code, "level"))
+  levels <- distinct(days, level)
+  devs <- days |>
+    tidyr::crossing(dir = c(1, -1)) |>
+    mutate(aux = paste(con, dir))
+
+  list(
+    vars = bind_rows(aux_vars(levels$level, upper = Inf), aux_vars(devs$aux, upper = Inf)),
+    terms = bind_rows(
+      x |>
+        inner_join(select(days, date, shift_code, con), by = c("date", "shift_code")) |>
+        transmute(con, j, coef = 1),
+      transmute(days, con, aux = level, coef = -1),
+      transmute(devs, con, aux, coef = -dir)
+    ) |>
+      mutate(rule = "NORMAL_DAY_SPREAD", lo = 0, hi = 0),
+    costs = transmute(devs, rule = "NORMAL_DAY_SPREAD", aux, coef = weight)
   )
 }

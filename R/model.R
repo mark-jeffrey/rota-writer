@@ -402,20 +402,30 @@ max_7day_terms <- function(x, shifts, limit, n_days) {
     constraint("MAX_7DAY", hi = limit)
 }
 
+# Approved leave counts as a normal day's hours (see leave_hours()), so it
+# uses up part of the limit
 avg_hours_terms <- function(x, inputs) {
   limit <- inputs$staff |>
     transmute(
       doctor_id,
-      weeks = as.numeric(pmin(end_date, inputs$period$end) - pmax(start_date, inputs$period$start) + 1) / 7,
-      hi = wte * weeks * if_else(opted_out_wtr %in% TRUE,
-                                 rule_value(inputs, "AVG_HOURS_OPTOUT"),
-                                 rule_value(inputs, "AVG_HOURS"))
-    )
+      hi = wte * weeks_in_post(inputs) * if_else(opted_out_wtr %in% TRUE,
+                                                 rule_value(inputs, "AVG_HOURS_OPTOUT"),
+                                                 rule_value(inputs, "AVG_HOURS"))
+    ) |>
+    left_join(leave_hours(inputs), by = "doctor_id") |>
+    mutate(hi = hi - coalesce(leave_hours, 0))
 
   x |>
     inner_join(limit, by = "doctor_id") |>
     transmute(con = doctor_id, j, coef = hours, hi) |>
     constraint("AVG_HOURS")
+}
+
+# Weeks each doctor in the staff sheet is in post during the rota
+weeks_in_post <- function(inputs) {
+  staff <- inputs$staff
+  pmax(as.numeric(pmin(staff$end_date, inputs$period$end) -
+                    pmax(staff$start_date, inputs$period$start) + 1) / 7, 0)
 }
 
 # At most n days with a shift in `shift_codes` in any n + 1 consecutive days

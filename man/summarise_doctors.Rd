@@ -20,10 +20,16 @@ path to an inputs workbook.}
 A tibble with one row per doctor:
 \describe{
 \item{doctor_id, grade, wte, opted_out_wtr}{From the \code{staff} sheet.}
+\item{contracted_hours}{Weekly contracted hours: the \code{staff} sheet's
+\code{contracted_hours}, or the \code{HOURS_TARGET} rule's value x WTE where
+that is blank.}
 \item{from, to, weeks_in_post}{Part of the rota period the doctor is
 in post.}
-\item{hours, avg_weekly_hours}{Rostered hours, in total and per week
-in post (leave counts as zero).}
+\item{hours, leave_hours}{Rostered hours, and approved leave on days
+the doctor would otherwise work (weekdays other than bank holidays and
+their LTFT day off), counted as a normal day each.}
+\item{avg_weekly_hours}{\code{hours + leave_hours} per week in post. This is
+what \code{AVG_HOURS} limits and what \code{contracted_hours} is compared with.}
 \item{on_calls, nights, weekends}{Counts. A weekend is worked if any
 shift falls between 00:00 Saturday and 24:00 Sunday.}
 \item{fair_on_calls, fair_nights, fair_weekends}{WTE-weighted fair

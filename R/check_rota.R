@@ -112,11 +112,17 @@ finalise_violations <- function(v, inputs) {
 
 # Department-level rules -------------------------------------------------
 
+# Shifts not listed for a day type are not needed; a blank n_max means no
+# maximum (e.g. normal days)
 expected_cover <- function(inputs) {
   tidyr::crossing(date = rota_dates(inputs), shift_code = inputs$shifts$shift_code) |>
     mutate(day_type = day_type(date, inputs)) |>
-    left_join(inputs$cover, by = c("shift_code", "day_type")) |>
-    mutate(across(c(n_min, n_max), \(x) coalesce(x, 0)))
+    left_join(mutate(inputs$cover, listed = TRUE), by = c("shift_code", "day_type")) |>
+    mutate(
+      n_min = coalesce(n_min, 0),
+      n_max = if_else(listed %in% TRUE, coalesce(n_max, Inf), 0)
+    ) |>
+    select(-listed)
 }
 
 check_cover <- function(si, inputs) {
@@ -130,7 +136,9 @@ check_cover <- function(si, inputs) {
       "COVER",
       start_date = date,
       detail = sprintf("%s: %d rostered, needs %s", shift_code, n,
-                       if_else(n_min == n_max, as.character(n_min), paste0(n_min, "-", n_max)))
+                       case_when(n_min == n_max ~ as.character(n_min),
+                                 is.infinite(n_max) ~ paste("at least", n_min),
+                                 .default = paste0(n_min, "-", n_max)))
     ))
 }
 
@@ -319,12 +327,44 @@ check_max_7day <- function(si, inputs) {
                     detail = sprintf("%.1f h in 168 h (max %g)", hours, limit)))
 }
 
+# Approved leave on a day the doctor would otherwise work (a weekday that is
+# not a bank holiday or their LTFT day off, while in post) counts as a
+# normal day's hours for average and contracted hours
+leave_hours <- function(inputs) {
+  normal_day <- inputs$shifts$hours[inputs$shifts$shift_type == "normal_day"]
+  day_hours <- if (length(normal_day) > 0) max(normal_day) else 0
+
+  leave_days(inputs) |>
+    filter(status == "approved") |>
+    distinct(doctor_id, date) |>
+    semi_join(in_post_days(inputs), by = c("doctor_id", "date")) |>
+    filter(day_type(date, inputs) == "weekday") |>
+    left_join(select(inputs$staff, doctor_id, day_off = ltft_fixed_day_off), by = "doctor_id") |>
+    filter(is.na(day_off) | as.character(lubridate::wday(date, label = TRUE, locale = "C")) != day_off) |>
+    count(doctor_id, name = "leave_days") |>
+    mutate(leave_hours = leave_days * day_hours) |>
+    select(doctor_id, leave_hours)
+}
+
+# Weekly contracted hours: the staff sheet's contracted_hours, or the
+# HOURS_TARGET rule's value x WTE where that is blank
+contracted_hours <- function(inputs) {
+  given <- inputs$staff$contracted_hours %||% rep(NA_real_, nrow(inputs$staff))
+  default <- rule_value(inputs, "HOURS_TARGET")
+  if (length(default) == 0) default <- NA_real_
+  coalesce(as.numeric(given), default * inputs$staff$wte)
+}
+
 check_avg_hours <- function(si, inputs) {
   limit <- rule_value(inputs, "AVG_HOURS")
   limit_optout <- rule_value(inputs, "AVG_HOURS_OPTOUT")
 
   doctor_summary(si, inputs) |>
-    mutate(limit = if_else(opted_out_wtr, limit_optout, limit) * wte) |>
+    mutate(
+      limit = if_else(opted_out_wtr %in% TRUE, limit_optout, limit) * wte,
+      # Unrounded, so 48.04 h is not passed as 48.0
+      avg_weekly_hours = (hours + leave_hours) / weeks_in_post
+    ) |>
     filter(avg_weekly_hours > limit + 1e-9) |>
     with(violations(
       "AVG_HOURS", doctor_id, from, to,
@@ -487,10 +527,16 @@ check_requests <- function(si, inputs) {
 #' @returns A tibble with one row per doctor:
 #'   \describe{
 #'     \item{doctor_id, grade, wte, opted_out_wtr}{From the `staff` sheet.}
+#'     \item{contracted_hours}{Weekly contracted hours: the `staff` sheet's
+#'       `contracted_hours`, or the `HOURS_TARGET` rule's value x WTE where
+#'       that is blank.}
 #'     \item{from, to, weeks_in_post}{Part of the rota period the doctor is
 #'       in post.}
-#'     \item{hours, avg_weekly_hours}{Rostered hours, in total and per week
-#'       in post (leave counts as zero).}
+#'     \item{hours, leave_hours}{Rostered hours, and approved leave on days
+#'       the doctor would otherwise work (weekdays other than bank holidays and
+#'       their LTFT day off), counted as a normal day each.}
+#'     \item{avg_weekly_hours}{`hours + leave_hours` per week in post. This is
+#'       what `AVG_HOURS` limits and what `contracted_hours` is compared with.}
 #'     \item{on_calls, nights, weekends}{Counts. A weekend is worked if any
 #'       shift falls between 00:00 Saturday and 24:00 Sunday.}
 #'     \item{fair_on_calls, fair_nights, fair_weekends}{WTE-weighted fair
@@ -516,17 +562,20 @@ doctor_summary <- function(si, inputs) {
   weekends <- count(weekends_worked(si), doctor_id, name = "weekends")
 
   inputs$staff |>
+    mutate(contracted_hours = contracted_hours(inputs)) |>
     transmute(
-      doctor_id, grade, wte, opted_out_wtr, nights_exempt,
+      doctor_id, grade, wte, contracted_hours, opted_out_wtr, nights_exempt,
       from = pmax(start_date, inputs$period$start),
       to = pmin(end_date, inputs$period$end),
       weeks_in_post = as.numeric(to - from + 1) / 7
     ) |>
     left_join(counts, by = "doctor_id") |>
     left_join(weekends, by = "doctor_id") |>
+    left_join(leave_hours(inputs), by = "doctor_id") |>
+    relocate(leave_hours, .after = hours) |>
     mutate(
-      across(c(hours, on_calls, nights, weekends), \(x) coalesce(x, 0)),
-      avg_weekly_hours = hours / weeks_in_post,
+      across(c(hours, leave_hours, on_calls, nights, weekends), \(x) coalesce(x, 0)),
+      avg_weekly_hours = (hours + leave_hours) / weeks_in_post,
       share = wte * weeks_in_post / sum(wte * weeks_in_post),
       # Nights-exempt doctors take no share of the nights
       night_share = if_else(nights_exempt %in% TRUE, 0, wte * weeks_in_post),
