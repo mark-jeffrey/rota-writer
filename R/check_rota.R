@@ -544,11 +544,11 @@ check_requests <- function(si, inputs) {
     left_join(day_flags, by = c("doctor_id", "date")) |>
     left_join(weekends, by = c("doctor_id", "sat")) |>
     mutate(across(c(on_call, night, weekend), \(x) coalesce(x, FALSE))) |>
-    filter(case_match(request,
-      "no_oncall"     ~ on_call,
-      "no_night"      ~ night,
-      "no_weekend"    ~ weekend,
-      "prefer_oncall" ~ !on_call,
+    filter(case_when(
+      request == "no_oncall"     ~ on_call,
+      request == "no_night"      ~ night,
+      request == "no_weekend"    ~ weekend,
+      request == "prefer_oncall" ~ !on_call,
       .default = FALSE
     )) |>
     with(violations("REQUESTS", doctor_id, date,
