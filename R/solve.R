@@ -4,12 +4,19 @@
 #'
 #' Builds the model with [build_rota_model()] and solves it with the HiGHS
 #' MILP solver in two phases:
-#' 1. Find any rota that meets every hard rule. This takes seconds.
+#' 1. Find a rota that meets every hard rule with every slot filled. With
+#'    workable inputs this takes seconds. If it cannot (the inputs are
+#'    impossible, or it runs out of time), build the rota a week at a time
+#'    instead, filling as many slots as the hard rules allow.
 #' 2. Improve it by large neighbourhood search: repeatedly free one week, or
 #'    a random group of doctors, fix the rest of the rota, and re-solve that
 #'    part to lower the soft-rule penalties. Every step solves the full model,
 #'    so the hard rules always hold and fairness is judged over the whole
 #'    rota.
+#'
+#' If the inputs make some slots impossible to fill (e.g. too few doctors
+#' with the right competencies, or everyone on leave), the rota leaves them
+#' empty rather than break a contract rule, and `unfilled` lists them.
 #'
 #' Phase 2 runs until the time limit, until the penalty is 0, or until many
 #' steps in a row fail to improve it. It does not prove the rota is the best
@@ -26,9 +33,11 @@
 #'   \describe{
 #'     \item{rota}{The rota in long format (`doctor_id`, `date`, `code`), as
 #'       used by [check_rota()], or `NULL` if no rota was found.}
-#'     \item{status}{`"Feasible"` if a rota was found, otherwise the solver's
-#'       reason, e.g. `"Infeasible"` (the hard rules cannot all be met) or
-#'       `"Time limit reached"`.}
+#'     \item{status}{`"Feasible"` if every slot is filled, `"Unfilled shifts"`
+#'       if some could not be, otherwise the solver's reason for finding no
+#'       rota, e.g. `"Time limit reached"`.}
+#'     \item{unfilled}{Slots the rota leaves short: `date`, `shift_code`,
+#'       `needed` and `filled`. Zero rows when every slot is filled.}
 #'     \item{objective}{Total penalty of the rota.}
 #'     \item{penalties}{Penalty by soft rule (`rule`, `penalty`). Apart from
 #'       the `FAIR_*` rules, these match the totals from [check_rota()].}
@@ -63,12 +72,20 @@ solve_rota <- function(inputs, time_limit = NULL, seed = 1, verbose = FALSE) {
   model <- build_rota_model(inputs)
   solve <- highs_solver(model)
 
-  first <- solve(cost = rep(0, nrow(model$vars)), time_limit = time_limit)
-  if (!is_feasible(first)) {
-    return(rota_solution(model, NULL, first$status_message, started))
+  # Phase 1: every slot filled, as a pure feasibility problem (minimising
+  # unfilled slots instead is far slower). Proving it impossible can also be
+  # slow, so cap it; an empty rota always meets the other hard rules.
+  first <- solve(cost = rep(0, nrow(model$vars)), time_limit = min(time_limit / 4, 60),
+                 allow_unfilled = FALSE)
+  if (is_feasible(first)) {
+    best <- polish(solve, model, first$primal_solution)
+  } else {
+    if (verbose) {
+      message(sprintf("%5.0f s  cannot fill every slot (%s); filling as many as possible",
+                      elapsed(), first$status_message))
+    }
+    best <- week_by_week(solve, model, deadline = \() time_limit - elapsed())
   }
-
-  best <- polish(solve, model, first$primal_solution)
   history <- tibble::tibble(seconds = elapsed(), objective = best$objective_value)
   if (verbose) message(sprintf("%5.0f s  first rota, penalty %g", elapsed(), best$objective_value))
 
@@ -94,22 +111,26 @@ solve_rota <- function(inputs, time_limit = NULL, seed = 1, verbose = FALSE) {
   # A step stopped by its time limit can leave helper variables above their
   # minimum; re-solve them with the rota fixed so the penalties are exact
   best <- polish(solve, model, best$primal_solution)
-  rota_solution(model, best, "Feasible", started, history)
+  rota_solution(model, inputs, best, NULL, started, history)
 }
 
 # A function that solves the model with the given costs, optionally fixing
 # the shift variables in `fix` to their values in `current`, which is also
-# passed as the starting point
+# passed as the starting point. `allow_unfilled = FALSE` makes cover exact.
 highs_solver <- function(model) {
   A <- Matrix::sparseMatrix(
     i = model$terms$i, j = model$terms$j, x = model$terms$coef,
     dims = c(nrow(model$rows), nrow(model$vars))
   )
   is_x <- model$vars$kind == "x"
+  unfilled_j <- model$costs$j[model$costs$rule == "COVER"]
 
-  function(cost, time_limit, fix = NULL, current = NULL) {
+  function(cost, time_limit, fix = NULL, current = NULL, allow_unfilled = TRUE) {
     lower <- model$vars$lower
     upper <- model$vars$upper
+    if (!allow_unfilled) {
+      upper[unfilled_j] <- 0
+    }
     start <- NULL
     if (!is.null(current)) {
       # Only the shift variables: HiGHS works out the helper variables
@@ -129,6 +150,24 @@ highs_solver <- function(model) {
 # A feasible point can also come back when the solver stops at the time limit
 is_feasible <- function(result) {
   identical(result$info$primal_solution_status, "Feasible")
+}
+
+# Build a rota one week at a time, each week solved with the weeks after it
+# still empty. An empty rota meets every hard rule except cover, so each
+# step is feasible, and unfilled slots cost so much that each week fills as
+# many as it can.
+week_by_week <- function(solve, model, deadline) {
+  t <- model$vars$t
+  current <- rep(0, nrow(model$vars))
+  for (first in seq(1, max(t, na.rm = TRUE), by = 7)) {
+    free <- model$vars$kind == "x" & t >= first & t < first + 7
+    tried <- solve(cost = model$vars$cost, time_limit = min(10, deadline()), fix = !free,
+                   current = current)
+    if (is_feasible(tried)) {
+      current <- tried$primal_solution
+    }
+  }
+  polish(solve, model, current)
 }
 
 # Fix every shift and solve for the cheapest helper variables
@@ -153,8 +192,8 @@ neighbourhood <- function(model, step, days = 7, doctors = 10) {
   }
 }
 
-rota_solution <- function(model, result, status, started, history = NULL) {
-  rota <- penalties <- NULL
+rota_solution <- function(model, inputs, result, status, started, history = NULL) {
+  rota <- penalties <- unfilled <- NULL
   if (!is.null(result)) {
     value <- result$primal_solution
     rota <- model$vars |>
@@ -167,6 +206,13 @@ rota_solution <- function(model, result, status, started, history = NULL) {
     ) |>
       summarise(penalty = round(sum(penalty), 6), .by = rule) |>
       arrange(desc(penalty))
+    unfilled <- expected_cover(inputs) |>
+      filter(n_min > 0) |>
+      left_join(count(rota, date, shift_code = code, name = "filled"), by = c("date", "shift_code")) |>
+      transmute(date, shift_code, needed = n_min, filled = coalesce(filled, 0L)) |>
+      filter(filled < needed) |>
+      arrange(date, shift_code)
+    status <- if (nrow(unfilled) == 0) "Feasible" else "Unfilled shifts"
   }
 
   structure(
@@ -174,6 +220,7 @@ rota_solution <- function(model, result, status, started, history = NULL) {
       rota = rota,
       status = status,
       objective = if (!is.null(result)) result$objective_value else NA_real_,
+      unfilled = unfilled,
       penalties = penalties,
       history = history,
       seconds = as.numeric(difftime(Sys.time(), started, units = "secs")),
@@ -189,6 +236,13 @@ print.rota_solution <- function(x, ...) {
   if (!is.null(x$rota)) {
     cat(sprintf("  %d shifts for %d doctors, %s to %s\n", nrow(x$rota),
                 n_distinct(x$rota$doctor_id), min(x$rota$date), max(x$rota$date)))
+    if (nrow(x$unfilled) > 0) {
+      shown <- head(x$unfilled, 10)
+      cat(sprintf("  %d slots could not be filled:\n", nrow(x$unfilled)))
+      cat(sprintf("    %s %-8s %d of %d\n", shown$date, shown$shift_code, shown$filled, shown$needed),
+          sep = "")
+      if (nrow(x$unfilled) > 10) cat("    ...\n")
+    }
     cat(sprintf("  Penalty %g\n", x$objective))
     cat(sprintf("    %-16s %10g\n", x$penalties$rule, x$penalties$penalty), sep = "")
   } else {

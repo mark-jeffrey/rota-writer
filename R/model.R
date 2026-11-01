@@ -18,10 +18,14 @@
 #' Turns the inputs into a mixed-integer linear programme with one binary
 #' variable per doctor, day and shift that the doctor may work.
 #'
-#' Hard rules are constraints: cover, one shift per day, in post,
+#' Hard rules are constraints: one shift per day, in post,
 #' competency, placement, nights-exempt, LTFT fixed days, approved leave, and
 #' the TCS Schedule 3 limits on hours, rest, consecutive shifts, nights and
-#' weekends. Soft rules are penalties in the objective, scored as in
+#' weekends. Cover is hard too, except that a slot may be left unfilled at a
+#' cost of 100,000 (or the `COVER` weight in the `rules` sheet, if set). That
+#' only happens when the other hard rules leave no way to fill it, so
+#' impossible inputs still give a rota, with the gaps showing which slots
+#' could not be filled. Soft rules are penalties in the objective, scored as in
 #' [check_rota()]: requested leave, requests, discouraged placement roles,
 #' skill mix, the 1-in-3 weekend target and isolated single nights. Fairness
 #' (`FAIR_ONCALL`, `FAIR_NIGHTS`, `FAIR_WEEKENDS`) penalises each doctor's
@@ -59,7 +63,6 @@ build_rota_model <- function(inputs) {
 
   x <- shift_vars(inputs, shifts) |>
     mutate(j = row_number())
-  check_fillable(x, inputs)
 
   run_rules <- run_rule_table(inputs, shifts)
   touches <- weekend_touches(x)
@@ -72,7 +75,6 @@ build_rota_model <- function(inputs) {
   weekend <- filter(vars, kind == "weekend")
 
   hard <- list(
-    cover_terms(x, inputs),
     one_shift_terms(x),
     if (rule_on(inputs, "MIN_REST")) min_rest_terms(x, shifts, rule_value(inputs, "MIN_REST")),
     if (rule_on(inputs, "MAX_7DAY")) max_7day_terms(x, shifts, rule_value(inputs, "MAX_7DAY"), n_days),
@@ -83,7 +85,7 @@ build_rota_model <- function(inputs) {
   )
   soft <- soft_parts(x, weekend, inputs, n_days)
 
-  assemble_model(vars, c(map(hard, \(terms) list(terms = terms)), soft))
+  assemble_model(vars, c(list(cover_part(x, inputs)), map(hard, \(terms) list(terms = terms)), soft))
 }
 
 # Combine model parts, each a list of optional tibbles: `vars` (new helper
@@ -239,27 +241,6 @@ shift_vars <- function(inputs, shifts) {
     arrange(t, shift_code, doctor_id)
 }
 
-# Fail early, with a useful message, if a slot has too few eligible doctors
-check_fillable <- function(x, inputs) {
-  if (!rule_on(inputs, "COVER")) {
-    return(invisible())
-  }
-  short <- expected_cover(inputs) |>
-    filter(n_min > 0) |>
-    left_join(count(x, date, shift_code), by = c("date", "shift_code")) |>
-    mutate(n = coalesce(n, 0L)) |>
-    filter(n < n_min)
-  if (nrow(short) > 0) {
-    shown <- head(short, 10)
-    stop("Some shifts have fewer eligible doctors than they need ",
-         "(check competencies, placements, leave and LTFT days):\n",
-         paste0("  ", shown$date, " ", shown$shift_code, ": ", shown$n, " eligible, needs ",
-                shown$n_min, collapse = "\n"),
-         if (nrow(short) > 10) paste0("\n  ... and ", nrow(short) - 10, " more"),
-         call. = FALSE)
-  }
-}
-
 # One indicator per doctor and weekend counted by WEEKEND_MAX: the weekends
 # (identified by their Saturday) that fall wholly within the doctor's post
 counted_weekends <- function(inputs) {
@@ -326,15 +307,39 @@ constraint <- function(df, rule, lo = -Inf, hi = Inf) {
     select(rule, con, j, coef, lo, hi)
 }
 
-cover_terms <- function(x, inputs) {
+# Cost of each unfilled slot: more than any combination of soft penalties
+# could save, so slots are left empty only when the hard rules leave no way
+# to fill them
+unfilled_weight <- 1e5
+
+# Cover: n_min <= doctors on the shift <= n_max. A shortfall below n_min is
+# allowed through `unfilled` slack at a very high cost, so impossible inputs
+# still give a rota, with the slots that cannot be filled left empty, rather
+# than no answer. Rest and hours rules have no slack: an empty slot is
+# always possible, so they never need breaking.
+cover_part <- function(x, inputs) {
   if (!rule_on(inputs, "COVER")) {
     return(NULL)
   }
-  x |>
-    inner_join(select(expected_cover(inputs), date, shift_code, n_min, n_max),
-               by = c("date", "shift_code")) |>
-    transmute(con = paste(date, shift_code), j, coef = 1, lo = n_min, hi = n_max) |>
-    constraint("COVER")
+  cover <- expected_cover(inputs) |>
+    filter(n_max > 0) |>
+    transmute(date, shift_code, n_min, n_max, con = paste(date, shift_code))
+  unfilled <- cover |>
+    filter(n_min > 0) |>
+    mutate(aux = paste("COVER", con))
+  weight <- coalesce(inputs$rules$weight[match("COVER", inputs$rules$rule_id)], unfilled_weight)
+
+  list(
+    vars = aux_vars(unfilled$aux, upper = unfilled$n_min),
+    terms = bind_rows(
+      x |>
+        inner_join(cover, by = c("date", "shift_code")) |>
+        transmute(con, j, coef = 1, lo = n_min, hi = n_max),
+      transmute(unfilled, con, aux, coef = 1, lo = n_min, hi = n_max)
+    ) |>
+      mutate(rule = "COVER"),
+    costs = transmute(unfilled, rule = "COVER", aux, coef = weight)
+  )
 }
 
 one_shift_terms <- function(x) {

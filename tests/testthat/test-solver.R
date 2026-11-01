@@ -17,6 +17,8 @@ test_that("the solved rota passes every hard rule in the checker", {
   solution <- solve_rota(inputs, time_limit = 20)
 
   expect_false(is.null(solution$rota))
+  expect_equal(solution$status, "Feasible")
+  expect_equal(nrow(solution$unfilled), 0)
   v <- check_rota(solution$rota, inputs)
   expect_equal(nrow(v[v$hard_soft == "hard", ]), 0)
 })
@@ -49,11 +51,18 @@ test_that("approved leave and nights-exempt doctors are respected", {
   expect_false(any(x$doctor_id == "D11" & x$is_night))
 })
 
-test_that("unfillable slots are reported before solving", {
-  inputs <- two_weeks()
+test_that("slots that cannot be filled are left empty and reported", {
+  inputs <- hard_only(two_weeks())
   inputs$staff$can_OBS <- FALSE
+  solution <- solve_rota(inputs, time_limit = 30)
 
-  expect_error(build_rota_model(inputs), "OBS_LD: 0 eligible, needs 1")
+  expect_equal(solution$status, "Unfilled shifts")
+  expect_setequal(unique(solution$unfilled$shift_code), c("OBS_LD", "OBS_N"))
+  expect_equal(nrow(solution$unfilled), 28) # 2 OBS shifts x 14 days
+  # Every other slot is filled, and no contract rule is broken to do it
+  v <- check_rota(solution$rota, inputs)
+  expect_equal(unique(v$rule_id[v$hard_soft == "hard"]), "COVER")
+  expect_equal(sum(v$rule_id == "COVER"), 28)
 })
 
 test_that("write_rota round-trips through read_rota", {

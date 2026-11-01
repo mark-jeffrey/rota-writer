@@ -5,7 +5,8 @@ using constrained optimisation (mixed-integer linear programming) in R.
 
 > **Status:** early development. The input format, test data and compliance checker are in place,
 > and the solver writes rotas that meet every hard rule and minimise the soft-rule penalties
-> (fairness, requests, skill mix). Next: diagnosing infeasible inputs, then outputs and the app
+> (fairness, requests, skill mix), leaving and listing any slots that cannot be filled. Next:
+> outputs and the app
 > (see [Roadmap](#roadmap)).
 
 ## Aims
@@ -51,7 +52,9 @@ These come from TCS Schedule 3. Full details, parameters and sources are in
 - LTFT doctors do not work on their fixed non-working day
 
 ### Hard: local
-- Every on-call slot is filled, and normal-day cover meets its minimum
+- Every on-call slot is filled, and normal-day cover meets its minimum. If the other hard rules
+  make a slot impossible to fill, it is left empty and reported rather than breaking a contract
+  rule (see [Solver](#solver)).
 - Doctors only fill roles they are signed off for (`can_*` columns in `staff`)
 - Doctors only work while in post (`start_date`/`end_date`)
 - Placements: during a placement block, a doctor only works the roles listed for that placement
@@ -110,13 +113,18 @@ the rule's weight), so the solver's penalty for each rule equals the checker's.
   sparse matrix only at solve time. This avoids ompr's slow model building at this size. Variables
   a doctor may never use (wrong competency or placement, leave, LTFT day, not in post) are left
   out, so the test data has about 10k binaries rather than 37k.
+- **Unfilled slots:** each cover row has a slack variable costing 100,000 per unfilled slot (more
+  than any mix of soft penalties could save). Rest and hours rules have no slack, because an empty
+  slot never breaks them. So the model always has a solution, and impossible inputs give a rota
+  with gaps instead of just "infeasible".
 - **Solve strategy:** HiGHS finds a rota that meets every hard rule in under 10 s. Minimising
   the penalties over the whole 13 weeks at once is too slow: the root LP relaxation alone takes
   minutes. So `solve_rota()` improves the first rota by *large neighbourhood search*. It
   repeatedly frees one week, or a random group of 10 doctors, fixes everything else, and
   re-solves that part for up to 5 s. Each step solves the full model, so hard rules always hold
   and fairness is judged over the whole rota. The search is seeded, so the same inputs give the
-  same rota.
+  same rota. If not every slot can be filled, the first rota is instead built a week at a time,
+  filling as many slots as possible, before the search improves it.
 - **Independent checker:** a separate, deliberately simple function re-checks any rota against
   every rule. It does not trust the solver, and it also checks rotas that have been edited by hand.
 
@@ -192,13 +200,14 @@ Rscript scripts/solve_rota.R inst/extdata/rota_inputs.xlsx rota.xlsx
 
 This solves the rota, writes a workbook with `grid` and `long` sheets (approved leave is shown as
 `AL`, `SL`, `EX` or `PL`), and runs the checker on the result. It exits with status 1 if no rota was
-found or it breaks a hard rule.
+found or it breaks a hard rule, including leaving slots unfilled.
 
 From R:
 
 ```r
 solution <- solve_rota(inputs)          # time limit from the settings sheet
 solution$rota                           # long format: doctor_id, date, code
+solution$unfilled                       # slots that could not be filled (usually none)
 solution$penalties                      # penalty per soft rule
 solution$history                        # penalty after each improvement
 check_rota(solution$rota, inputs)       # no hard violations; soft ones match the penalties
@@ -207,9 +216,11 @@ write_rota(solution$rota, inputs, "rota.xlsx")
 build_rota_model(inputs)                # the model itself: sizes per rule
 ```
 
-If a shift has fewer eligible doctors than it needs, `solve_rota()` stops before solving and lists
-the shifts. Other infeasibility (e.g. too few doctors for the weekend rule) is reported only as
-`status = "Infeasible"` for now.
+If the inputs make some slots impossible to fill, for example too few doctors with a
+competency, or too many on leave at once, `solve_rota()` still returns a rota. It leaves those
+slots empty, never breaks a contract rule to fill them, sets `status = "Unfilled shifts"` and lists
+them in `unfilled`. The checker reports the same slots as `COVER` violations. For example, with
+nobody signed off for OBS, exactly the 182 OBS slots are left empty and everything else is filled.
 
 ## Repository layout
 
@@ -255,12 +266,11 @@ also needs `highs`, `Matrix` and `withr`. `highs` builds from source and needs `
    every rule. It catches every planted violation in the example.
 3. **Core MILP** ✓. Hard constraints only. Finds a rota for the test data that passes the checker
    with no hard violations, including when contract limits are tightened.
-4. **Soft constraints** ✓ (mostly): fairness, requests, skill mix, weekends, single nights and
+4. **Soft constraints** ✓: fairness, requests, skill mix, weekends, single nights and
    discouraged placements, weighted from the spreadsheet. The solver reports the penalty per rule,
    and it matches the checker. On the test data, a 10-minute solve gives no hard violations, no
-   skill-mix shortfalls and no requested leave refused. **Still to do:** slack on cover and
-   weekends, so that infeasible inputs give a report of what could not be met rather than just
-   "Infeasible".
+   skill-mix shortfalls and no requested leave refused. Impossible inputs give a rota with the
+   slots that cannot be filled left empty and listed.
 5. **Outputs:** coordinator grid (xlsx), per-doctor calendars (`.ics`/PDF), and a compliance and
    fairness report.
 6. **No-code interface.** A Shiny app (bslib, editable tables) to upload the workbook, edit

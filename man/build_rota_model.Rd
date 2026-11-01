@@ -32,10 +32,14 @@ Turns the inputs into a mixed-integer linear programme with one binary
 variable per doctor, day and shift that the doctor may work.
 }
 \details{
-Hard rules are constraints: cover, one shift per day, in post,
+Hard rules are constraints: one shift per day, in post,
 competency, placement, nights-exempt, LTFT fixed days, approved leave, and
 the TCS Schedule 3 limits on hours, rest, consecutive shifts, nights and
-weekends. Soft rules are penalties in the objective, scored as in
+weekends. Cover is hard too, except that a slot may be left unfilled at a
+cost of 100,000 (or the \code{COVER} weight in the \code{rules} sheet, if set). That
+only happens when the other hard rules leave no way to fill it, so
+impossible inputs still give a rota, with the gaps showing which slots
+could not be filled. Soft rules are penalties in the objective, scored as in
 \code{\link[=check_rota]{check_rota()}}: requested leave, requests, discouraged placement roles,
 skill mix, the 1-in-3 weekend target and isolated single nights. Fairness
 (\code{FAIR_ONCALL}, \code{FAIR_NIGHTS}, \code{FAIR_WEEKENDS}) penalises each doctor's

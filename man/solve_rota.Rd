@@ -22,9 +22,11 @@ A \code{rota_solution}: a list with
 \describe{
 \item{rota}{The rota in long format (\code{doctor_id}, \code{date}, \code{code}), as
 used by \code{\link[=check_rota]{check_rota()}}, or \code{NULL} if no rota was found.}
-\item{status}{\code{"Feasible"} if a rota was found, otherwise the solver's
-reason, e.g. \code{"Infeasible"} (the hard rules cannot all be met) or
-\code{"Time limit reached"}.}
+\item{status}{\code{"Feasible"} if every slot is filled, \code{"Unfilled shifts"}
+if some could not be, otherwise the solver's reason for finding no
+rota, e.g. \code{"Time limit reached"}.}
+\item{unfilled}{Slots the rota leaves short: \code{date}, \code{shift_code},
+\code{needed} and \code{filled}. Zero rows when every slot is filled.}
 \item{objective}{Total penalty of the rota.}
 \item{penalties}{Penalty by soft rule (\code{rule}, \code{penalty}). Apart from
 the \verb{FAIR_*} rules, these match the totals from \code{\link[=check_rota]{check_rota()}}.}
@@ -38,7 +40,10 @@ the \verb{FAIR_*} rules, these match the totals from \code{\link[=check_rota]{ch
 Builds the model with \code{\link[=build_rota_model]{build_rota_model()}} and solves it with the HiGHS
 MILP solver in two phases:
 \enumerate{
-\item Find any rota that meets every hard rule. This takes seconds.
+\item Find a rota that meets every hard rule with every slot filled. With
+workable inputs this takes seconds. If it cannot (the inputs are
+impossible, or it runs out of time), build the rota a week at a time
+instead, filling as many slots as the hard rules allow.
 \item Improve it by large neighbourhood search: repeatedly free one week, or
 a random group of doctors, fix the rest of the rota, and re-solve that
 part to lower the soft-rule penalties. Every step solves the full model,
@@ -47,6 +52,10 @@ rota.
 }
 }
 \details{
+If the inputs make some slots impossible to fill (e.g. too few doctors
+with the right competencies, or everyone on leave), the rota leaves them
+empty rather than break a contract rule, and \code{unfilled} lists them.
+
 Phase 2 runs until the time limit, until the penalty is 0, or until many
 steps in a row fail to improve it. It does not prove the rota is the best
 possible, but in practice gets close; give it longer for a better rota.

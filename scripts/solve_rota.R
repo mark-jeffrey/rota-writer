@@ -4,7 +4,8 @@
 #
 # Run from the project root. Writes the rota workbook (grid and long sheets)
 # and prints the checker's summary. Exits with status 1 if no rota was found
-# or it breaks a hard rule, and 2 if the inputs fail validation.
+# or it breaks a hard rule (including slots left unfilled), and 2 if the
+# inputs fail validation.
 
 pkgload::load_all(quiet = TRUE)
 
