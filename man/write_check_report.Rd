@@ -24,9 +24,10 @@ ones yellow. It has three sheets:
 \itemize{
 \item \code{summary}: violations and total penalty per rule
 \item \code{violations}: one row per violation
-\item \code{doctors}: per-doctor hours, on-calls, nights and weekends against fair
-shares, with the difference from each share (\verb{*_vs_fair}) shaded blue
-(fewer than fair) to red (more than fair)
+\item \code{doctors}: per-doctor hours against contracted hours, and on-calls,
+nights and weekends against fair shares. The differences
+(\code{hours_vs_contracted}, in hours a week, and \verb{*_vs_fair}) are shaded
+blue (fewer) to red (more)
 }
 }
 \examples{

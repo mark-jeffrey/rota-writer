@@ -19,5 +19,5 @@ test_that("an empty rota fails cover for every required slot", {
   required <- expected_cover(inputs) |> dplyr::filter(n_min > 0)
 
   expect_equal(sum(v$rule_id == "COVER"), nrow(required))
-  expect_true(all(is.na(v$doctor_id)))
+  expect_true(all(is.na(v$doctor_id[v$rule_id == "COVER"])))
 })

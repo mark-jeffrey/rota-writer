@@ -14,7 +14,7 @@ rules are penalised in the objective function with the weight given in the
 
 | rule_id | Rule | Parameter | Type | How modelled |
 |---|---|---|---|---|
-| `AVG_HOURS` | Average weekly working hours over the rota reference period | ≤ 48 h × WTE (≤ 56 h if opted out of the Working Time Regulations) | Hard | Sum of shift hours per doctor ≤ limit × weeks in post |
+| `AVG_HOURS` | Average weekly working hours over the rota reference period | ≤ 48 h × WTE (≤ 56 h if opted out of the Working Time Regulations) | Hard | Sum of shift hours plus leave hours (see below) per doctor ≤ limit × weeks in post |
 | `MAX_7DAY` | Maximum hours in any 168-hour period | ≤ 72 h | Hard | Windows starting at each shift start time on every day, with each shift's hours inside the window: Σ ≤ 72. The worst 168 h always starts at a shift start. |
 | `MAX_SHIFT` | Maximum shift length | ≤ 13 h | Hard | Checked on the `shifts` sheet at load time; no shift may exceed it |
 | `MIN_REST` | Minimum rest between shifts | ≥ 11 h | Hard | Pre-computed table of incompatible shift pairs on consecutive days (e.g. night → any day shift next day) |
@@ -30,12 +30,21 @@ rules are penalised in the objective function with the weight given in the
 ### How the checker interprets these rules
 
 - Times are wall-clock times with no BST adjustment, so the night when the clocks change counts as 12.5 h.
-- Average hours are total rostered hours divided by weeks in post within the rota period. Leave
-  days count as zero hours.
+- Average hours are total rostered hours plus leave hours, divided by weeks in post within the
+  rota period. Approved leave on a day the doctor would otherwise work (a weekday that is not a
+  bank holiday or their LTFT day off) counts as a normal day's hours (9 h in the test data);
+  other leave days count as zero.
 - Consecutive runs are counted by the date each shift starts. A run's rest period is measured from
   the end of its last shift to the start of the doctor's next shift of any kind.
 - A shift clashes with leave if any part of it falls on a leave day, so a night may not finish
   on the first morning of leave.
+
+## Contracted hours (local, soft)
+
+| rule_id | Rule | Parameter | Type | How modelled |
+|---|---|---|---|---|
+| `HOURS_TARGET` | Average weekly hours close to contracted hours | `contracted_hours` in `staff`, or the rule's value (45 h) × WTE where blank | Soft | Per doctor: rostered hours + short − over = contracted hours × weeks in post − leave hours. The *k*-th normal day's worth of hours short costs (2*k* − 1) × weight per hour (7 × weight from the 4th day on), and each hour over costs 10 × weight. |
+| `NORMAL_DAY_SPREAD` | Normal-day staffing even across the rota | — | Soft | Per normal-day shift and day: count − level = over − under, with one level per shift chosen by the solver. Each doctor-day over or under costs the weight. The checker uses the median, which is the cheapest level. |
 
 ## Less than full time (LTFT)
 

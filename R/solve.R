@@ -72,11 +72,12 @@ solve_rota <- function(inputs, time_limit = NULL, seed = 1, verbose = FALSE) {
   model <- build_rota_model(inputs)
   solve <- highs_solver(model)
 
-  # Phase 1: every slot filled, as a pure feasibility problem (minimising
-  # unfilled slots instead is far slower). Proving it impossible can also be
-  # slow, so cap it; an empty rota always meets the other hard rules.
+  # Phase 1: every slot filled, as a pure feasibility problem over the hard
+  # rules (minimising unfilled slots instead is far slower). Proving it
+  # impossible can also be slow, so cap it; an empty rota always meets the
+  # other hard rules.
   first <- solve(cost = rep(0, nrow(model$vars)), time_limit = min(time_limit / 4, 60),
-                 allow_unfilled = FALSE)
+                 allow_unfilled = FALSE, hard_only = TRUE)
   if (is_feasible(first)) {
     best <- polish(solve, model, first$primal_solution)
   } else {
@@ -117,6 +118,8 @@ solve_rota <- function(inputs, time_limit = NULL, seed = 1, verbose = FALSE) {
 # A function that solves the model with the given costs, optionally fixing
 # the shift variables in `fix` to their values in `current`, which is also
 # passed as the starting point. `allow_unfilled = FALSE` makes cover exact.
+# `hard_only = TRUE` drops the rows that only price soft rules, whose helper
+# variables are then free; it suits a solve with zero costs.
 highs_solver <- function(model) {
   A <- Matrix::sparseMatrix(
     i = model$terms$i, j = model$terms$j, x = model$terms$coef,
@@ -124,8 +127,10 @@ highs_solver <- function(model) {
   )
   is_x <- model$vars$kind == "x"
   unfilled_j <- model$costs$j[model$costs$rule == "COVER"]
+  hard <- !model$rows$rule %in% setdiff(model$costs$rule, "COVER")
 
-  function(cost, time_limit, fix = NULL, current = NULL, allow_unfilled = TRUE) {
+  function(cost, time_limit, fix = NULL, current = NULL, allow_unfilled = TRUE,
+           hard_only = FALSE) {
     lower <- model$vars$lower
     upper <- model$vars$upper
     if (!allow_unfilled) {
@@ -138,9 +143,11 @@ highs_solver <- function(model) {
       fixed <- is_x & fix
       lower[fixed] <- upper[fixed] <- start[fixed]
     }
+    rows <- if (hard_only) hard else TRUE
     highs::highs_solve(
       L = cost, lower = lower, upper = upper,
-      A = A, lhs = model$rows$lo, rhs = model$rows$hi, types = model$vars$type,
+      A = A[rows, , drop = FALSE], lhs = model$rows$lo[rows], rhs = model$rows$hi[rows],
+      types = model$vars$type,
       offset = sum(model$offset$value), start = start,
       control = highs::highs_control(time_limit = max(time_limit, 1), mip_rel_gap = 1e-4)
     )

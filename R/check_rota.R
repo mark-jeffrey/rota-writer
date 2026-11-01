@@ -66,7 +66,8 @@ check_rota <- function(rota, inputs) {
     check_cover, check_in_post, check_competency, check_placement,
     check_nights_exempt, check_ltft_day, check_leave, check_max_shift,
     check_min_rest, check_max_7day, check_avg_hours, check_consecutive,
-    check_nights, check_weekends, check_requests, check_skill_mix
+    check_nights, check_weekends, check_requests, check_skill_mix,
+    check_hours_target, check_normal_day_spread
   )
 
   map(checks, \(check) check(si, inputs)) |>
@@ -245,7 +246,7 @@ check_ltft_day <- function(si, inputs) {
 leave_days <- function(inputs) {
   inputs$leave |>
     mutate(date = map2(start_date, end_date, \(s, e) seq(s, e, by = "day"))) |>
-    unnest(date) |>
+    unnest(date, ptype = list(date = as.Date(character()))) |>
     distinct(doctor_id, date, leave_type, status)
 }
 
@@ -371,6 +372,46 @@ check_avg_hours <- function(si, inputs) {
       detail = sprintf("Average %.1f h/week over %.1f weeks (max %.1f at WTE %g)",
                        avg_weekly_hours, weeks_in_post, limit, wte)
     ))
+}
+
+# Hours (rostered plus leave) against contracted hours x weeks in post,
+# scored as hours_target_part() does: the k-th normal day's worth of hours
+# short costs (2k - 1) per hour (from the 4th day on, 7 per hour), and each
+# hour over costs 10
+check_hours_target <- function(si, inputs) {
+  normal_day <- inputs$shifts$hours[inputs$shifts$shift_type == "normal_day"]
+  day_hours <- if (length(normal_day) > 0) max(normal_day) else 8
+  short_cost <- function(short) {
+    steps <- pmin(pmax(short - day_hours * 0:2, 0), day_hours)
+    steps[1] + 3 * steps[2] + 5 * steps[3] + 7 * max(short - 3 * day_hours, 0)
+  }
+
+  doctor_summary(si, inputs) |>
+    filter(!is.na(contracted_hours), weeks_in_post > 0) |>
+    mutate(diff = contracted_hours * weeks_in_post - hours - leave_hours) |>
+    filter(abs(diff) > 1e-9) |>
+    mutate(
+      weight = if_else(diff > 0, map_dbl(diff, short_cost), -10 * diff),
+      detail = sprintf("%.1f h %s contracted %.1f h x %.1f weeks (average %.1f h/week)",
+                       abs(diff), if_else(diff > 0, "short of", "over"),
+                       contracted_hours, weeks_in_post,
+                       (hours + leave_hours) / weeks_in_post)
+    ) |>
+    with(violations("HOURS_TARGET", doctor_id, from, to, detail = detail, weight = weight))
+}
+
+# Each day's count of each normal-day shift against the median for that
+# shift over the rota (the level normal_day_spread_part() settles on)
+check_normal_day_spread <- function(si, inputs) {
+  normal <- inputs$shifts$shift_code[inputs$shifts$shift_type == "normal_day"]
+
+  expected_cover(inputs) |>
+    filter(shift_code %in% normal, n_max > 0) |>
+    left_join(count(si, date, shift_code = code), by = c("date", "shift_code")) |>
+    mutate(n = coalesce(n, 0L), level = median(n), .by = shift_code) |>
+    filter(n != level) |>
+    with(violations("NORMAL_DAY_SPREAD", start_date = date, weight = abs(n - level),
+                    detail = sprintf("%s: %d rostered (typical %g)", shift_code, n, level)))
 }
 
 # Runs of shifts on consecutive days -------------------------------------

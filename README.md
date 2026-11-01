@@ -29,13 +29,16 @@ using constrained optimisation (mixed-integer linear programming) in R.
 | Role | Code | Shifts |
 |---|---|---|
 | ICU 1st on-call (senior resident) | `ICU1` | long day `ICU1_LD`, night `ICU1_N` |
-| ICU 2nd on-call | `ICU2` | `ICU2_LD` (weekends), `ICU2_N` |
+| ICU 2nd on-call | `ICU2` | `ICU2_LD`, `ICU2_N` |
 | Anaesthesia 1st on-call | `ANA1` | `ANA1_LD`, `ANA1_N` |
-| Anaesthesia 2nd on-call | `ANA2` | `ANA2_LD` (weekends), `ANA2_N` |
+| Anaesthesia 2nd on-call | `ANA2` | `ANA2_LD`, `ANA2_N` |
 | Obstetric anaesthesia | `OBS` | `OBS_LD`, `OBS_N` |
 | Normal working days | `ICU_DAY`, `ANA_DAY` | weekdays 08:00–17:00 |
 
 All on-call shifts are **resident**: long day 08:00–20:30 (12.5 h) and night 20:00–08:30 (12.5 h).
+Every on-call tier runs a long day and a night every day. Normal days have a minimum and no
+maximum: once the on-calls are filled, the solver adds normal days to bring each doctor up to their
+contracted hours.
 Non-resident on-call is listed in the rules reference for future use.
 
 ## Constraint catalogue
@@ -78,6 +81,15 @@ These come from TCS Schedule 3. Full details, parameters and sources are in
 - **Discouraged placement roles** (`penalty` column in `placement_roles`). For example, doctors on
   the general rota can cover OBS on-calls, but at a significant penalty per shift, so obstetric
   on-call goes to OBS-block doctors first.
+- **Contracted hours** (`HOURS_TARGET`): each doctor's average weekly hours as close as possible
+  to their contracted hours (`contracted_hours` in `staff`; if blank, the rule's value × WTE).
+  Approved leave on a day the doctor would otherwise work counts as a normal day's hours. Hours
+  short cost more for each further normal day short (the *k*-th day costs (2*k* − 1) × weight per
+  hour), so a shortfall is shared. Each hour over costs 10 × weight, so doctors go over only
+  when cover needs it.
+- **Even normal-day staffing** (`NORMAL_DAY_SPREAD`): each weekday's count of `ICU_DAY` and
+  `ANA_DAY` stays close to a common level, rather than piling normal days onto some days. Each
+  doctor-day away from the level (the median) costs the weight.
 - Weekends no more than 1 in 3 where possible (this avoids the weekend allowance)
 - Avoid isolated single nights and fragmented patterns
 
@@ -117,7 +129,8 @@ the rule's weight), so the solver's penalty for each rule equals the checker's.
   than any mix of soft penalties could save). Rest and hours rules have no slack, because an empty
   slot never breaks them. So the model always has a solution, and impossible inputs give a rota
   with gaps instead of just "infeasible".
-- **Solve strategy:** HiGHS finds a rota that meets every hard rule in under 10 s. Minimising
+- **Solve strategy:** HiGHS finds a rota that meets every hard rule in under 10 s, solving only
+  the hard-rule rows (the soft rules' helper rows slow this step and do not affect feasibility). Minimising
   the penalties over the whole 13 weeks at once is too slow: the root LP relaxation alone takes
   minutes. So `solve_rota()` improves the first rota by *large neighbourhood search*. It
   repeatedly frees one week, or a random group of 10 doctors, fixes everything else, and
@@ -202,8 +215,8 @@ This solves the rota, runs the checker on it, and writes to `out/`:
 
 | File | Contents |
 |---|---|
-| `rota.xlsx` | `grid`: dates down, doctors across, with shift and leave codes (`AL`, `SL`, `EX`, `PL` for approved leave). Weekends and bank holidays are shaded; nights and long days are coloured. `by_shift`: dates down, shifts across, showing who is on, with `UNFILLED` where cover is short. `doctors`: each doctor's hours, on-calls, nights and weekends against their fair share. `key`: what the codes mean. `long`: the format the checker reads, so a hand-edited rota can be re-checked. |
-| `report.xlsx` | The checker's compliance and fairness report: violations by rule, one row per violation, and per-doctor totals with each doctor's distance from their fair share, shaded blue (fewer) to red (more). |
+| `rota.xlsx` | `grid`: dates down, doctors across, with shift and leave codes (`AL`, `SL`, `EX`, `PL` for approved leave). Weekends and bank holidays are shaded; nights and long days are coloured. `by_shift`: dates down, shifts across, showing who is on, with `UNFILLED` where cover is short. `doctors`: each doctor's hours against contracted hours, and on-calls, nights and weekends against their fair share. `key`: what the codes mean. `long`: the format the checker reads, so a hand-edited rota can be re-checked. |
+| `report.xlsx` | The checker's compliance and fairness report: violations by rule, one row per violation, and per-doctor totals with each doctor's distance from their contracted hours (`hours_vs_contracted`, hours a week) and fair shares, shaded blue (fewer) to red (more). |
 | `calendars/` | One `.ics` file per doctor with their shifts and approved leave, to import into Outlook, Google Calendar or Apple Calendar. |
 
 It exits with status 1 if no rota was found or it breaks a hard rule, including leaving slots
@@ -281,7 +294,8 @@ also needs `highs`, `Matrix` and `withr`. `highs` builds from source and needs `
 4. **Soft constraints** ✓: fairness, requests, skill mix, weekends, single nights and
    discouraged placements, weighted from the spreadsheet. The solver reports the penalty per rule,
    and it matches the checker. On the test data, a 10-minute solve gives no hard violations, no
-   skill-mix shortfalls and no requested leave refused. Impossible inputs give a rota with the
+   skill-mix shortfalls, no requested leave refused, and every doctor within
+   1.5 h a week of their contracted hours. Impossible inputs give a rota with the
    slots that cannot be filled left empty and listed.
 5. **Outputs** ✓: coordinator workbook (grid, who's-on-each-shift, per-doctor totals), per-doctor
    `.ics` calendars, and a compliance and fairness report. PDF calendars are not done yet.

@@ -7,9 +7,10 @@
 #' ones yellow. It has three sheets:
 #' * `summary`: violations and total penalty per rule
 #' * `violations`: one row per violation
-#' * `doctors`: per-doctor hours, on-calls, nights and weekends against fair
-#'   shares, with the difference from each share (`*_vs_fair`) shaded blue
-#'   (fewer than fair) to red (more than fair)
+#' * `doctors`: per-doctor hours against contracted hours, and on-calls,
+#'   nights and weekends against fair shares. The differences
+#'   (`hours_vs_contracted`, in hours a week, and `*_vs_fair`) are shaded
+#'   blue (fewer) to red (more)
 #'
 #' @param violations Output of [check_rota()].
 #' @param doctors Output of [summarise_doctors()].
@@ -43,6 +44,13 @@ write_check_report <- function(violations, doctors, path) {
   for (m in measures) {
     doctors[[paste0(m, "_vs_fair")]] <- round(doctors[[m]] - doctors[[paste0("fair_", m)]], 1)
   }
+  diffs <- paste0(measures, "_vs_fair")
+  if (all(c("avg_weekly_hours", "contracted_hours") %in% names(doctors))) {
+    doctors <- doctors |>
+      mutate(hours_vs_contracted = round(avg_weekly_hours - contracted_hours, 1),
+             .after = avg_weekly_hours)
+    diffs <- c("hours_vs_contracted", diffs)
+  }
 
   sheets <- list(summary = summary, violations = violations, doctors = doctors)
   for (name in names(sheets)) {
@@ -63,7 +71,7 @@ write_check_report <- function(violations, doctors, path) {
     }
   }
 
-  for (col in match(paste0(measures, "_vs_fair"), names(doctors))) {
+  for (col in match(diffs, names(doctors))) {
     wb <- openxlsx2::wb_add_conditional_formatting(
       wb, "doctors", dims = openxlsx2::wb_dims(rows = seq_len(max(nrow(doctors), 1)) + 1, cols = col),
       type = "colorScale", style = c("FF5A8AC6", "FFFFFFFF", "FFF8696B"), rule = c(-4, 0, 4)

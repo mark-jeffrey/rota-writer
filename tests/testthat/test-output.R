@@ -32,7 +32,8 @@ test_that("by_shift shows who is on and flags unfilled slots", {
   expect_equal(first_day$ICU1_LD, "D01 Ada Alder")
   expect_equal(first_day$ICU_DAY, "D04 Dev Damson, UNFILLED") # needs 2
   expect_equal(first_day$ICU1_N, "UNFILLED")
-  expect_true(is.na(first_day$ICU2_LD)) # not required on weekdays
+  expect_equal(first_day$ICU2_LD, "UNFILLED")
+  expect_true(is.na(by_shift$ICU_DAY[6])) # 6 Feb is a Saturday: not required
 })
 
 test_that("calendars are valid iCalendar with shifts and approved leave", {
@@ -84,4 +85,5 @@ test_that("the report shows each doctor's distance from their fair share", {
   doctors <- readxl::read_excel(path, "doctors")
   expect_equal(doctors$on_calls_vs_fair, round(doctors$on_calls - doctors$fair_on_calls, 1))
   expect_true(all(c("nights_vs_fair", "weekends_vs_fair") %in% names(doctors)))
+  expect_equal(doctors$hours_vs_contracted, round(doctors$avg_weekly_hours - doctors$contracted_hours, 1))
 })
