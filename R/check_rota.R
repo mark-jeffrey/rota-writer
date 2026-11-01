@@ -347,6 +347,15 @@ leave_hours <- function(inputs) {
     select(doctor_id, leave_hours)
 }
 
+# Fairness pool of each doctor in the staff sheet. Fair shares are split
+# within a pool, so doctors in separate pools (e.g. anaesthetics and an ICU
+# tier 2 rota) are not compared. A blank pool, or no pool column, is one
+# shared pool.
+staff_pool <- function(inputs) {
+  pool <- inputs$staff$pool %||% rep(NA_character_, nrow(inputs$staff))
+  coalesce(as.character(pool), "")
+}
+
 # Weekly contracted hours: the staff sheet's contracted_hours, or the
 # HOURS_TARGET rule's value x WTE where that is blank
 contracted_hours <- function(inputs) {
@@ -401,14 +410,15 @@ check_hours_target <- function(si, inputs) {
 }
 
 # Each day's count of each normal-day shift against the median for that
-# shift over the rota (the level normal_day_spread_part() settles on)
+# shift and day type over the rota (the level normal_day_spread_part()
+# settles on)
 check_normal_day_spread <- function(si, inputs) {
   normal <- inputs$shifts$shift_code[inputs$shifts$shift_type == "normal_day"]
 
   expected_cover(inputs) |>
     filter(shift_code %in% normal, n_max > 0) |>
     left_join(count(si, date, shift_code = code), by = c("date", "shift_code")) |>
-    mutate(n = coalesce(n, 0L), level = median(n), .by = shift_code) |>
+    mutate(n = coalesce(n, 0L), level = median(n), .by = c(shift_code, day_type)) |>
     filter(n != level) |>
     with(violations("NORMAL_DAY_SPREAD", start_date = date, weight = abs(n - level),
                     detail = sprintf("%s: %d rostered (typical %g)", shift_code, n, level)))
@@ -627,13 +637,16 @@ check_requests <- function(si, inputs) {
 #'
 #' Totals for each doctor in the staff list, alongside the fair share they
 #' would have if on-calls, nights and weekends were split in proportion to
-#' `wte * weeks_in_post`. Use it to judge how even a rota is.
+#' `wte * weeks_in_post`. Shares are split within each staffing pool (the
+#' `staff` sheet's `pool` column), so doctors are compared only with others
+#' on the same rota. Use it to judge how even a rota is.
 #'
 #' @inheritParams check_rota
 #'
 #' @returns A tibble with one row per doctor:
 #'   \describe{
-#'     \item{doctor_id, grade, wte, opted_out_wtr}{From the `staff` sheet.}
+#'     \item{doctor_id, grade, pool, wte, opted_out_wtr}{From the `staff`
+#'       sheet. `pool` is blank if the sheet has no pools.}
 #'     \item{contracted_hours}{Weekly contracted hours: the `staff` sheet's
 #'       `contracted_hours`, or the `HOURS_TARGET` rule's value x WTE where
 #'       that is blank.}
@@ -647,8 +660,8 @@ check_requests <- function(si, inputs) {
 #'     \item{on_calls, nights, weekends}{Counts. A weekend is worked if any
 #'       shift falls between 00:00 Saturday and 24:00 Sunday.}
 #'     \item{fair_on_calls, fair_nights, fair_weekends}{WTE-weighted fair
-#'       share of the department total. Nights-exempt doctors have no share
-#'       of the nights.}
+#'       share of the pool's total. Nights-exempt doctors have no share of
+#'       the nights.}
 #'   }
 #'
 #' @export
@@ -733,9 +746,9 @@ doctor_summary <- function(si, inputs) {
   weekends <- count(weekends_worked(si), doctor_id, name = "weekends")
 
   inputs$staff |>
-    mutate(contracted_hours = contracted_hours(inputs)) |>
+    mutate(contracted_hours = contracted_hours(inputs), pool = staff_pool(inputs)) |>
     transmute(
-      doctor_id, grade, wte, contracted_hours, opted_out_wtr, nights_exempt,
+      doctor_id, grade, pool, wte, contracted_hours, opted_out_wtr, nights_exempt,
       from = pmax(start_date, inputs$period$start),
       to = pmin(end_date, inputs$period$end),
       weeks_in_post = as.numeric(to - from + 1) / 7
@@ -746,7 +759,7 @@ doctor_summary <- function(si, inputs) {
     relocate(leave_hours, .after = hours) |>
     mutate(
       across(c(hours, leave_hours, on_calls, nights, weekends), \(x) coalesce(x, 0)),
-      avg_weekly_hours = (hours + leave_hours) / weeks_in_post,
+      avg_weekly_hours = round((hours + leave_hours) / weeks_in_post, 1),
       share = wte * weeks_in_post / sum(wte * weeks_in_post),
       # Nights-exempt doctors take no share of the nights
       night_share = if_else(nights_exempt %in% TRUE, 0, wte * weeks_in_post),
@@ -754,7 +767,7 @@ doctor_summary <- function(si, inputs) {
       fair_nights = night_share / sum(night_share) * sum(nights),
       fair_weekends = share * sum(weekends),
       across(c(fair_on_calls, fair_nights, fair_weekends), \(x) round(x, 1)),
-      avg_weekly_hours = round(avg_weekly_hours, 1)
+      .by = pool
     ) |>
     select(-share, -night_share, -nights_exempt)
 }

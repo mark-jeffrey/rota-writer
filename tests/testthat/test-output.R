@@ -33,7 +33,8 @@ test_that("by_shift shows who is on and flags unfilled slots", {
   expect_equal(first_day$ICU_DAY, "D04 Dev Damson, UNFILLED") # needs 2
   expect_equal(first_day$ICU1_N, "UNFILLED")
   expect_equal(first_day$ICU2_LD, "UNFILLED")
-  expect_true(is.na(by_shift$ICU_DAY[6])) # 6 Feb is a Saturday: not required
+  expect_equal(by_shift$ICU_DAY[6], "UNFILLED") # 6 Feb is a Saturday: one short day
+  expect_true(is.na(by_shift$ANA_DAY[6])) # not required at weekends
 })
 
 test_that("calendars are valid iCalendar with shifts and approved leave", {
@@ -74,6 +75,17 @@ test_that("nights-exempt doctors have no fair share of nights", {
   exempt <- inputs$staff$doctor_id[inputs$staff$nights_exempt]
   expect_true(all(doctors$fair_nights[doctors$doctor_id %in% exempt] == 0))
   expect_equal(sum(doctors$fair_nights), sum(doctors$nights), tolerance = 0.5)
+})
+
+test_that("fair shares are split within each staffing pool", {
+  inputs <- test_inputs()
+  doctors <- summarise_doctors(example_rota(), inputs)
+
+  expect_setequal(unique(doctors$pool), c("anaesthetics", "icu_tier2"))
+  by_pool <- dplyr::summarise(doctors, dplyr::across(c(on_calls, fair_on_calls, weekends, fair_weekends), sum),
+                              .by = pool)
+  expect_equal(by_pool$fair_on_calls, by_pool$on_calls, tolerance = 0.5)
+  expect_equal(by_pool$fair_weekends, by_pool$weekends, tolerance = 0.5)
 })
 
 test_that("the report shows each doctor's distance from their fair share", {

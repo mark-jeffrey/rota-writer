@@ -79,18 +79,24 @@ rules <- tribble(
 # Grades ------------------------------------------------------------------
 
 grades <- tribble(
-  ~grade,  ~rank, ~description,
-  "CT1",   1,     "Core trainee year 1",
-  "CT2",   2,     "Core trainee year 2",
-  "CT3",   3,     "Core trainee year 3",
-  "LED-J", 2,     "Locally employed doctor (junior clinical fellow), CT2 equivalent",
-  "ST3",   4,     "Specialty trainee year 3",
-  "ST4",   5,     "Specialty trainee year 4",
-  "LED-S", 5,     "Locally employed doctor (senior clinical fellow), ST4 equivalent",
-  "ST5",   6,     "Specialty trainee year 5",
-  "ST6",   7,     "Specialty trainee year 6",
-  "ST7",   8,     "Specialty trainee year 7",
-  "ST8",   9,     "Specialty trainee year 8"
+  ~grade,      ~rank, ~description,
+  "FY1",       1,     "Foundation year 1",
+  "FY2",       2,     "Foundation year 2",
+  "CT1",       3,     "Core trainee year 1",
+  "ACCS-CT1",  3,     "Acute care common stem (emergency medicine) core trainee year 1",
+  "IMT1",      3,     "Internal medicine trainee year 1",
+  "CT2",       4,     "Core trainee year 2",
+  "IMT2",      4,     "Internal medicine trainee year 2",
+  "LED-J",     4,     "Locally employed doctor (junior clinical fellow), CT2 equivalent",
+  "CT3",       5,     "Core trainee year 3",
+  "IMT3",      5,     "Internal medicine trainee year 3",
+  "ST3",       6,     "Specialty trainee year 3",
+  "ST4",       7,     "Specialty trainee year 4",
+  "LED-S",     7,     "Locally employed doctor (senior clinical fellow), ST4 equivalent",
+  "ST5",       8,     "Specialty trainee year 5",
+  "ST6",       9,     "Specialty trainee year 6",
+  "ST7",       10,    "Specialty trainee year 7",
+  "ST8",       11,    "Specialty trainee year 8"
 )
 
 # Shifts and cover --------------------------------------------------------
@@ -119,7 +125,8 @@ shifts <- tribble(
 
 # Every on-call tier runs a long day and a night every day. Normal days have
 # a minimum and no maximum (blank n_max): the solver adds normal days to
-# bring doctors up to their contracted hours.
+# bring doctors up to their contracted hours. ICU also needs one short day
+# at weekends and on bank holidays, on top of ICU1 and ICU2.
 cover <- bind_rows(
   shifts |>
     filter(is_on_call == "Y") |>
@@ -130,9 +137,9 @@ cover <- bind_rows(
     ~shift_code, ~day_type,      ~n_min, ~n_max,
     "ICU_DAY",   "weekday",      2,      NA,
     "ANA_DAY",   "weekday",      5,      NA,
-    "ICU_DAY",   "weekend",      0,      0,
+    "ICU_DAY",   "weekend",      1,      1,
     "ANA_DAY",   "weekend",      0,      0,
-    "ICU_DAY",   "bank_holiday", 0,      0,
+    "ICU_DAY",   "bank_holiday", 1,      1,
     "ANA_DAY",   "bank_holiday", 0,      0
   )
 ) |>
@@ -145,23 +152,32 @@ bank_holidays <- tribble(
 )
 
 # Staff -------------------------------------------------------------------
-# Competencies follow grade: CT1s lack obstetric sign-off, ANA1/ICU1 need
-# CT3+ with experience, LEDs vary. All names are fictional.
+# Two staffing pools, each with its own fair shares. The anaesthetics team
+# covers theatres, obstetrics and ICU1 (which needs airway competence). A
+# second pool of foundation, internal medicine and ACCS emergency medicine
+# trainees covers ICU2. Both pools work ICU short days.
+#
+# Anaesthetics competencies follow grade: CT1s lack obstetric sign-off and
+# airway competence for ICU1, ANA1 needs CT3+ with experience, LEDs vary.
+# The anaesthetists are still signed off for ICU2, but placement_roles keeps
+# them off it. All names are fictional.
 
 first_names <- c(
   "Ada", "Ben", "Cara", "Dev", "Eli", "Fern", "Gus", "Hana", "Ivo", "Jade",
   "Kit", "Lena", "Max", "Nia", "Omar", "Pia", "Quin", "Rosa", "Sam", "Tara",
   "Umar", "Vera", "Wes", "Xena", "Yusuf", "Zoe", "Arlo", "Bea", "Cal", "Dina",
-  "Ezra", "Faye", "Gil", "Hope"
+  "Ezra", "Faye", "Gil", "Hope", "Ines", "Jon", "Kai", "Lola", "Milo", "Nell",
+  "Otto", "Pru"
 )
 surnames <- c(
   "Alder", "Birch", "Cedar", "Damson", "Elm", "Fir", "Gorse", "Hazel", "Ivy",
   "Juniper", "Kale", "Larch", "Maple", "Nettle", "Oak", "Pine", "Quince",
   "Rowan", "Spruce", "Teak", "Upas", "Vetch", "Willow", "Xylo", "Yew", "Zelkova",
-  "Aspen", "Beech", "Cherry", "Dogwood", "Ebony", "Fig", "Ginkgo", "Holly"
+  "Aspen", "Beech", "Cherry", "Dogwood", "Ebony", "Fig", "Ginkgo", "Holly",
+  "Ironwood", "Jacaranda", "Kauri", "Linden", "Mulberry", "Nutmeg", "Olive", "Poplar"
 )
 
-staff <- tribble(
+anaesthetics <- tribble(
   ~grade,  ~wte, ~ltft_fixed_day_off, ~nights_exempt, ~opted_out_wtr, ~ICU1, ~ICU2, ~ANA1, ~ANA2, ~OBS,
   # Higher trainees
   "ST8",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
@@ -180,11 +196,11 @@ staff <- tribble(
   "ST3",   0.8,  "Thu",  FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
   "ST3",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
   # Core trainees
-  "CT3",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,
+  "CT3",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
   "CT3",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,
   "CT3",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  TRUE,
-  "CT2",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  TRUE,
-  "CT2",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  TRUE,
+  "CT2",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  FALSE, TRUE,  TRUE,
+  "CT2",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  FALSE, TRUE,  TRUE,
   "CT2",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  TRUE,
   "CT2",   0.8,  "Tue",  FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  TRUE,
   "CT2",   1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  TRUE,
@@ -194,14 +210,28 @@ staff <- tribble(
   # Locally employed doctors
   "LED-S", 1.0,  NA,     FALSE, TRUE,  TRUE,  TRUE,  FALSE, FALSE, FALSE, # ICU-only fellow
   "LED-S", 1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
-  "LED-J", 1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, FALSE, FALSE, # ICU-only fellow
+  "LED-J", 1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  FALSE, FALSE, FALSE, # ICU-only fellow
   "LED-J", 1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  TRUE,
   "LED-J", 1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  FALSE,
   "LED-J", 0.6,  "Fri",  FALSE, FALSE, FALSE, TRUE,  FALSE, TRUE,  FALSE,
   # Changeover: one leaves mid-rota, one starts mid-rota
   "ST4",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE,
   "ST3",   1.0,  NA,     FALSE, FALSE, TRUE,  TRUE,  TRUE,  TRUE,  TRUE
-) |>
+)
+
+icu_tier2 <- tribble(
+  ~grade,      ~wte, ~ltft_fixed_day_off, ~nights_exempt, ~opted_out_wtr, ~ICU1, ~ICU2, ~ANA1, ~ANA2, ~OBS,
+  "FY2",       1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, FALSE, FALSE,
+  "FY2",       1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, FALSE, FALSE,
+  "IMT1",      1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, FALSE, FALSE,
+  "IMT1",      1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, FALSE, FALSE,
+  "IMT2",      1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, FALSE, FALSE,
+  "IMT2",      0.8,  "Wed",  FALSE, FALSE, FALSE, TRUE,  FALSE, FALSE, FALSE,
+  "ACCS-CT1",  1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, FALSE, FALSE,
+  "ACCS-CT1",  1.0,  NA,     FALSE, FALSE, FALSE, TRUE,  FALSE, FALSE, FALSE
+)
+
+staff <- bind_rows(anaesthetics = anaesthetics, icu_tier2 = icu_tier2, .id = "pool") |>
   mutate(
     doctor_id  = sprintf("D%02d", row_number()),
     name       = paste("Dr", first_names, surnames),
@@ -213,12 +243,13 @@ staff <- tribble(
   ) |>
   rename_with(\(x) paste0("can_", x), ICU1:OBS) |>
   mutate(contracted_hours = 45 * wte) |>
-  select(doctor_id, name, grade, wte, contracted_hours, ltft_fixed_day_off, start_date, end_date,
+  select(doctor_id, name, grade, pool, wte, contracted_hours, ltft_fixed_day_off, start_date, end_date,
          nights_exempt, opted_out_wtr, starts_with("can_"))
 
 # Placements --------------------------------------------------------------
 # 13-week rota = one 3-month block. Some doctors swap ICU <-> GENERAL halfway
-# (6-week split blocks); D33/D34 hand over an ICU post at changeover.
+# (6-week split blocks); D33/D34 hand over an ICU post at changeover. The
+# ICU tier 2 pool (D35-D42) is on ICU_TIER2 throughout.
 
 halfway <- rota_start + weeks(6)
 
@@ -229,7 +260,8 @@ placement_type <- c(
   D16 = "ICU", D17 = "GENERAL", D18 = "OBS", D19 = "ICU", D20 = "SPLIT_GEN_FIRST",
   D21 = "OBS", D22 = "OBS", D23 = "GENERAL", D24 = "GENERAL", D25 = "GENERAL",
   D26 = "GENERAL", D27 = "ICU", D28 = "GENERAL", D29 = "ICU", D30 = "OBS",
-  D31 = "GENERAL", D32 = "GENERAL", D33 = "ICU", D34 = "ICU"
+  D31 = "GENERAL", D32 = "GENERAL", D33 = "ICU", D34 = "ICU",
+  set_names(rep("ICU_TIER2", nrow(icu_tier2)), sprintf("D%02d", 34 + seq_len(nrow(icu_tier2))))
 )
 
 placements <- staff |>
@@ -251,10 +283,11 @@ placements <- staff |>
 # penalty > 0 makes a role allowed but discouraged (soft, per shift), e.g.
 # general-block doctors only cover obstetrics when the OBS block can't.
 placement_roles <- tribble(
-  ~placement, ~role,     ~penalty,
-  "ICU",      "ICU1",    0,
-  "ICU",      "ICU2",    0,
-  "ICU",      "ICU_DAY", 0,
+  ~placement,  ~role,     ~penalty,
+  "ICU",       "ICU1",    0,
+  "ICU",       "ICU_DAY", 0,
+  "ICU_TIER2", "ICU2",    0,
+  "ICU_TIER2", "ICU_DAY", 0,
   "OBS",      "OBS",     0,
   "OBS",      "ANA_DAY", 0,
   "GENERAL",  "ANA1",    0,
@@ -265,8 +298,10 @@ placement_roles <- tribble(
 
 # Leave -------------------------------------------------------------------
 
+# Random leave and requests are drawn for the anaesthetics pool only, so
+# adding the ICU tier 2 pool left them unchanged; its leave is listed below.
 random_leave <- staff |>
-  filter(!doctor_id %in% c("D33", "D34")) |>
+  filter(pool == "anaesthetics", !doctor_id %in% c("D33", "D34")) |>
   slice_sample(n = 26) |>
   mutate(
     week       = sample(1:12, n(), replace = TRUE),
@@ -298,7 +333,14 @@ planted_leave <- tribble(
   "D23",      ymd("2027-03-03"),  ymd("2027-03-03"),  "study",     "approved",  "Regional teaching day",
   "D04",      ymd("2027-04-21"),  ymd("2027-04-23"),  "study",     "requested", "ICM conference",
   # Parental leave starting mid-rota
-  "D08",      ymd("2027-04-05"),  rota_end,           "parental",  "approved",  "Parental leave"
+  "D08",      ymd("2027-04-05"),  rota_end,           "parental",  "approved",  "Parental leave",
+  # ICU tier 2 pool
+  "D35",      ymd("2027-02-22"),  ymd("2027-02-26"),  "annual",    "approved",  "",
+  "D37",      ymd("2027-03-26"),  ymd("2027-03-29"),  "annual",    "requested", "Easter",
+  "D38",      ymd("2027-03-17"),  ymd("2027-03-17"),  "study",     "approved",  "IMT regional teaching",
+  "D39",      ymd("2027-03-17"),  ymd("2027-03-17"),  "study",     "approved",  "IMT regional teaching",
+  "D40",      ymd("2027-04-12"),  ymd("2027-04-16"),  "annual",    "requested", "",
+  "D41",      ymd("2027-03-08"),  ymd("2027-03-12"),  "annual",    "approved",  ""
 )
 
 leave <- bind_rows(planted_leave, random_leave) |>
@@ -310,7 +352,7 @@ leave <- bind_rows(planted_leave, random_leave) |>
 request_types <- c("no_oncall", "no_night", "no_weekend", "prefer_oncall")
 
 requests <- staff |>
-  filter(!doctor_id %in% c("D33", "D34")) |>
+  filter(pool == "anaesthetics", !doctor_id %in% c("D33", "D34")) |>
   slice_sample(n = 22) |>
   mutate(
     date    = sample(rota_dates, n(), replace = TRUE),
@@ -324,7 +366,9 @@ requests <- staff |>
     "D03",      ymd("2027-02-14"),  "no_oncall",  5,       "Childcare",
     "D11",      ymd("2027-04-10"),  "no_oncall",  5,       "Wedding",
     "D11",      ymd("2027-04-11"),  "no_oncall",  5,       "Wedding",
-    "D26",      ymd("2027-02-27"),  "no_weekend", 3,       ""
+    "D26",      ymd("2027-02-27"),  "no_weekend", 3,       "",
+    "D36",      ymd("2027-03-06"),  "no_weekend", 3,       "",
+    "D42",      ymd("2027-02-19"),  "no_oncall",  5,       "Family event"
   )) |>
   mutate(date = if_else(request == "no_weekend", floor_date(date, "week", week_start = 6), date)) |>
   arrange(doctor_id, date)
@@ -444,7 +488,7 @@ planted <- tribble(
   "D26",      ymd("2027-03-13"),  "OBS_LD",    "MAX_7DAY",
   "D26",      ymd("2027-03-14"),  "OBS_LD",    "MAX_7DAY",
   # Rostered during approved exam leave
-  "D16",      ymd("2027-03-10"),  "ICU2_N",    "LEAVE_APPROVED",
+  "D16",      ymd("2027-03-10"),  "ICU1_N",    "LEAVE_APPROVED",
   # CT1 without obstetric sign-off on labour ward
   "D24",      ymd("2027-04-06"),  "OBS_N",     "COMPETENCY"
 )
@@ -500,7 +544,7 @@ day_work <- available |>
   filter(day_type_of(date) == "weekday") |>
   anti_join(oncall, by = c("doctor_id", "date")) |>
   anti_join(post_night, by = c("doctor_id", "date")) |>
-  transmute(doctor_id, date, code = if_else(placement == "ICU", "ICU_DAY", "ANA_DAY"))
+  transmute(doctor_id, date, code = if_else(str_starts(placement, "ICU"), "ICU_DAY", "ANA_DAY"))
 
 leave_codes <- leave |>
   mutate(
@@ -574,7 +618,7 @@ inputs_wb <- wb_workbook(creator = "rota-writer", datetime_created = fixed_time)
     list(grade = grades$grade, ltft_fixed_day_off = c("Mon", "Tue", "Wed", "Thu", "Fri")),
     set_names(rep(list(c("Y", "N")), length(yn_cols)), yn_cols)
   )) |>
-  add_sheet("placements", placements, list(placement = c("ICU", "OBS", "GENERAL"))) |>
+  add_sheet("placements", placements, list(placement = c("ICU", "ICU_TIER2", "OBS", "GENERAL"))) |>
   add_sheet("placement_roles", placement_roles) |>
   add_sheet("leave", leave, list(
     leave_type = c("annual", "study", "exam", "parental"),

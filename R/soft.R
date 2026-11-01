@@ -346,9 +346,11 @@ split_weekend_part <- function(x, inputs) {
   )
 }
 
-# Distance of each doctor's count from their WTE-weighted share of the total,
-# as in summarise_doctors(), but shared only among doctors who can work the
-# category at all (e.g. not nights-exempt doctors for nights). The penalty
+# Distance of each doctor's count from their WTE-weighted share of their
+# pool's total, as in summarise_doctors(), but shared only among doctors who
+# can work the category at all (e.g. not nights-exempt doctors for nights).
+# Each pool has its own total, so one pool's work never counts towards
+# another's shares. The penalty
 # is piecewise linear and convex, so the k-th unit away from the share costs
 # (2k - 1) x weight (approximately quadratic). This spreads the unavoidable
 # imbalance across doctors instead of loading it onto one.
@@ -357,15 +359,17 @@ fair_part <- function(items, inputs, rule, steps = 3) {
   if (weight == 0 || nrow(items) == 0) {
     return(NULL)
   }
-  total <- paste(rule, "total")
   share <- inputs$staff |>
+    mutate(pool = staff_pool(inputs)) |>
     filter(doctor_id %in% items$doctor_id) |>
-    transmute(
-      doctor_id,
+    mutate(
       weeks = as.numeric(pmin(end_date, inputs$period$end) - pmax(start_date, inputs$period$start) + 1) / 7,
       share = wte * weeks / sum(wte * weeks),
-      con = paste(rule, doctor_id)
-    )
+      .by = pool
+    ) |>
+    transmute(doctor_id, share, con = paste(rule, doctor_id), total = paste(rule, "total", pool))
+  totals <- distinct(share, total)
+  items <- inner_join(items, select(share, doctor_id, con, total), by = "doctor_id")
   segments <- share |>
     tidyr::crossing(dir = c(1, -1), step = seq_len(steps + 1)) |>
     mutate(aux = paste(con, dir, step),
@@ -373,13 +377,13 @@ fair_part <- function(items, inputs, rule, steps = 3) {
            cost = weight * (2 * step - 1))
 
   list(
-    vars = bind_rows(aux_vars(total, upper = Inf), aux_vars(segments$aux, upper = segments$upper)),
+    vars = bind_rows(aux_vars(totals$total, upper = Inf), aux_vars(segments$aux, upper = segments$upper)),
     terms = bind_rows(
-      # total = sum of all items
+      # pool total = sum of the pool's items
       transmute(items, con = total, j, coef = 1),
-      tibble::tibble(con = total, aux = total, coef = -1),
-      # count - share x total - over + under = 0
-      items |> inner_join(select(share, doctor_id, con), by = "doctor_id") |> transmute(con, j, coef = 1),
+      transmute(totals, con = total, aux = total, coef = -1),
+      # count - share x pool total - over + under = 0
+      transmute(items, con, j, coef = 1),
       transmute(share, con, aux = total, coef = -share),
       transmute(segments, con, aux, coef = -dir)
     ) |>
@@ -434,8 +438,9 @@ hours_target_part <- function(x, inputs, steps = 3) {
 }
 
 # Normal-day staffing even across the rota: each day's count of each
-# normal-day shift close to a common level for that shift, chosen by the
-# solver. Each doctor-day above or below the level costs `weight`.
+# normal-day shift close to a common level for that shift and day type
+# (weekday, weekend, bank holiday), chosen by the solver. Each doctor-day
+# above or below the level costs `weight`.
 normal_day_spread_part <- function(x, inputs) {
   weight <- soft_weight(inputs, "NORMAL_DAY_SPREAD")
   normal <- inputs$shifts$shift_code[inputs$shifts$shift_type == "normal_day"]
@@ -445,7 +450,7 @@ normal_day_spread_part <- function(x, inputs) {
   days <- expected_cover(inputs) |>
     filter(shift_code %in% normal, n_max > 0) |>
     transmute(date, shift_code, con = paste("NORMAL_DAY_SPREAD", shift_code, date),
-              level = paste("NORMAL_DAY_SPREAD", shift_code, "level"))
+              level = paste("NORMAL_DAY_SPREAD", shift_code, day_type, "level"))
   levels <- distinct(days, level)
   devs <- days |>
     tidyr::crossing(dir = c(1, -1)) |>

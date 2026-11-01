@@ -45,6 +45,21 @@ test_that("approved leave and nights-exempt doctors are respected", {
   expect_false(any(x$doctor_id == "D11" & x$is_night))
 })
 
+test_that("ICU1 comes from anaesthetics, ICU2 from the tier 2 pool, and each pool has its own share", {
+  inputs <- two_weeks()
+  model <- build_rota_model(inputs)
+  x <- dplyr::filter(model$vars, kind == "x")
+  pool <- setNames(inputs$staff$pool, inputs$staff$doctor_id)
+
+  expect_equal(unique(pool[x$doctor_id[x$shift_code %in% c("ICU2_LD", "ICU2_N")]]), "icu_tier2")
+  expect_equal(unique(pool[x$doctor_id[x$shift_code %in% c("ICU1_LD", "ICU1_N")]]), "anaesthetics")
+  expect_setequal(unique(pool[x$doctor_id[x$shift_code == "ICU_DAY"]]), c("anaesthetics", "icu_tier2"))
+  # Saturday 6 Feb needs one ICU short day
+  expect_true(any(x$shift_code == "ICU_DAY" & x$date == as.Date("2027-02-06")))
+  expect_setequal(model$rows$con[model$rows$con %in% paste("FAIR_ONCALL total", pool)],
+                  paste("FAIR_ONCALL total", c("anaesthetics", "icu_tier2")))
+})
+
 test_that("slots that cannot be filled are left empty and reported", {
   inputs <- hard_only(two_weeks())
   inputs$staff$can_OBS <- FALSE

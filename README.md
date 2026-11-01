@@ -54,7 +54,8 @@ them from the project root.
    Service for resident doctors in England (Schedule 3, as amended in 2019). These rules are hard
    constraints, not post-hoc checks. See [`docs/contract-rules.md`](docs/contract-rules.md).
 2. **Fair.** On-calls, nights and weekends are shared in proportion to each doctor's whole-time
-   equivalent (WTE). Leave and preference requests are honoured wherever the hard rules allow.
+   equivalent (WTE), within each staffing pool. Leave and preference requests are honoured
+   wherever the hard rules allow.
 3. **Training-aware.** The rota respects placements (e.g. a 3- or 6-month ICU or obstetric block),
    competencies (e.g. obstetric sign-off), and a sensible skill mix across the on-call tiers.
 4. **Transparent.** All rules and their weights live in a spreadsheet that the rota coordinator can
@@ -67,17 +68,23 @@ them from the project root.
 
 | Role | Code | Shifts |
 |---|---|---|
-| ICU 1st on-call (senior resident) | `ICU1` | long day `ICU1_LD`, night `ICU1_N` |
-| ICU 2nd on-call | `ICU2` | `ICU2_LD`, `ICU2_N` |
+| ICU 1st on-call (anaesthetist, airway competent) | `ICU1` | long day `ICU1_LD`, night `ICU1_N` |
+| ICU 2nd on-call (FY/IMT/ACCS pool) | `ICU2` | `ICU2_LD`, `ICU2_N` |
 | Anaesthesia 1st on-call | `ANA1` | `ANA1_LD`, `ANA1_N` |
 | Anaesthesia 2nd on-call | `ANA2` | `ANA2_LD`, `ANA2_N` |
 | Obstetric anaesthesia | `OBS` | `OBS_LD`, `OBS_N` |
-| Normal working days | `ICU_DAY`, `ANA_DAY` | weekdays 08:00–17:00 |
+| Normal working days | `ICU_DAY`, `ANA_DAY` | 08:00–17:00 on weekdays; one `ICU_DAY` at weekends and bank holidays |
 
 All on-call shifts are **resident**: long day 08:00–20:30 (12.5 h) and night 20:00–08:30 (12.5 h).
 Every on-call tier runs a long day and a night every day. Normal days have a minimum and no
 maximum: once the on-calls are filled, the solver adds normal days to bring each doctor up to their
 contracted hours. Non-resident on-call is listed in the rules reference for future use.
+
+Doctors belong to a **staffing pool** (`pool` in `staff`). In the test data, the anaesthetics pool
+covers theatres, obstetrics and ICU1. A second pool of foundation, internal medicine and ACCS
+emergency medicine trainees (`icu_tier2`, on an `ICU_TIER2` placement) covers ICU2. Both pools
+work ICU short days. Fair shares are measured within each pool, because the ICU tier 2 rota is
+busier out of hours than the anaesthetics one.
 
 ## Constraint catalogue
 
@@ -99,8 +106,9 @@ These come from TCS Schedule 3. Full details, parameters and sources are in
 - Doctors only fill roles they are signed off for (`can_*` columns in `staff`)
 - Doctors only work while in post (`start_date`/`end_date`)
 - Placements: during a placement block, a doctor only works the roles listed for that placement
-  (`placement_roles`). An ICU block means ICU1/ICU2/ICU_DAY only, and an OBS block means OBS on-calls
-  and ANA_DAY only.
+  (`placement_roles`). An anaesthetics ICU block means ICU1/ICU_DAY only, the ICU tier 2 pool's
+  `ICU_TIER2` placement means ICU2/ICU_DAY only, and an OBS block means OBS on-calls and ANA_DAY
+  only.
 - **Approved** leave is never overwritten. Nights-exempt doctors (e.g. on occupational health
   advice) are never given nights.
 
@@ -110,8 +118,9 @@ These come from TCS Schedule 3. Full details, parameters and sources are in
   ST3+ in theatre/labour ward at night. These have heavy weights,
   so a shortfall is reported rather than making the model infeasible.
 - **Fairness:** on-calls, nights and weekends deviate as little as possible from each doctor's
-  WTE-weighted share. The share is taken among doctors who can work that category at all (e.g.
-  nights-exempt doctors are left out of nights). The penalty grows with the distance: the *k*-th
+  WTE-weighted share of their pool's total. The share is taken among doctors in the pool who can
+  work that category at all (e.g. nights-exempt doctors are left out of nights). A blank `pool`
+  puts everyone in one pool. The penalty grows with the distance: the *k*-th
   shift away from the share costs (2*k* − 1) × weight, roughly quadratic. So two doctors one
   shift off cost less than one doctor two shifts off.
 - **Requested** (not yet approved) leave, and preference requests (`requests` sheet, with
@@ -125,9 +134,10 @@ These come from TCS Schedule 3. Full details, parameters and sources are in
   short cost more for each further normal day short (the *k*-th day costs (2*k* − 1) × weight per
   hour), so a shortfall is shared. Each hour over costs 10 × weight, so doctors go over only
   when cover needs it.
-- **Even normal-day staffing** (`NORMAL_DAY_SPREAD`): each weekday's count of `ICU_DAY` and
-  `ANA_DAY` stays close to a common level, rather than piling normal days onto some days. Each
-  doctor-day away from the level (the median) costs the weight.
+- **Even normal-day staffing** (`NORMAL_DAY_SPREAD`): each day's count of `ICU_DAY` and
+  `ANA_DAY` stays close to a common level for its day type (weekday, weekend, bank holiday),
+  rather than piling normal days onto some days. Each doctor-day away from the level (the median)
+  costs the weight.
 - Weekends no more than 1 in 3 where possible (this avoids the weekend allowance)
 - **Run lengths** (`SINGLE_NIGHT`, `LONG_RUN`, `LONG_NIGHT_RUN`): no single nights, and no more
   than 5 shifts in a row. Each isolated single night costs the `SINGLE_NIGHT` weight, and each
@@ -206,8 +216,8 @@ Yes/No columns use `Y`/`N` drop-downs.
 | `shifts` | Shift definitions: role, type (`normal_day`/`long_day`/`night`), start and end, hours, flags (`is_on_call`, `is_night`, `is_long`, `is_late`) |
 | `cover` | Number of doctors required per shift by day type (`weekday`/`weekend`/`bank_holiday`). On-call is exact (`n_min = n_max`); normal days have a minimum. |
 | `bank_holidays` | English bank holidays in the rota window |
-| `staff` | One row per doctor: grade, WTE, LTFT fixed day off, start/end in post, nights-exempt, WTR opt-out, competencies (`can_ICU1` … `can_OBS`) |
-| `placements` | Training placement blocks: `ICU`, `OBS` or `GENERAL`, with dates |
+| `staff` | One row per doctor: grade, staffing `pool` (fair shares are measured within a pool), WTE, LTFT fixed day off, start/end in post, nights-exempt, WTR opt-out, competencies (`can_ICU1` … `can_OBS`) |
+| `placements` | Training placement blocks: `ICU`, `ICU_TIER2`, `OBS` or `GENERAL`, with dates |
 | `placement_roles` | Which roles each placement may work. Unlisted roles are forbidden; `penalty` > 0 means allowed but discouraged (soft, per shift). |
 | `leave` | Leave periods: type (`annual`, `study`, `parental`, `exam`), status (`approved` = hard, `requested` = soft) |
 | `requests` | Soft preferences: `no_oncall`, `no_night`, `no_weekend`, `prefer_oncall` on a date, with a weight |
@@ -311,7 +321,7 @@ scripts/solve_rota.R          command-line solver
 tests/testthat/               tests for each rule, plus the planted violations
 docs/contract-rules.md        rules reference with sources
 data-raw/make_test_data.R     regenerates the test workbooks (deterministic)
-inst/extdata/rota_inputs.xlsx test inputs: 34 fictional doctors, 13 weeks from 1 Feb 2027
+inst/extdata/rota_inputs.xlsx test inputs: 42 fictional doctors in two pools, 13 weeks from 1 Feb 2027
 inst/extdata/example_rota_output.xlsx  a rota that breaks the rules on purpose (see below)
 ```
 

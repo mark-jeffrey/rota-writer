@@ -19,7 +19,8 @@ path to an inputs workbook.}
 \value{
 A tibble with one row per doctor:
 \describe{
-\item{doctor_id, grade, wte, opted_out_wtr}{From the \code{staff} sheet.}
+\item{doctor_id, grade, pool, wte, opted_out_wtr}{From the \code{staff}
+sheet. \code{pool} is blank if the sheet has no pools.}
 \item{contracted_hours}{Weekly contracted hours: the \code{staff} sheet's
 \code{contracted_hours}, or the \code{HOURS_TARGET} rule's value x WTE where
 that is blank.}
@@ -33,14 +34,16 @@ what \code{AVG_HOURS} limits and what \code{contracted_hours} is compared with.}
 \item{on_calls, nights, weekends}{Counts. A weekend is worked if any
 shift falls between 00:00 Saturday and 24:00 Sunday.}
 \item{fair_on_calls, fair_nights, fair_weekends}{WTE-weighted fair
-share of the department total. Nights-exempt doctors have no share
-of the nights.}
+share of the pool's total. Nights-exempt doctors have no share of
+the nights.}
 }
 }
 \description{
 Totals for each doctor in the staff list, alongside the fair share they
 would have if on-calls, nights and weekends were split in proportion to
-\code{wte * weeks_in_post}. Use it to judge how even a rota is.
+\code{wte * weeks_in_post}. Shares are split within each staffing pool (the
+\code{staff} sheet's \code{pool} column), so doctors are compared only with others
+on the same rota. Use it to judge how even a rota is.
 }
 \examples{
 summarise_doctors(
