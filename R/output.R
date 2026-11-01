@@ -59,20 +59,8 @@ write_rota <- function(rota, inputs, path) {
   inputs <- as_rota_inputs(inputs)
   rota <- as_rota(rota)
   long <- rota_with_leave(rota, inputs)
-  labels <- doctor_labels(inputs$staff)
-
-  days <- tibble::tibble(date = rota_dates(inputs)) |>
-    mutate(
-      day = as.character(lubridate::wday(date, label = TRUE, locale = "C")),
-      holiday = if_else(date %in% inputs$bank_holidays$date, "Bank holiday", NA_character_)
-    )
-
-  grid <- long |>
-    pivot_wider(names_from = doctor_id, values_from = code) |>
-    right_join(days, by = "date") |>
-    arrange(date) |>
-    select(date, day, holiday, any_of(inputs$staff$doctor_id))
-  names(grid) <- coalesce(labels[names(grid)], names(grid))
+  days <- rota_days(inputs)
+  grid <- rota_grid(rota, inputs)
 
   wb <- openxlsx2::wb_workbook(creator = "rota-writer") |>
     add_rota_styles() |>
@@ -114,6 +102,28 @@ write_rota <- function(rota, inputs, path) {
   invisible(path)
 }
 
+# One row per rota date: day name and bank holiday note
+rota_days <- function(inputs) {
+  tibble::tibble(date = rota_dates(inputs)) |>
+    mutate(
+      day = as.character(lubridate::wday(date, label = TRUE, locale = "C")),
+      holiday = if_else(date %in% inputs$bank_holidays$date, "Bank holiday", NA_character_)
+    )
+}
+
+# Dates down, doctors across (labelled "D01 Ada Alder"), holding shift and
+# approved leave codes
+rota_grid <- function(rota, inputs) {
+  labels <- doctor_labels(inputs$staff)
+  grid <- rota_with_leave(rota, inputs) |>
+    pivot_wider(names_from = doctor_id, values_from = code) |>
+    right_join(rota_days(inputs), by = "date") |>
+    arrange(date) |>
+    select(date, day, holiday, any_of(inputs$staff$doctor_id))
+  names(grid) <- coalesce(labels[names(grid)], names(grid))
+  grid
+}
+
 # Who is on each shift each day, with UNFILLED where cover is short
 shift_table <- function(rota, inputs, days) {
   labels <- doctor_labels(inputs$staff)
@@ -148,17 +158,38 @@ placement_summary <- function(inputs) {
     summarise(placement = paste(unique(placement), collapse = " then "), .by = doctor_id)
 }
 
+# Cell colours for the workbook and the app: fill, and text where not black
+rota_colours <- tibble::tribble(
+  ~style,     ~fill,     ~text,
+  "night",    "#3F3F7F", "#FFFFFF",
+  "long_day", "#FFE08A", NA,
+  "leave",    "#B7E1CD", NA,
+  "weekend",  "#E7E6E6", NA,
+  "holiday",  "#F8CBAD", NA,
+  "unfilled", "#F4C7C3", "#9C0006"
+)
+
+# Style of each rota code, matching colour_codes(): nights, long days and
+# leave, otherwise NA
+code_style <- function(code) {
+  case_when(
+    stringr::str_detect(code, "_N") ~ "night",
+    stringr::str_detect(code, "_LD") ~ "long_day",
+    code %in% leave_codes ~ "leave",
+    .default = NA_character_
+  )
+}
+
 add_rota_styles <- function(wb) {
-  colour <- openxlsx2::wb_color
-  wb |>
-    openxlsx2::wb_add_dxfs_style(name = "night", bg_fill = colour("FF3F3F7F"),
-                                 font_color = colour("FFFFFFFF")) |>
-    openxlsx2::wb_add_dxfs_style(name = "long_day", bg_fill = colour("FFFFE08A")) |>
-    openxlsx2::wb_add_dxfs_style(name = "leave", bg_fill = colour("FFB7E1CD")) |>
-    openxlsx2::wb_add_dxfs_style(name = "weekend", bg_fill = colour("FFE7E6E6")) |>
-    openxlsx2::wb_add_dxfs_style(name = "holiday", bg_fill = colour("FFF8CBAD")) |>
-    openxlsx2::wb_add_dxfs_style(name = "unfilled", bg_fill = colour("FFF4C7C3"),
-                                 font_color = colour("FF9C0006"))
+  argb <- \(hex) openxlsx2::wb_color(paste0("FF", sub("#", "", hex)))
+  for (i in seq_len(nrow(rota_colours))) {
+    style <- rota_colours[i, ]
+    wb <- openxlsx2::wb_add_dxfs_style(
+      wb, name = style$style, bg_fill = argb(style$fill),
+      font_color = if (!is.na(style$text)) argb(style$text)
+    )
+  }
+  wb
 }
 
 add_table_sheet <- function(wb, name, x) {

@@ -44,18 +44,8 @@ write_check_report <- function(violations, doctors, path, patterns = NULL) {
     openxlsx2::wb_add_dxfs_style(name = "hard", bg_fill = openxlsx2::wb_color("FFF4C7C3")) |>
     openxlsx2::wb_add_dxfs_style(name = "soft", bg_fill = openxlsx2::wb_color("FFFFF2CC"))
 
-  measures <- intersect(c("on_calls", "nights", "weekends"), names(doctors))
-  measures <- measures[paste0("fair_", measures) %in% names(doctors)]
-  for (m in measures) {
-    doctors[[paste0(m, "_vs_fair")]] <- round(doctors[[m]] - doctors[[paste0("fair_", m)]], 1)
-  }
-  diffs <- paste0(measures, "_vs_fair")
-  if (all(c("avg_weekly_hours", "contracted_hours") %in% names(doctors))) {
-    doctors <- doctors |>
-      mutate(hours_vs_contracted = round(avg_weekly_hours - contracted_hours, 1),
-             .after = avg_weekly_hours)
-    diffs <- c("hours_vs_contracted", diffs)
-  }
+  doctors <- fairness_table(doctors)
+  diffs <- intersect(fairness_diffs, names(doctors))
 
   sheets <- list(summary = summary, violations = violations, doctors = doctors, patterns = patterns) |>
     compact()
@@ -86,4 +76,22 @@ write_check_report <- function(violations, doctors, path, patterns = NULL) {
 
   openxlsx2::wb_save(wb, path, overwrite = TRUE)
   invisible(path)
+}
+
+fairness_diffs <- c("hours_vs_contracted", "on_calls_vs_fair", "nights_vs_fair", "weekends_vs_fair")
+
+# Add each doctor's distance from their contracted hours and fair shares to a
+# summarise_doctors() table, for whichever of those columns it has
+fairness_table <- function(doctors) {
+  measures <- intersect(c("on_calls", "nights", "weekends"), names(doctors))
+  measures <- measures[paste0("fair_", measures) %in% names(doctors)]
+  for (m in measures) {
+    doctors[[paste0(m, "_vs_fair")]] <- round(doctors[[m]] - doctors[[paste0("fair_", m)]], 1)
+  }
+  if (all(c("avg_weekly_hours", "contracted_hours") %in% names(doctors))) {
+    doctors <- doctors |>
+      mutate(hours_vs_contracted = round(avg_weekly_hours - contracted_hours, 1),
+             .after = avg_weekly_hours)
+  }
+  doctors
 }
