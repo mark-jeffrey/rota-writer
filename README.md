@@ -3,11 +3,50 @@
 Write contract-compliant, fair on-call rotas for resident doctors in **Anaesthesia and Intensive Care**,
 using constrained optimisation (mixed-integer linear programming) in R.
 
-> **Status:** early development. The input format, test data and compliance checker are in place,
-> and the solver writes rotas that meet every hard rule and minimise the soft-rule penalties
-> (fairness, requests, skill mix), leaving and listing any slots that cannot be filled. It writes a
-> coordinator workbook, a compliance report and per-doctor calendars. Next: the app
+> **Status:** early development. The solver and checker work from the command line or R: they
+> write rotas that meet every hard rule and minimise the soft-rule penalties, with a coordinator
+> workbook, a compliance report and per-doctor calendars. There is no point-and-click app yet
 > (see [Roadmap](#roadmap)).
+
+## Installation
+
+You need R ≥ 4.3 and `cmake` (the `highs` solver package builds from source):
+
+```sh
+sudo apt install cmake        # or: sudo pacman -S cmake / brew install cmake
+git clone https://github.com/mark-jeffrey/rota-writer.git
+cd rota-writer
+Rscript -e 'install.packages(c("dplyr", "highs", "lubridate", "Matrix", "openxlsx2", "purrr",
+  "readxl", "rlang", "stringr", "tibble", "tidyr", "withr", "pkgload", "testthat"))'
+```
+
+The scripts load the package straight from the folder, so there is nothing else to install. Run
+them from the project root.
+
+## Quick start
+
+1. **Prepare the inputs.** Copy the test workbook `inst/extdata/rota_inputs.xlsx` and replace the
+   example data with your own: rota dates in `settings`, doctors in `staff`, and placements, leave
+   and requests in their sheets. See [Input data](#input-data-rota_inputsxlsx) for each sheet. The
+   rules and weights can stay as they are.
+2. **Solve.**
+
+   ```sh
+   Rscript scripts/solve_rota.R my_inputs.xlsx out/
+   ```
+
+   This runs for the time limit in `settings` (10 minutes in the test workbook); pass a number of
+   seconds as a third argument to change it. It prints any input problems and stops, or writes
+   `out/rota.xlsx`, `out/report.xlsx` and one calendar per doctor in `out/calendars/`. See
+   [Solver](#solver) for what each file contains.
+3. **Review** the rota and report. Any unfilled slots are marked `UNFILLED` in the `by_shift` sheet
+   and listed in the report.
+4. **Re-check hand edits.** Edit the `long` sheet of `rota.xlsx` (the `grid` sheet is for reading
+   only), then:
+
+   ```sh
+   Rscript scripts/check_rota.R my_inputs.xlsx out/rota.xlsx out/report.xlsx
+   ```
 
 ## Aims
 
@@ -38,8 +77,7 @@ using constrained optimisation (mixed-integer linear programming) in R.
 All on-call shifts are **resident**: long day 08:00–20:30 (12.5 h) and night 20:00–08:30 (12.5 h).
 Every on-call tier runs a long day and a night every day. Normal days have a minimum and no
 maximum: once the on-calls are filled, the solver adds normal days to bring each doctor up to their
-contracted hours.
-Non-resident on-call is listed in the rules reference for future use.
+contracted hours. Non-resident on-call is listed in the rules reference for future use.
 
 ## Constraint catalogue
 
@@ -122,7 +160,7 @@ the rule's weight), so the solver's penalty for each rule equals the checker's.
   a cost in the objective.
 - **Solver:** [HiGHS](https://highs.dev) via `highs::highs_solve()`. The model is built as tidy
   tables with dplyr (one row per variable, one per constraint, one per non-zero) and turned into a
-  sparse matrix only at solve time. This avoids ompr's slow model building at this size. Variables
+  sparse matrix only at solve time. Variables
   a doctor may never use (wrong competency or placement, leave, LTFT day, not in post) are left
   out, so the test data has about 10k binaries rather than 37k.
 - **Unfilled slots:** each cover row has a slack variable costing 100,000 per unfilled slot (more
@@ -130,7 +168,7 @@ the rule's weight), so the solver's penalty for each rule equals the checker's.
   slot never breaks them. So the model always has a solution, and impossible inputs give a rota
   with gaps instead of just "infeasible".
 - **Solve strategy:** HiGHS finds a rota that meets every hard rule in under 10 s, solving only
-  the hard-rule rows (the soft rules' helper rows slow this step and do not affect feasibility). Minimising
+  the hard-rule rows. Minimising
   the penalties over the whole 13 weeks at once is too slow: the root LP relaxation alone takes
   minutes. So `solve_rota()` improves the first rota by *large neighbourhood search*. It
   repeatedly frees one week, or a random group of 10 doctors, fixes everything else, and
@@ -161,17 +199,6 @@ Yes/No columns use `Y`/`N` drop-downs.
 | `requests` | Soft preferences: `no_oncall`, `no_night`, `no_weekend`, `prefer_oncall` on a date, with a weight |
 | `skill_mix` | Seniority rules across groups of shifts: minimum grade, minimum count, weight |
 
-## Output: `example_rota_output.xlsx`
-
-- `grid`: one row per date and one column per doctor, holding shift or leave codes (the
-  coordinator's view)
-- `long`: tidy `doctor_id, date, code` (the format the code uses)
-- `known_violations`: the test fixture lists contract breaches that were planted on purpose (see below)
-
-The example in `inst/extdata/` is a **naive round-robin rota that deliberately breaks the rules**. It
-shows the output format and gives the compliance checker something to catch. It is not an
-optimised rota.
-
 ## Compliance checker
 
 `check_rota()` checks any rota, whether solved or edited by hand, against every rule in the `rules`
@@ -180,10 +207,11 @@ sheet. It works on real clock times: each shift becomes an interval, so a night 
 mistakes in the other.
 
 ```sh
-Rscript scripts/check_rota.R inst/extdata/rota_inputs.xlsx inst/extdata/example_rota_output.xlsx report.xlsx
+Rscript scripts/check_rota.R inputs.xlsx rota.xlsx report.xlsx
 ```
 
-This prints the number of violations for each rule and writes a report workbook with three sheets:
+The rota workbook needs a `long` sheet (`doctor_id`, `date`, `code`), as `rota.xlsx` from the
+solver has. This prints the number of violations for each rule and writes a report workbook with three sheets:
 `summary`, `violations` (one row per breach, with doctor, dates, detail and penalty) and `doctors`
 (hours, average weekly hours, on-calls, nights and weekends per doctor, against each doctor's
 WTE-weighted fair share). It exits with status 1 if any hard rule is broken, and 2 if the inputs
@@ -200,7 +228,7 @@ violations <- check_rota(rota, inputs)
 doctors <- summarise_doctors(rota, inputs)
 
 # File paths work too
-check_rota("inst/extdata/example_rota_output.xlsx", "inst/extdata/rota_inputs.xlsx")
+check_rota("out/rota.xlsx", "inst/extdata/rota_inputs.xlsx")
 ```
 
 Each function has a help page, e.g. `?check_rota`, `?read_rota_inputs`, `?rotawriter`.
@@ -208,7 +236,7 @@ Each function has a help page, e.g. `?check_rota`, `?read_rota_inputs`, `?rotawr
 ## Solver
 
 ```sh
-Rscript scripts/solve_rota.R inst/extdata/rota_inputs.xlsx out/ [time_limit_s]
+Rscript scripts/solve_rota.R inputs.xlsx out/ [time_limit_s]
 ```
 
 This solves the rota, runs the checker on it, and writes to `out/`:
@@ -245,9 +273,9 @@ slots empty, never breaks a contract rule to fill them, sets `status = "Unfilled
 them in `unfilled`. The checker reports the same slots as `COVER` violations. For example, with
 nobody signed off for OBS, exactly the 182 OBS slots are left empty and everything else is filled.
 
-## Repository layout
+## Development
 
-The project is an R package (`rotawriter`), loaded with `pkgload::load_all()` during development.
+The project is an R package (`rotawriter`), loaded with `pkgload::load_all()`.
 
 ```
 README.md
@@ -268,8 +296,12 @@ tests/testthat/               tests for each rule, plus the planted violations
 docs/contract-rules.md        rules reference with sources
 data-raw/make_test_data.R     regenerates the test workbooks (deterministic)
 inst/extdata/rota_inputs.xlsx test inputs: 34 fictional doctors, 13 weeks from 1 Feb 2027
-inst/extdata/example_rota_output.xlsx
+inst/extdata/example_rota_output.xlsx  a rota that breaks the rules on purpose (see below)
 ```
+
+`example_rota_output.xlsx` is a naive round-robin rota, not an optimised one. Its
+`known_violations` sheet lists the contract breaches planted in it, and the tests check that the
+checker finds every one.
 
 Regenerate the test data, rebuild the help pages (and `NAMESPACE`) from the roxygen comments, and run
 the tests:
@@ -280,30 +312,17 @@ Rscript -e 'roxygen2::roxygenise()'
 Rscript -e 'pkgload::load_all(); testthat::test_dir("tests/testthat", load_package = "none")'
 ```
 
-## Requirements
-
-R ≥ 4.3 with `tidyverse`, `lubridate`, `readxl`, `openxlsx2`, `pkgload` and `testthat`. The solver
-also needs `highs`, `Matrix` and `withr`. `highs` builds from source and needs `cmake`
-(`sudo pacman -S cmake` / `apt install cmake`).
-
 ## Roadmap
 
-1. **Data model, test data and README** ✓
-2. **Compliance checker** ✓. Loads the workbook, validates inputs, and checks any rota against
-   every rule. It catches every planted violation in the example.
-3. **Core MILP** ✓. Hard constraints only. Finds a rota for the test data that passes the checker
-   with no hard violations, including when contract limits are tightened.
-4. **Soft constraints** ✓: fairness, requests, skill mix, weekends, single nights and
-   discouraged placements, weighted from the spreadsheet. The solver reports the penalty per rule,
-   and it matches the checker. On the test data, a 10-minute solve gives no hard violations, no
-   skill-mix shortfalls, no requested leave refused, and every doctor within
-   1.5 h a week of their contracted hours. Impossible inputs give a rota with the
-   slots that cannot be filled left empty and listed.
-5. **Outputs** ✓: coordinator workbook (grid, who's-on-each-shift, per-doctor totals), per-doctor
-   `.ics` calendars, and a compliance and fairness report. PDF calendars are not done yet.
-6. **No-code interface.** A Shiny app (bslib, editable tables) to upload the workbook, edit
-   requests, solve, and download. It may later be packaged as an R package / golem app.
-7. Later: re-solving mid-rota with existing shifts fixed, swaps, and non-resident on-call.
+**Done:** input workbook and validation, independent compliance checker, solver with hard and soft
+rules, coordinator workbook, compliance report and `.ics` calendars. On the test data, a 10-minute
+solve fills every slot with no hard violations, no skill-mix shortfalls and no requested leave
+refused, and every doctor is within 1.5 h a week of their contracted hours.
+
+**Next:**
+1. A Shiny app to upload the workbook, edit requests, solve and download, without using R.
+2. PDF calendars.
+3. Re-solving mid-rota with existing shifts fixed, swaps, and non-resident on-call.
 
 ## Prior art
 
@@ -312,7 +331,7 @@ There is no maintained open-source NHS rota **optimiser** that we know of. Relat
 - [RudolfCardinal/rota](https://github.com/RudolfCardinal/rota): Python rota design and checking
   tool (banding, New Deal/EWTD). It is a checker, not an optimiser. Apache-2.0.
 - [BMA rota checker](https://bma.org.uk/pay-and-contracts/working-hours/work-schedule/bma-rota-checker):
-  the reference compliance check for the 2016 contract. Our checker should agree with it.
+  the reference compliance check for the 2016 contract.
 - Academic work: a [2017 rostering problem set based on the junior doctor contract](https://e-space.mmu.ac.uk/619524)
   (simulated annealing); an [anaesthetist rota system using constraint satisfaction](https://aaai.org/?p=65521);
   and a [MIP model for anaesthetist rostering](https://ftsm.ukm.my/v6/public/assets/file/technicalreport/LP-CAIT-FTSM-2021-001.pdf).
@@ -320,7 +339,6 @@ There is no maintained open-source NHS rota **optimiser** that we know of. Relat
   and Lantum (built on the open-source [Timefold](https://timefold.ai) solver).
 - General tools: Google OR-Tools CP-SAT and Timefold. Nurse rostering is the closest
   well-studied problem.
-- R: [Exploring ompr with the HiGHS solver](https://www.r-bloggers.com/2022/09/exploring-ompr-with-highs-solver/).
 
 ## Disclaimer
 
