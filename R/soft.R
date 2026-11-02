@@ -332,22 +332,30 @@ split_weekend_part <- function(x, inputs) {
 # is piecewise linear and convex, so the k-th unit away from the share costs
 # (2k - 1) x weight (approximately quadratic). This spreads the unavoidable
 # imbalance across doctors instead of loading it onto one.
+#
+# Items may have a `group` column (e.g. the cover slot for FAIR_SLOTS) to
+# share each group separately.
 fair_part <- function(items, inputs, rule, steps = 3) {
   weight <- soft_weight(inputs, rule)
   if (weight == 0 || nrow(items) == 0) {
     return(NULL)
   }
+  if (!"group" %in% names(items)) {
+    items$group <- ""
+  }
+  in_group <- \(key, group) if_else(group == "", key, paste(key, group))
   share <- inputs$staff |>
     mutate(pool = staff_pool(inputs)) |>
-    filter(doctor_id %in% items$doctor_id) |>
+    inner_join(distinct(items, doctor_id, group), by = "doctor_id") |>
     mutate(
       weeks = as.numeric(pmin(end_date, inputs$period$end) - pmax(start_date, inputs$period$start) + 1) / 7,
       share = wte * weeks / sum(wte * weeks),
-      .by = pool
+      .by = c(pool, group)
     ) |>
-    transmute(doctor_id, share, con = paste(rule, doctor_id), total = paste(rule, "total", pool))
+    transmute(doctor_id, group, share, con = in_group(paste(rule, doctor_id), group),
+              total = in_group(paste(rule, "total", pool), group))
   totals <- distinct(share, total)
-  items <- inner_join(items, select(share, doctor_id, con, total), by = "doctor_id")
+  items <- inner_join(items, select(share, doctor_id, group, con, total), by = c("doctor_id", "group"))
   segments <- share |>
     tidyr::crossing(dir = c(1, -1), step = seq_len(steps + 1)) |>
     mutate(aux = paste(con, dir, step),

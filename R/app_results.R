@@ -67,7 +67,7 @@ results_server <- function(id, inputs, rota, solution) {
       doctors <- setdiff(names(grid), c("date", "day", "holiday"))
       weekend <- grid$day %in% c("Sat", "Sun")
       code_cell <- reactable::colDef(minWidth = 80, align = "center", style = function(value) {
-        c(list(whiteSpace = "nowrap", fontSize = "0.85em"), cell_style(code_style(value)))
+        c(list(whiteSpace = "nowrap", fontSize = "0.85em"), cell_style(code_style(value, ready()$inputs$shifts)))
       })
       reactable::reactable(
         grid,
@@ -127,7 +127,7 @@ results_server <- function(id, inputs, rota, solution) {
           name = stringr::str_replace_all(col, "_", " "),
           minWidth = if (col %in% c("name", "placement")) 150 else if (col == "pool") 110 else 80,
           sticky = if (col == "name") "left",
-          style = if (col %in% fairness_diffs) \(value) diff_style(value)
+          style = if (col %in% fairness_diffs(names(x))) \(value) diff_style(value)
         )
       })
       app_table(x, pagination = FALSE, height = 650, filterable = TRUE, columns = columns,

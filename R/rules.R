@@ -12,12 +12,18 @@ rota_types <- list(
   resident = list(
     required = c("settings", "rules", "grades", "shifts", "cover", "bank_holidays", "staff",
                  "placements", "placement_roles", "leave", "requests", "skill_mix"),
-    unlisted_rules_on = TRUE
+    unlisted_rules_on = TRUE,
+    # Phase 2 of solve_rota() frees this many days, or doctors, at a time
+    search = list(days = 7, doctors = 10, whole_weeks = FALSE, first_by_week = FALSE)
   ),
   # Consultant on-call rotas: only the rules listed in the rules sheet apply
   consultant = list(
     required = c("settings", "rules", "shifts", "cover", "bank_holidays", "staff", "leave"),
-    unlisted_rules_on = FALSE
+    unlisted_rules_on = FALSE,
+    # Rotas a year long, with blocks that should not be split. The first rota
+    # is built a week at a time with every penalty counted, so it starts in
+    # blocks.
+    search = list(days = 28, doctors = 5, whole_weeks = TRUE, first_by_week = TRUE)
   )
 )
 
@@ -43,7 +49,8 @@ optional_sheets <- list(
 optional_columns <- list(
   staff = list(grade = NA_character_, pool = NA_character_, contracted_hours = NA_real_,
                ltft_fixed_day_off = NA_character_, nights_exempt = FALSE, opted_out_wtr = FALSE),
-  shifts = list(is_long = FALSE, is_late = FALSE, covers = NA_character_, open_to = "all")
+  shifts = list(is_long = FALSE, is_late = FALSE, covers = NA_character_, open_to = "all",
+                label = NA_character_)
 )
 
 rota_type <- function(settings) {
@@ -123,6 +130,7 @@ rule_registry <- function() {
     rule_entry("COMPETENCY", check = check_competency),
     rule_entry(c("PLACEMENT", "PLACEMENT_AVOID"), check = check_placement),
     rule_entry("NIGHTS_EXEMPT", check = check_nights_exempt),
+    rule_entry("PREFERENCE_ONLY", check = check_preference_only),
     rule_entry("LTFT_FIXED_DAY", check = check_ltft_day),
     rule_entry(c("LEAVE_APPROVED", "LEAVE_REQUESTED"), check = check_leave),
     rule_entry("MAX_SHIFT", check = check_max_shift),
@@ -142,9 +150,14 @@ rule_registry <- function() {
     rule_entry("ISOLATED_DAY_OFF", \(ctx) isolated_day_off_part(ctx$x, ctx$inputs, ctx$n_days)),
     rule_entry("SPLIT_WEEKEND", \(ctx) split_weekend_part(ctx$x, ctx$inputs)),
     rule_entry(c("ICU_SHORT_RUN", "ISOLATED_DAY_OFF", "SPLIT_WEEKEND"), check = check_wellbeing),
+    rule_entry(c("SEQUENCE", "SEQUENCE_SOFT"), \(ctx) sequence_part(ctx$x, ctx$inputs), check_sequences),
+    rule_entry("SEQUENCE_SOFT", \(ctx) sequence_soft_part(ctx$x, ctx$inputs)),
+    rule_entry("PATTERNS", \(ctx) patterns_part(ctx$x, ctx$inputs), check_patterns),
+    rule_entry("PREFERENCES", \(ctx) preferences_part(ctx$x, ctx$inputs), check_preferences),
     rule_entry("FAIR_ONCALL", \(ctx) fair_part(filter(ctx$x, is_on_call), ctx$inputs, "FAIR_ONCALL")),
     rule_entry("FAIR_NIGHTS", \(ctx) fair_part(filter(ctx$x, is_night), ctx$inputs, "FAIR_NIGHTS")),
     rule_entry("FAIR_WEEKENDS", \(ctx) fair_part(ctx$weekend, ctx$inputs, "FAIR_WEEKENDS")),
+    rule_entry("FAIR_SLOTS", \(ctx) fair_part(slot_items(ctx$x, ctx$inputs), ctx$inputs, "FAIR_SLOTS")),
     rule_entry("HOURS_TARGET", \(ctx) hours_target_part(ctx$x, ctx$inputs), check_hours_target),
     rule_entry("NORMAL_DAY_SPREAD", \(ctx) normal_day_spread_part(ctx$x, ctx$inputs),
                check_normal_day_spread)
@@ -155,4 +168,13 @@ rule_registry <- function() {
 active_rules <- function(inputs) {
   keep(rule_registry(), \(entry) length(entry$rules) == 0 ||
          any(map_lgl(entry$rules, \(id) rule_on(inputs, id))))
+}
+
+# Shift variables with one row per on-call cover slot they fill, grouped by
+# slot, for FAIR_SLOTS
+slot_items <- function(x, inputs) {
+  x |>
+    inner_join(shift_covers(inputs$shifts), by = "shift_code", relationship = "many-to-many") |>
+    filter(slot %in% on_call_slots(inputs)) |>
+    mutate(group = slot)
 }

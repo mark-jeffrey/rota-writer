@@ -58,7 +58,10 @@ impossible, or it runs out of time), build the rota a week at a time
 instead, filling as many slots as the hard rules allow.
 \item Improve it by large neighbourhood search: repeatedly free one week, or
 a random group of doctors, fix the rest of the rota, and re-solve that
-part to lower the soft-rule penalties. Every step solves the full model,
+part to lower the soft-rule penalties. For consultant rotas (the
+\code{rota_type} setting) it frees four whole weeks at a time, or five
+doctors; the settings \code{neighbourhood_days} and \code{neighbourhood_doctors}
+change this. Every step solves the full model,
 so the hard rules always hold and fairness is judged over the whole
 rota.
 }

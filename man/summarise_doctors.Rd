@@ -36,6 +36,10 @@ shift falls between 00:00 Saturday and 24:00 Sunday.}
 \item{fair_on_calls, fair_nights, fair_weekends}{WTE-weighted fair
 share of the pool's total. Nights-exempt doctors have no share of
 the nights.}
+\item{one column per on-call slot, e.g. \verb{1ST}, and \code{fair_1ST}}{Only
+when the \code{FAIR_SLOTS} rule is on: how many times each doctor filled
+the slot (a 24-hour shift counts towards both slots it fills), and
+their fair share among doctors who can work it.}
 }
 }
 \description{

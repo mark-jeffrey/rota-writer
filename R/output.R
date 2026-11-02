@@ -8,11 +8,12 @@ doctor_labels <- function(staff) {
   set_names(paste(staff$doctor_id, sub("^Dr\\.? ", "", staff$name)), staff$doctor_id)
 }
 
-# "ICU day", "ICU1 long day", "OBS night"
-shift_label <- function(role, shift_type) {
-  if_else(shift_type == "normal_day",
-          paste(sub("_DAY$", "", role), "day"),
-          paste(role, sub("_", " ", shift_type)))
+# "ICU day", "ICU1 long day", "OBS night", unless the shifts sheet gives a
+# label
+shift_label <- function(role, shift_type, label = NA_character_) {
+  coalesce(label, if_else(shift_type == "normal_day",
+                          paste(sub("_DAY$", "", role), "day"),
+                          paste(role, sub("_", " ", shift_type))))
 }
 
 # The rota plus approved leave, within the rota period
@@ -67,7 +68,7 @@ write_rota <- function(rota, inputs, path) {
     add_table_sheet("grid", grid) |>
     openxlsx2::wb_freeze_pane("grid", first_active_row = 2, first_active_col = 4) |>
     shade_rows("grid", grid, cols = 1:3) |>
-    colour_codes("grid", grid, cols = 4:max(4, ncol(grid)))
+    colour_codes("grid", grid, cols = 4:max(4, ncol(grid)), inputs$shifts)
 
   by_shift <- shift_table(rota, inputs, days)
   wb <- wb |>
@@ -87,7 +88,7 @@ write_rota <- function(rota, inputs, path) {
 
   key <- bind_rows(
     inputs$shifts |>
-      transmute(code = shift_code, meaning = shift_label(role, shift_type),
+      transmute(code = shift_code, meaning = shift_label(role, shift_type, label),
                 start, end, hours),
     tibble::tibble(code = unname(leave_codes),
                    meaning = paste(stringr::str_to_title(names(leave_codes)), "leave (approved)"))
@@ -127,11 +128,11 @@ rota_grid <- function(rota, inputs) {
 # Who is on each shift each day, with UNFILLED where cover is short
 shift_table <- function(rota, inputs, days) {
   labels <- doctor_labels(inputs$staff)
-  codes <- inputs$shifts$shift_code
+  codes <- unique(shift_covers(inputs$shifts)$slot)
 
   expected_cover(inputs) |>
     filter(n_max > 0) |>
-    left_join(transmute(rota, date, shift_code = code, who = labels[doctor_id]),
+    left_join(transmute(rota_slots(rota, inputs), date, shift_code = slot, who = labels[doctor_id]),
               by = c("date", "shift_code")) |>
     summarise(
       short = sum(!is.na(who)) < first(n_min),
@@ -170,12 +171,15 @@ rota_colours <- tibble::tribble(
 )
 
 # Style of each rota code, matching colour_codes(): nights, long days and
-# leave, otherwise NA
-code_style <- function(code) {
+# leave, otherwise NA. Codes are recognised by "_N" and "_LD", or else by
+# their shift_type in `shifts`.
+code_style <- function(code, shifts = NULL) {
+  by_type <- if (!is.null(shifts)) shifts$shift_type[match(code, shifts$shift_code)] else NA
   case_when(
     stringr::str_detect(code, "_N") ~ "night",
     stringr::str_detect(code, "_LD") ~ "long_day",
     code %in% leave_codes ~ "leave",
+    by_type %in% c("night", "long_day") ~ by_type,
     .default = NA_character_
   )
 }
@@ -214,9 +218,15 @@ shade_rows <- function(wb, sheet, x, cols) {
                                              style = "weekend")
 }
 
-colour_codes <- function(wb, sheet, x, cols) {
+colour_codes <- function(wb, sheet, x, cols, shifts = NULL) {
   dims <- data_dims(x, cols)
   rules <- c("_N" = "night", "_LD" = "long_day", set_names(rep("leave", length(leave_codes)), leave_codes))
+  if (!is.null(shifts)) {
+    # Codes without "_N" or "_LD", styled by their shift type
+    other <- shifts$shift_code[!stringr::str_detect(shifts$shift_code, "_N|_LD")]
+    styles <- code_style(other, shifts)
+    rules <- c(rules, set_names(styles, other)[!is.na(styles)])
+  }
   for (text in names(rules)) {
     wb <- openxlsx2::wb_add_conditional_formatting(wb, sheet, dims = dims, type = "containsText",
                                                    rule = text, style = rules[[text]])
@@ -256,7 +266,7 @@ write_calendars <- function(rota, inputs, dir, doctors = NULL) {
       uid = paste(doctor_id, date, code, sep = "-"),
       start = format(start_dt, "%Y%m%dT%H%M%S", tz = "UTC"),
       end = format(end_dt, "%Y%m%dT%H%M%S", tz = "UTC"),
-      summary = shift_label(role, shift_type),
+      summary = shift_label(role, shift_type, label),
       description = paste0(code, ", ", start_dt |> format("%H:%M", tz = "UTC"), "-",
                            end_dt |> format("%H:%M", tz = "UTC"), ", ", hours, " h"),
       all_day = FALSE

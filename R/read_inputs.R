@@ -181,6 +181,9 @@ read_rota <- function(path, sheet = "long") {
 #' * unknown shift codes, roles or grades in `cover`, `placement_roles` and
 #'   `skill_mix`
 #' * in-post days with no placement
+#' * unknown shift codes, patterns, weekdays or preference types in the
+#'   shifts sheet's `covers` column and the `patterns`, `preferences` and
+#'   `sequences` sheets
 #'
 #' @inheritParams check_rota
 #'
@@ -228,13 +231,54 @@ validate_inputs <- function(inputs) {
             paste("Unknown shift_code:", skill_shifts)),
     problem("skill_mix", which(!inputs$skill_mix$min_grade %in% inputs$grades$grade),
             paste("Unknown grade:", inputs$skill_mix$min_grade)),
-    if (rule_on(inputs, "PLACEMENT")) missing_placements(inputs)
+    if (rule_on(inputs, "PLACEMENT")) missing_placements(inputs),
+    unknown_ids("preferences"),
+    validate_slots_and_patterns(inputs)
   ) |>
     list_rbind()
 }
 
+# The covers column, and the patterns, preferences and sequences sheets
+validate_slots_and_patterns <- function(inputs) {
+  problem <- function(sheet, bad, msg) tibble::tibble(sheet = rep(sheet, length(bad)), problem = msg)
+  codes <- inputs$shifts$shift_code
+  slots <- shift_covers(inputs$shifts)$slot
+  days <- pattern_days(inputs)
+  prefs <- inputs$preferences
+  pattern_ids <- unique(inputs$patterns$pattern_id)
+  check_values <- function(type, allowed) {
+    bad <- prefs$value[prefs$preference == type & !prefs$value %in% allowed]
+    problem("preferences", bad, paste0("Unknown value for ", type, ": ", bad))
+  }
+  bad_types <- setdiff(prefs$preference, preference_types)
+  bad_slots <- setdiff(slots, codes)
+  bad_pattern_slots <- setdiff(days$slot, codes)
+  bad_days <- unique(days$pattern_id[is.na(days$offset)])
+  bad_seq <- setdiff(c(inputs$sequences$from_shift, inputs$sequences$to_shift), codes)
+
+  bind_rows(
+    problem("shifts", bad_slots, paste("Unknown shift_code in covers:", bad_slots)),
+    problem("patterns", bad_pattern_slots, paste("Unknown slot:", bad_pattern_slots)),
+    problem("patterns", bad_days, paste0(bad_days, ": days must be Mon, Tue, Wed, Thu, Fri, Sat or Sun ",
+                                         "separated by ;")),
+    problem("preferences", bad_types, paste("Unknown preference:", bad_types)),
+    check_values("prefer_shift", codes),
+    check_values("avoid_shift", codes),
+    check_values("prefer_pattern", pattern_ids),
+    check_values("avoid_pattern", pattern_ids),
+    check_values("day_off", weekday_names),
+    problem("sequences", bad_seq, paste("Unknown shift_code:", bad_seq)),
+    if (isTRUE(rota_types[[rota_type(inputs$settings)]]$search$whole_weeks) &&
+        lubridate::wday(inputs$period$start, week_start = 1) != 1) {
+      problem("settings", 1, "rota_start should be a Monday, so blocks fill whole weeks")
+    }
+  )
+}
+
+# A shift ending at its start time lasts 24 h
 shift_clock_hours <- function(start, end) {
-  (hhmm_hours(end) - hhmm_hours(start)) %% 24
+  hours <- (hhmm_hours(end) - hhmm_hours(start)) %% 24
+  if_else(hours == 0, 24, hours)
 }
 
 # Every in-post day should be covered by a placement

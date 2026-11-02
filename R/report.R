@@ -45,7 +45,7 @@ write_check_report <- function(violations, doctors, path, patterns = NULL) {
     openxlsx2::wb_add_dxfs_style(name = "soft", bg_fill = openxlsx2::wb_color("FFFFF2CC"))
 
   doctors <- fairness_table(doctors)
-  diffs <- intersect(fairness_diffs, names(doctors))
+  diffs <- fairness_diffs(names(doctors))
 
   sheets <- list(summary = summary, violations = violations, doctors = doctors, patterns = patterns) |>
     compact()
@@ -78,13 +78,17 @@ write_check_report <- function(violations, doctors, path, patterns = NULL) {
   invisible(path)
 }
 
-fairness_diffs <- c("hours_vs_contracted", "on_calls_vs_fair", "nights_vs_fair", "weekends_vs_fair")
+# Columns of fairness_table() showing a distance from contracted hours or a
+# fair share
+fairness_diffs <- function(names) {
+  names[names == "hours_vs_contracted" | endsWith(names, "_vs_fair")]
+}
 
 # Add each doctor's distance from their contracted hours and fair shares to a
 # summarise_doctors() table, for whichever of those columns it has
 fairness_table <- function(doctors) {
-  measures <- intersect(c("on_calls", "nights", "weekends"), names(doctors))
-  measures <- measures[paste0("fair_", measures) %in% names(doctors)]
+  measures <- sub("^fair_", "", grep("^fair_", names(doctors), value = TRUE))
+  measures <- intersect(names(doctors), measures)
   for (m in measures) {
     doctors[[paste0(m, "_vs_fair")]] <- round(doctors[[m]] - doctors[[paste0("fair_", m)]], 1)
   }

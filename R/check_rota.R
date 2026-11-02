@@ -107,10 +107,11 @@ finalise_violations <- function(v, inputs) {
 
 # Department-level rules -------------------------------------------------
 
-# Shifts not listed for a day type are not needed; a blank n_max means no
-# maximum (e.g. normal days)
+# Cover slots (shift codes in the cover sheet) each day. Slots not listed
+# for a day type are not needed; a blank n_max means no maximum (e.g. normal
+# days).
 expected_cover <- function(inputs) {
-  tidyr::crossing(date = rota_dates(inputs), shift_code = inputs$shifts$shift_code) |>
+  tidyr::crossing(date = rota_dates(inputs), shift_code = unique(shift_covers(inputs$shifts)$slot)) |>
     mutate(day_type = day_type(date, inputs)) |>
     left_join(mutate(inputs$cover, listed = TRUE), by = c("shift_code", "day_type")) |>
     mutate(
@@ -120,8 +121,25 @@ expected_cover <- function(inputs) {
     select(-listed)
 }
 
+# The cover slots each shift fills: its `covers` (shift codes separated by
+# ";"), or else itself. A 24-hour shift covering "C2;CN" fills a 2nd-on day
+# and a night.
+shift_covers <- function(shifts) {
+  covers <- shifts$covers %||% rep(NA_character_, nrow(shifts))
+  tibble::tibble(shift_code = shifts$shift_code,
+                 slot = stringr::str_split(coalesce(covers, shifts$shift_code), ";")) |>
+    unnest(slot) |>
+    mutate(slot = stringr::str_trim(slot))
+}
+
+# A rota (with a `code` column) with one row per slot each shift fills
+rota_slots <- function(rota, inputs) {
+  inner_join(rota, shift_covers(inputs$shifts), by = c(code = "shift_code"),
+             relationship = "many-to-many")
+}
+
 check_cover <- function(si, inputs) {
-  actual <- count(si, date, shift_code = code)
+  actual <- count(rota_slots(si, inputs), date, shift_code = slot)
 
   expected_cover(inputs) |>
     left_join(actual, by = c("date", "shift_code")) |>
@@ -184,10 +202,19 @@ check_in_post <- function(si, inputs) {
     ))
 }
 
-check_competency <- function(si, inputs) {
-  can <- inputs$staff |>
+# One row per doctor and role in the staff sheet's can_* columns (none if
+# the sheet has no such columns)
+staff_competencies <- function(inputs) {
+  if (!any(startsWith(names(inputs$staff), "can_"))) {
+    return(tibble::tibble(doctor_id = character(), role = character(), can = logical()))
+  }
+  inputs$staff |>
     select(doctor_id, starts_with("can_")) |>
     pivot_longer(-doctor_id, names_to = "role", names_prefix = "can_", values_to = "can")
+}
+
+check_competency <- function(si, inputs) {
+  can <- staff_competencies(inputs)
 
   si |>
     inner_join(can, by = c("doctor_id", "role")) |>
@@ -218,6 +245,26 @@ check_placement <- function(si, inputs) {
                       detail = paste0(code, " - ", role, " discouraged in ", placement, " block"),
                       weight = penalty))
   )
+}
+
+# Shifts open only to doctors who prefer them (`open_to` = "preference" in
+# the shifts sheet), as (doctor_id, shift_code) pairs barred
+preference_only_shifts <- function(inputs) {
+  preferred <- inputs$preferences |>
+    filter(preference == "prefer_shift") |>
+    distinct(doctor_id, shift_code = value)
+  inputs$shifts |>
+    filter(tolower(coalesce(open_to, "all")) == "preference") |>
+    select(shift_code) |>
+    tidyr::crossing(doctor_id = inputs$staff$doctor_id) |>
+    anti_join(preferred, by = c("doctor_id", "shift_code"))
+}
+
+check_preference_only <- function(si, inputs) {
+  si |>
+    semi_join(preference_only_shifts(inputs), by = c("doctor_id", code = "shift_code")) |>
+    with(violations("PREFERENCE_ONLY", doctor_id, date,
+                    detail = paste(code, "- only for doctors who prefer it")))
 }
 
 check_nights_exempt <- function(si, inputs) {
@@ -667,6 +714,10 @@ check_requests <- function(si, inputs) {
 #'     \item{fair_on_calls, fair_nights, fair_weekends}{WTE-weighted fair
 #'       share of the pool's total. Nights-exempt doctors have no share of
 #'       the nights.}
+#'     \item{one column per on-call slot, e.g. `1ST`, and `fair_1ST`}{Only
+#'       when the `FAIR_SLOTS` rule is on: how many times each doctor filled
+#'       the slot (a 24-hour shift counts towards both slots it fills), and
+#'       their fair share among doctors who can work it.}
 #'   }
 #'
 #' @export
@@ -774,5 +825,59 @@ doctor_summary <- function(si, inputs) {
       across(c(fair_on_calls, fair_nights, fair_weekends), \(x) round(x, 1)),
       .by = pool
     ) |>
-    select(-share, -night_share, -nights_exempt)
+    select(-share, -night_share, -nights_exempt) |>
+    left_join(slot_summary(si, inputs), by = "doctor_id")
+}
+
+# With FAIR_SLOTS on: each doctor's count of each on-call cover slot (named
+# after the slot, e.g. `C1`), and their fair share (`fair_C1`), shared within
+# the pool among doctors who can work the slot. A 24-hour shift counts towards
+# both slots it fills.
+slot_summary <- function(si, inputs) {
+  if (!rule_on(inputs, "FAIR_SLOTS") || !"FAIR_SLOTS" %in% inputs$rules$rule_id) {
+    return(select(inputs$staff, doctor_id))
+  }
+  slots <- on_call_slots(inputs)
+  counts <- rota_slots(si, inputs) |>
+    filter(slot %in% slots) |>
+    count(doctor_id, slot)
+  eligible <- slot_eligible(inputs) |>
+    filter(slot %in% slots)
+
+  inputs$staff |>
+    transmute(doctor_id, pool = staff_pool(inputs), wte,
+              weeks = as.numeric(pmin(end_date, inputs$period$end) -
+                                   pmax(start_date, inputs$period$start) + 1) / 7) |>
+    inner_join(eligible, by = "doctor_id", relationship = "many-to-many") |>
+    left_join(counts, by = c("doctor_id", "slot")) |>
+    mutate(n = coalesce(n, 0L),
+           fair = round(wte * weeks / sum(wte * weeks) * sum(n), 1), .by = c(pool, slot)) |>
+    mutate(slot = factor(slot, levels = slots)) |>
+    arrange(slot) |>
+    pivot_wider(id_cols = doctor_id, names_from = slot, values_from = c(n, fair),
+                names_glue = "{if_else(.value == 'n', '', 'fair_')}{slot}", values_fill = 0) |>
+    right_join(select(inputs$staff, doctor_id), by = "doctor_id")
+}
+
+# Cover slots whose own shift is on-call
+on_call_slots <- function(inputs) {
+  slots <- unique(shift_covers(inputs$shifts)$slot)
+  slots[slots %in% inputs$shifts$shift_code[inputs$shifts$is_on_call %in% TRUE]]
+}
+
+# Doctors who can work each slot at all: a shift filling it is open to them
+# by competency and preference (placements and leave aside)
+slot_eligible <- function(inputs) {
+  can <- staff_competencies(inputs)
+  tidyr::crossing(doctor_id = inputs$staff$doctor_id, shift_code = inputs$shifts$shift_code) |>
+    left_join(select(inputs$shifts, shift_code, role, is_night), by = "shift_code") |>
+    left_join(can, by = c("doctor_id", "role")) |>
+    left_join(select(inputs$staff, doctor_id, nights_exempt), by = "doctor_id") |>
+    filter(!(rule_on(inputs, "COMPETENCY") & can %in% FALSE),
+           !(rule_on(inputs, "NIGHTS_EXEMPT") & is_night & nights_exempt %in% TRUE)) |>
+    anti_join(if (rule_on(inputs, "PREFERENCE_ONLY")) preference_only_shifts(inputs) else
+                tibble::tibble(doctor_id = character(), shift_code = character()),
+              by = c("doctor_id", "shift_code")) |>
+    inner_join(shift_covers(inputs$shifts), by = "shift_code", relationship = "many-to-many") |>
+    distinct(doctor_id, slot)
 }

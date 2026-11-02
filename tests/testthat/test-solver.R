@@ -108,21 +108,6 @@ test_that("the solver's soft penalties match the checker's", {
   expect_equal(sum(solution$penalties$penalty), solution$objective, tolerance = 1e-6)
 })
 
-# Each soft rule's penalty for a fixed rota, as the model scores it: every
-# shift variable fixed, helper variables solved for their cheapest values
-model_penalties <- function(rota, inputs) {
-  model <- build_rota_model(inputs)
-  on <- paste(model$vars$doctor_id, model$vars$date, model$vars$shift_code) %in%
-    paste(rota$doctor_id, as.Date(rota$date), rota$code)
-  stopifnot(sum(on & model$vars$kind == "x") == nrow(rota))
-  result <- polish(highs_solver(model), model, as.numeric(on & model$vars$kind == "x"))
-  dplyr::transmute(model$costs, rule, penalty = coef * result$primal_solution[j]) |>
-    dplyr::bind_rows(dplyr::rename(model$offset, penalty = value)) |>
-    dplyr::summarise(penalty = round(sum(penalty), 6), .by = rule) |>
-    dplyr::filter(!startsWith(rule, "FAIR_"), rule != "COVER", penalty != 0) |>
-    dplyr::arrange(rule)
-}
-
 test_that("the model scores a fixed rota exactly as the checker does", {
   inputs <- two_weeks(test_inputs())
   inputs$rules$enabled[inputs$rules$rule_id == "LONG_NIGHT_RUN"] <- TRUE

@@ -251,6 +251,41 @@ Yes/No columns use `Y`/`N` drop-downs.
 | `requests` | Soft preferences: `no_oncall`, `no_night`, `no_weekend`, `prefer_oncall` on a date, with a weight |
 | `skill_mix` | Seniority rules across groups of shifts: minimum grade, minimum count, weight |
 
+## Rota types
+
+The `rota_type` setting picks the kind of rota. Each type sets which sheets the inputs workbook
+must have, and whether rules left out of its `rules` sheet are on:
+
+| `rota_type` | For | Required sheets | Rules not in the `rules` sheet |
+|---|---|---|---|
+| `resident` (default) | Resident doctors on the 2016 TCS | all twelve above | on |
+| `consultant` | Consultant on-call rotas | `settings`, `rules`, `shifts`, `cover`, `bank_holidays`, `staff`, `leave` | off |
+
+Either type can use these optional pieces:
+
+| Where | What it does | Rule |
+|---|---|---|
+| `shifts$covers` | Cover slots a shift fills, separated by `;`. A 24-hour `24H` shift covering `2ND;NIGHT` fills the 2nd-on day and the night. Blank means the shift fills its own slot. | `COVER` |
+| `shifts$open_to` | `preference`: only doctors with a matching `prefer_shift` row may work it | `PREFERENCE_ONLY` (hard) |
+| `shifts$label` | Name of the shift in the workbook key and calendars | |
+| `patterns` sheet | Blocks a slot is worked in, within a Mon–Sun week: `pattern_id`, `slot`, `days` (e.g. `Mon;Tue;Wed;Thu`), `open_to` (`all`/`preference`). Each day of a slot outside a block costs the rule's weight; each week is split into blocks the cheapest way. | `PATTERNS` (soft) |
+| `preferences` sheet | Standing preferences, with a weight each: `prefer_shift` (e.g. 24-hour shifts; working its slots separately costs), `avoid_shift`, `day_off` (`Mon`…`Sun`), `prefer_pattern` (unlocks a preference-only pattern; other blocks for the slot cost), `avoid_pattern` | `PREFERENCES` (soft) |
+| `sequences` sheet | `to_shift` worked `days_after` days after `from_shift`, e.g. no 1st on the day before a night. A blank weight makes the row hard. | `SEQUENCE` (hard), `SEQUENCE_SOFT` |
+| `FAIR_SLOTS` rule | Each on-call slot shared by WTE, so a 24-hour shift counts towards both slots it fills. `summarise_doctors()` adds a count and fair share for each slot. | `FAIR_SLOTS` (soft) |
+
+[`icu_consultant_inputs.xlsx`](inst/extdata/icu_consultant_inputs.xlsx) is a worked example: 15 ICU
+consultants (most at 0.75 WTE, giving a quarter of their time to emergency medicine, anaesthesia or
+respiratory medicine) covering 1st on and 2nd on (08:00–18:00) and nights (17:00–08:00, on site to
+22:00) for a year. 1st on runs in Mon–Thu and Fri–Sun blocks, or whole weeks for the two who prefer
+them. Nights are split each week between a Mon/Wed/Fri/Sun consultant and a Tue/Thu/Sat one. Four
+consultants prefer 24-hour shifts. Consultants are off the day after a night (`MIN_REST` 11 h), never
+1st on the day before a night, and work at most 1 weekend in 3. The search frees four whole weeks or
+five consultants at a time (`neighbourhood_days`, `neighbourhood_doctors` in `settings`).
+
+To add another kind of rota, such as anaesthetic consultants: write a template workbook, reuse a
+type or add one to `rota_types` in `R/rules.R`, and register any new rule in `rule_registry()` with
+the function that adds it to the model and the one that checks it.
+
 ## Compliance checker
 
 `check_rota()` checks any rota, whether solved or edited by hand, against every rule in the `rules`
@@ -337,10 +372,12 @@ LICENSE.md                    AGPL-3.0-or-later (code)
 LICENSE-docs.md               CC BY-SA 4.0 (documentation)
 DESCRIPTION, NAMESPACE        package metadata
 R/read_inputs.R               read_rota_inputs(), validate_inputs(), read_rota()
+R/rules.R                     rota types and the rule registry
 R/check_rota.R                check_rota(), summarise_doctors(), summarise_patterns()
 R/report.R                    write_check_report()
 R/model.R                     build_rota_model(): the MILP as tidy tables
 R/soft.R                      soft rules: objective penalties
+R/patterns.R, R/preferences.R, R/sequences.R  block patterns, standing preferences, shift sequences
 R/solve.R                     solve_rota(): first rota, then neighbourhood search
 R/output.R                    write_rota(), write_calendars()
 R/app.R, R/app_*.R            run_app(): the Shiny app (inputs, solve, results, check tabs)
@@ -351,7 +388,9 @@ scripts/run_app.R             starts the app from the source folder
 tests/testthat/               tests for each rule, plus the planted violations
 docs/contract-rules.md        rules reference with sources
 data-raw/make_test_data.R     regenerates the test workbooks (deterministic)
+data-raw/make_consultant_data.R  regenerates the ICU consultant inputs
 inst/extdata/rota_inputs.xlsx test inputs: 42 fictional doctors in two pools, 13 weeks from 1 Feb 2027
+inst/extdata/icu_consultant_inputs.xlsx  15 fictional ICU consultants, 52 weeks from 1 Feb 2027
 inst/extdata/example_rota_output.xlsx  a rota that breaks the rules on purpose (see below)
 ```
 
@@ -364,6 +403,7 @@ the tests:
 
 ```sh
 Rscript data-raw/make_test_data.R
+Rscript data-raw/make_consultant_data.R
 Rscript -e 'roxygen2::roxygenise()'
 Rscript -e 'pkgload::load_all(); testthat::test_dir("tests/testthat", load_package = "none")'
 ```
@@ -382,6 +422,12 @@ That rota, its compliance report and the calendars are in
 
 A local app (`run_app()`) to upload the workbook, solve with live progress, view and check rotas,
 and download the results.
+
+Rota types (`resident`, `consultant`) with block patterns, standing preferences, 24-hour shifts
+and shift sequences. On the ICU consultant example, a 30-minute solve of the whole year fills every
+slot with no hard violations and every 1st-on day and night in a block. Each consultant is within
+2 of their fair share of 1st-on days, 2nd-on days and nights, and within 1 of their weekends.
+11 shifts fall on a preferred day off and 5 weekends are split.
 
 **Next:**
 1. Editing leave and requests in the app, and saving and reopening sessions.

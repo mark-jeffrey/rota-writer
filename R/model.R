@@ -41,9 +41,11 @@
 #' @returns A `rota_model`: a list of tibbles.
 #'   \describe{
 #'     \item{vars}{One row per variable: `j`, `kind` (`"x"` for doctor/day/
-#'       shift, `"weekend"` for weekend-worked indicators, `"aux"` for other
-#'       helper variables), `type` (`"I"` or `"C"`), bounds and `cost`. Shift
-#'       variables also have `doctor_id`, `date`, `t` and `shift_code`.}
+#'       shift, `"weekend"` for weekend-worked indicators, `"block"` for
+#'       block patterns, `"aux"` for other helper variables), `type` (`"I"`
+#'       or `"C"`), bounds and `cost`. Shift variables also have
+#'       `doctor_id`, `date`, `t` and `shift_code`; blocks have `doctor_id`
+#'       and `t`, their week's Monday.}
 #'     \item{rows}{One row per constraint: `i`, `rule` (matching the
 #'       `rules` sheet where there is one), `con` and the bounds `lo`, `hi`.}
 #'     \item{terms}{Non-zero coefficients: `i`, `j`, `coef`.}
@@ -89,7 +91,8 @@ assemble_model <- function(vars, parts) {
   pick <- \(name) list_rbind(map(parts, name))
   aux <- pick("vars")
   if (nrow(aux) > 0) {
-    vars <- bind_rows(vars, mutate(aux, kind = "aux", j = nrow(vars) + row_number()))
+    if (!"kind" %in% names(aux)) aux$kind <- NA_character_
+    vars <- bind_rows(vars, mutate(aux, kind = coalesce(kind, "aux"), j = nrow(vars) + row_number()))
   }
   resolve <- function(df) {
     if (!"aux" %in% names(df)) {
@@ -160,8 +163,15 @@ shift_gaps <- function(shifts, k) {
 # work what are applied here by leaving variables out.
 shift_vars <- function(inputs, shifts) {
   staff <- inputs$staff
+  # A shift can be worked on days every slot it fills is needed
+  covers <- shift_covers(inputs$shifts)
   needed <- expected_cover(inputs) |>
     filter(n_max > 0) |>
+    select(date, slot = shift_code) |>
+    inner_join(covers, by = "slot", relationship = "many-to-many") |>
+    count(date, shift_code) |>
+    inner_join(count(covers, shift_code, name = "slots"), by = "shift_code") |>
+    filter(n == slots) |>
     select(date, shift_code)
 
   doctor_days <- if (rule_on(inputs, "IN_POST")) {
@@ -191,11 +201,12 @@ shift_vars <- function(inputs, shifts) {
   x <- mutate(x, placement_penalty = coalesce(placement_penalty, 0))
 
   if (rule_on(inputs, "COMPETENCY")) {
-    cannot <- staff |>
-      select(doctor_id, starts_with("can_")) |>
-      pivot_longer(-doctor_id, names_to = "role", names_prefix = "can_", values_to = "can") |>
-      filter(!can)
+    cannot <- filter(staff_competencies(inputs), !can)
     x <- anti_join(x, cannot, by = c("doctor_id", "role"))
+  }
+
+  if (rule_on(inputs, "PREFERENCE_ONLY")) {
+    x <- anti_join(x, preference_only_shifts(inputs), by = c("doctor_id", "shift_code"))
   }
 
   if (rule_on(inputs, "NIGHTS_EXEMPT")) {
@@ -302,7 +313,7 @@ constraint <- function(df, rule, lo = -Inf, hi = Inf) {
 # to fill them
 unfilled_weight <- 1e5
 
-# Cover: n_min <= doctors on the shift <= n_max. A shortfall below n_min is
+# Cover: n_min <= doctors filling the slot <= n_max. A shortfall below n_min is
 # allowed through `unfilled` slack at a very high cost, so impossible inputs
 # still give a rota, with the slots that cannot be filled left empty, rather
 # than no answer. Rest and hours rules have no slack: an empty slot is
@@ -323,7 +334,8 @@ cover_part <- function(x, inputs) {
     vars = aux_vars(unfilled$aux, upper = unfilled$n_min),
     terms = bind_rows(
       x |>
-        inner_join(cover, by = c("date", "shift_code")) |>
+        inner_join(shift_covers(inputs$shifts), by = "shift_code", relationship = "many-to-many") |>
+        inner_join(cover, by = c("date", slot = "shift_code")) |>
         transmute(con, j, coef = 1, lo = n_min, hi = n_max),
       transmute(unfilled, con, aux, coef = 1, lo = n_min, hi = n_max)
     ) |>

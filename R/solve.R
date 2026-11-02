@@ -10,7 +10,10 @@
 #'    instead, filling as many slots as the hard rules allow.
 #' 2. Improve it by large neighbourhood search: repeatedly free one week, or
 #'    a random group of doctors, fix the rest of the rota, and re-solve that
-#'    part to lower the soft-rule penalties. Every step solves the full model,
+#'    part to lower the soft-rule penalties. For consultant rotas (the
+#'    `rota_type` setting) it frees four whole weeks at a time, or five
+#'    doctors; the settings `neighbourhood_days` and `neighbourhood_doctors`
+#'    change this. Every step solves the full model,
 #'    so the hard rules always hold and fairness is judged over the whole
 #'    rota.
 #'
@@ -74,6 +77,8 @@ solve_rota <- function(inputs, time_limit = NULL, seed = 1, verbose = FALSE, pro
             setting[["solver"]], call. = FALSE)
   }
 
+  search <- search_settings(inputs)
+
   started <- Sys.time()
   elapsed <- \() as.numeric(difftime(Sys.time(), started, units = "secs"))
   model <- build_rota_model(inputs)
@@ -83,9 +88,13 @@ solve_rota <- function(inputs, time_limit = NULL, seed = 1, verbose = FALSE, pro
   # rules (minimising unfilled slots instead is far slower). Proving it
   # impossible can also be slow, so cap it; an empty rota always meets the
   # other hard rules.
-  first <- solve(cost = rep(0, nrow(model$vars)), time_limit = min(time_limit / 4, 60),
-                 allow_unfilled = FALSE, hard_only = TRUE)
-  if (is_feasible(first)) {
+  first <- if (!search$first_by_week) {
+    solve(cost = rep(0, nrow(model$vars)), time_limit = min(time_limit / 4, 60),
+          allow_unfilled = FALSE, hard_only = TRUE)
+  }
+  if (search$first_by_week) {
+    best <- week_by_week(solve, model, deadline = \() time_limit - elapsed())
+  } else if (is_feasible(first)) {
     best <- polish(solve, model, first$primal_solution)
   } else {
     if (verbose) {
@@ -105,7 +114,7 @@ solve_rota <- function(inputs, time_limit = NULL, seed = 1, verbose = FALSE, pro
     step_time <- 5
     while (!stopped && time_limit - elapsed() > 1 && best$objective_value > 1e-6) {
       step <- step + 1
-      free <- neighbourhood(model, step)
+      free <- neighbourhood(model, step, search)
       tried <- solve(cost = model$vars$cost, time_limit = min(step_time, time_limit - elapsed()),
                      fix = !free, current = best$primal_solution)
       if (is_feasible(tried) && tried$objective_value < best$objective_value - 1e-6) {
@@ -140,6 +149,7 @@ highs_solver <- function(model) {
     dims = c(nrow(model$rows), nrow(model$vars))
   )
   is_x <- model$vars$kind == "x"
+  is_block <- model$vars$kind == "block"
   unfilled_j <- model$costs$j[model$costs$rule == "COVER"]
   hard <- !model$rows$rule %in% setdiff(model$costs$rule, "COVER")
 
@@ -152,8 +162,8 @@ highs_solver <- function(model) {
     }
     start <- NULL
     if (!is.null(current)) {
-      # Only the shift variables: HiGHS works out the helper variables
-      start <- if_else(is_x, round(current), NA_real_)
+      # Only shift and block variables: HiGHS works out the helper variables
+      start <- if_else(is_x | is_block, round(current), NA_real_)
       fixed <- is_x & fix
       lower[fixed] <- upper[fixed] <- start[fixed]
     }
@@ -199,13 +209,34 @@ polish <- function(solve, model, current) {
   polished
 }
 
-# Shift variables to free in phase 2: alternately one random week, and a
-# random group of up to 10 doctors for the whole rota
-neighbourhood <- function(model, step, days = 7, doctors = 10) {
+# How much phase 2 frees at a time: the rota type's defaults, unless the
+# settings sheet gives neighbourhood_days or neighbourhood_doctors
+search_settings <- function(inputs) {
+  search <- rota_types[[rota_type(inputs$settings)]]$search
+  setting <- set_names(inputs$settings$value, inputs$settings$key)
+  for (key in c("days", "doctors")) {
+    value <- suppressWarnings(as.numeric(setting[paste0("neighbourhood_", key)]))
+    if (!is.na(value)) search[[key]] <- value
+  }
+  search
+}
+
+# Shift variables to free in phase 2: alternately a random run of
+# `search$days` days (starting on a Monday if `search$whole_weeks`, so blocks
+# are not split), and a random group of `search$doctors` doctors for the
+# whole rota
+neighbourhood <- function(model, step, search = list(days = 7, doctors = 10, whole_weeks = FALSE)) {
   is_x <- model$vars$kind == "x"
   t <- model$vars$t
+  days <- search$days
+  doctors <- search$doctors
   if (step %% 2 == 1) {
-    first <- sample.int(max(max(t, na.rm = TRUE) - days + 1, 1), 1)
+    if (isTRUE(search$whole_weeks)) {
+      mondays <- sort(unique(t[is_x & lubridate::wday(model$vars$date, week_start = 1) == 1]))
+      first <- mondays[sample.int(length(mondays), 1)]
+    } else {
+      first <- sample.int(max(max(t, na.rm = TRUE) - days + 1, 1), 1)
+    }
     is_x & t >= first & t < first + days
   } else {
     ids <- unique(model$vars$doctor_id[is_x])
@@ -229,7 +260,8 @@ rota_solution <- function(model, inputs, result, status, started, history = NULL
       arrange(desc(penalty))
     unfilled <- expected_cover(inputs) |>
       filter(n_min > 0) |>
-      left_join(count(rota, date, shift_code = code, name = "filled"), by = c("date", "shift_code")) |>
+      left_join(count(rota_slots(rota, inputs), date, shift_code = slot, name = "filled"),
+                by = c("date", "shift_code")) |>
       transmute(date, shift_code, needed = n_min, filled = coalesce(filled, 0L)) |>
       filter(filled < needed) |>
       arrange(date, shift_code)

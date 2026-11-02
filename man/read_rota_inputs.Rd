@@ -7,10 +7,19 @@
 read_rota_inputs(path)
 }
 \arguments{
-\item{path}{Path to an \code{.xlsx} workbook with the sheets \code{settings},
-\code{rules}, \code{grades}, \code{shifts}, \code{cover}, \code{bank_holidays}, \code{staff},
-\code{placements}, \code{placement_roles}, \code{leave}, \code{requests} and \code{skill_mix}.
-See \code{inst/extdata/rota_inputs.xlsx} for the layout.}
+\item{path}{Path to an \code{.xlsx} workbook. Which sheets it needs depends on
+the \code{rota_type} setting:
+\itemize{
+\item \code{resident} (the default): \code{settings}, \code{rules}, \code{grades}, \code{shifts},
+\code{cover}, \code{bank_holidays}, \code{staff}, \code{placements}, \code{placement_roles},
+\code{leave}, \code{requests} and \code{skill_mix}. See
+\code{inst/extdata/rota_inputs.xlsx}.
+\item \code{consultant}: \code{settings}, \code{rules}, \code{shifts}, \code{cover}, \code{bank_holidays},
+\code{staff} and \code{leave}. See \code{inst/extdata/icu_consultant_inputs.xlsx}.
+}
+
+Either may add \code{patterns}, \code{preferences} and \code{sequences} sheets. Sheets
+left out are read as empty.}
 }
 \value{
 A \code{rota_inputs} object: a named list with one tibble per sheet

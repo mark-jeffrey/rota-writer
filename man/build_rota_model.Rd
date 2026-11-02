@@ -14,9 +14,11 @@ path to an inputs workbook.}
 A \code{rota_model}: a list of tibbles.
 \describe{
 \item{vars}{One row per variable: \code{j}, \code{kind} (\code{"x"} for doctor/day/
-shift, \code{"weekend"} for weekend-worked indicators, \code{"aux"} for other
-helper variables), \code{type} (\code{"I"} or \code{"C"}), bounds and \code{cost}. Shift
-variables also have \code{doctor_id}, \code{date}, \code{t} and \code{shift_code}.}
+shift, \code{"weekend"} for weekend-worked indicators, \code{"block"} for
+block patterns, \code{"aux"} for other helper variables), \code{type} (\code{"I"}
+or \code{"C"}), bounds and \code{cost}. Shift variables also have
+\code{doctor_id}, \code{date}, \code{t} and \code{shift_code}; blocks have \code{doctor_id}
+and \code{t}, their week's Monday.}
 \item{rows}{One row per constraint: \code{i}, \code{rule} (matching the
 \code{rules} sheet where there is one), \code{con} and the bounds \code{lo}, \code{hi}.}
 \item{terms}{Non-zero coefficients: \code{i}, \code{j}, \code{coef}.}

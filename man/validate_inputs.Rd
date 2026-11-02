@@ -25,6 +25,9 @@ or solved. It reports:
 \item unknown shift codes, roles or grades in \code{cover}, \code{placement_roles} and
 \code{skill_mix}
 \item in-post days with no placement
+\item unknown shift codes, patterns, weekdays or preference types in the
+shifts sheet's \code{covers} column and the \code{patterns}, \code{preferences} and
+\code{sequences} sheets
 }
 }
 \examples{
