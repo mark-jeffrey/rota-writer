@@ -50,6 +50,7 @@ rules <- tribble(
   "PREFERENCE_ONLY", "Shifts and patterns open only to consultants who prefer them",     NA,     "",       "hard",     NA,      "Y",
   "LEAVE_REQUESTED", "Requested leave honoured (penalty per day not granted)",           NA,     "",       "soft",     500,     "Y",
   "PATTERNS",        "1st on and nights in the blocks in the patterns sheet (per day outside a block)", NA, "", "soft", 100, "Y",
+  "PATTERN_UNPREFERRED", "A preference-only pattern (7-day 1st on) worked in full without preferring it (per week)", NA, "", "soft", 100, "Y",
   "FAIR_SLOTS",      "1st on, 2nd on and nights close to WTE-weighted share",            NA,     "",       "soft",     10,      "Y",
   "FAIR_WEEKENDS",   "Weekends close to WTE-weighted share",                             NA,     "",       "soft",     10,      "Y",
   "SPLIT_WEEKEND",   "Avoid working only one day of a weekend",                          NA,     "",       "soft",     20,      "Y",

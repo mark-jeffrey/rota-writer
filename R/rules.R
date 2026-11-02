@@ -153,6 +153,7 @@ rule_registry <- function() {
     rule_entry(c("SEQUENCE", "SEQUENCE_SOFT"), \(ctx) sequence_part(ctx$x, ctx$inputs), check_sequences),
     rule_entry("SEQUENCE_SOFT", \(ctx) sequence_soft_part(ctx$x, ctx$inputs)),
     rule_entry("PATTERNS", \(ctx) patterns_part(ctx$x, ctx$inputs), check_patterns),
+    rule_entry("PATTERN_UNPREFERRED", \(ctx) unpreferred_part(ctx$x, ctx$inputs), check_unpreferred),
     rule_entry("PREFERENCES", \(ctx) preferences_part(ctx$x, ctx$inputs), check_preferences),
     rule_entry("FAIR_ONCALL", \(ctx) fair_part(filter(ctx$x, is_on_call), ctx$inputs, "FAIR_ONCALL")),
     rule_entry("FAIR_NIGHTS", \(ctx) fair_part(filter(ctx$x, is_night), ctx$inputs, "FAIR_NIGHTS")),

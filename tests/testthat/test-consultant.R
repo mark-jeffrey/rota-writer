@@ -76,6 +76,10 @@ test_that("days outside a block pattern are penalised, split into blocks the che
   expect_equal(penalty_of(first_on("C03", "2027-02-01", 7), "PREFERENCES"), 0)
   expect_equal(penalty_of(first_on("C03", "2027-02-01", 4), "PREFERENCES"), 50)
 
+  # A whole week of 1st on for someone who has not asked for 7-day weeks
+  expect_equal(penalty_of(first_on("C01", "2027-02-01", 7), "PATTERN_UNPREFERRED"), 100)
+  expect_equal(penalty_of(first_on("C03", "2027-02-01", 7), "PATTERN_UNPREFERRED"), 0)
+
   nights <- \(doctor, dates) hits(rota_of(doctor, dates, "NIGHT"), inputs)
   mwfs <- as.Date("2027-02-01") + c(0, 2, 4, 6)
   expect_equal(penalty_of(nights("C01", mwfs), "PATTERNS"), 0)
@@ -96,14 +100,15 @@ test_that("standing preferences cost each shift against them", {
 })
 
 test_that("the model scores a consultant rota exactly as the checker does", {
-  inputs <- consultant_inputs()
+  inputs <- consultant_inputs(weeks = 3)
   rota <- dplyr::bind_rows(
     rota_of("C01", days_from("2027-02-02", 3), "1ST"),         # Tue-Thu: 3 days outside blocks
     rota_of("C03", days_from("2027-02-08", 4), "1ST"),         # Mon-Thu, but prefers 7 days
     rota_of("C04", "2027-02-02", "2ND"),                       # prefers Tuesdays off
     rota_of("C02", "2027-02-05", "2ND"),                       # prefers 24-hour shifts
     rota_of("C10", as.Date("2027-02-01") + c(0, 2, 4, 6), "NIGHT"), # avoids this block
-    rota_of("C05", "2027-02-09", "24H")                        # a night outside a block
+    rota_of("C05", "2027-02-09", "24H"),                       # a night outside a block
+    rota_of("C06", days_from("2027-02-15", 7), "1ST")          # 7 days without preferring them
   )
   checked <- check_rota(rota, inputs) |>
     dplyr::filter(hard_soft == "soft") |>
@@ -111,6 +116,7 @@ test_that("the model scores a consultant rota exactly as the checker does", {
     dplyr::arrange(rule_id)
   expect_equal(nrow(dplyr::filter(check_rota(rota, inputs), hard_soft == "hard", rule_id != "COVER")), 0)
   expect_equal(checked$penalty[checked$rule_id == "PATTERNS"], 400)
+  expect_equal(checked$penalty[checked$rule_id == "PATTERN_UNPREFERRED"], 100)
 
   modelled <- model_penalties(rota, inputs)
   expect_equal(modelled$rule, checked$rule_id)

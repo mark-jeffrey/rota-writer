@@ -269,6 +269,7 @@ Either type can use these optional pieces:
 | `shifts$open_to` | `preference`: only doctors with a matching `prefer_shift` row may work it | `PREFERENCE_ONLY` (hard) |
 | `shifts$label` | Name of the shift in the workbook key and calendars | |
 | `patterns` sheet | Blocks a slot is worked in, within a Mon–Sun week: `pattern_id`, `slot`, `days` (e.g. `Mon;Tue;Wed;Thu`), `open_to` (`all`/`preference`). Each day of a slot outside a block costs the rule's weight; each week is split into blocks the cheapest way. | `PATTERNS` (soft) |
+| `PATTERN_UNPREFERRED` rule | Each week a doctor works every day of a preference-only pattern without preferring it, e.g. 1st on Mon–Thu then Fri–Sun for someone who has not asked for 7-day weeks | `PATTERN_UNPREFERRED` (soft) |
 | `preferences` sheet | Standing preferences, with a weight each: `prefer_shift` (e.g. 24-hour shifts; working its slots separately costs), `avoid_shift`, `day_off` (`Mon`…`Sun`), `prefer_pattern` (unlocks a preference-only pattern; other blocks for the slot cost), `avoid_pattern` | `PREFERENCES` (soft) |
 | `sequences` sheet | `to_shift` worked `days_after` days after `from_shift`, e.g. no 1st on the day before a night. A blank weight makes the row hard. | `SEQUENCE` (hard), `SEQUENCE_SOFT` |
 | `FAIR_SLOTS` rule | Each on-call slot shared by WTE, so a 24-hour shift counts towards both slots it fills. `summarise_doctors()` adds a count and fair share for each slot. | `FAIR_SLOTS` (soft) |
@@ -425,9 +426,11 @@ and download the results.
 
 Rota types (`resident`, `consultant`) with block patterns, standing preferences, 24-hour shifts
 and shift sequences. On the ICU consultant example, a 30-minute solve of the whole year fills every
-slot with no hard violations and every 1st-on day and night in a block. Each consultant is within
-2 of their fair share of 1st-on days, 2nd-on days and nights, and within 1 of their weekends.
-11 shifts fall on a preferred day off and 5 weekends are split.
+slot with no hard violations and every 1st-on day and night in a block. Only the two consultants who
+prefer them work 7-day 1st-on weeks. Each consultant is within 2 of their fair share of 1st-on days,
+and within 1 of their 2nd-on days, nights and weekends. 16 shifts fall on a preferred day off and 7
+weekends are split. That rota, its compliance report and the calendars are in
+[`examples/icu-consultants/`](examples/icu-consultants/).
 
 **Next:**
 1. Editing leave and requests in the app, and saving and reopening sessions.

@@ -195,3 +195,75 @@ split_into_blocks <- function(mask, block_masks, block_costs, day_cost) {
   }
   best(as.integer(mask))
 }
+
+# Preference-only patterns worked in full by doctors who have not asked for
+# them, e.g. 1st on Mon-Thu then Fri-Sun in one week for someone who has not
+# asked for 7-day weeks (rule PATTERN_UNPREFERRED, per week):
+#   unpreferred[d, pattern, week] >= sum(x filling the slot on its days) - (len - 1)
+unpreferred_candidates <- function(inputs) {
+  preferred <- inputs$preferences |>
+    filter(preference == "prefer_pattern") |>
+    distinct(doctor_id, pattern_id = value)
+  pattern_days(inputs) |>
+    filter(open_to == "preference") |>
+    distinct(pattern_id, slot) |>
+    tidyr::crossing(doctor_id = inputs$staff$doctor_id) |>
+    anti_join(preferred, by = c("doctor_id", "pattern_id"))
+}
+
+unpreferred_part <- function(x, inputs) {
+  weight <- soft_weight(inputs, "PATTERN_UNPREFERRED")
+  candidates <- unpreferred_candidates(inputs)
+  if (weight == 0 || nrow(candidates) == 0) {
+    return(NULL)
+  }
+  days <- pattern_days(inputs)
+  fill <- x |>
+    select(doctor_id, t, shift_code, j) |>
+    inner_join(shift_covers(inputs$shifts), by = "shift_code", relationship = "many-to-many") |>
+    filter(slot %in% candidates$slot)
+  weeks <- candidates |>
+    inner_join(select(days, pattern_id, offset), by = "pattern_id", relationship = "many-to-many") |>
+    tidyr::crossing(week = rota_weeks(inputs)) |>
+    mutate(t = week + offset, aux = paste("PATTERN_UNPREFERRED", doctor_id, pattern_id, week)) |>
+    left_join(count(days, pattern_id, name = "len"), by = "pattern_id") |>
+    # Only weeks the doctor could fill the slot every day of the pattern
+    semi_join(fill, by = c("doctor_id", "slot", "t")) |>
+    filter(n() == len, .by = aux)
+  if (nrow(weeks) == 0) {
+    return(NULL)
+  }
+  found <- distinct(weeks, aux, len)
+
+  list(
+    vars = aux_vars(found$aux),
+    terms = bind_rows(
+      weeks |>
+        inner_join(fill, by = c("doctor_id", "slot", "t"), relationship = "many-to-many") |>
+        transmute(con = aux, j, coef = 1),
+      transmute(found, con = aux, aux, coef = -1)
+    ) |>
+      mutate(rule = "PATTERN_UNPREFERRED", lo = -Inf, hi = found$len[match(con, found$aux)] - 1),
+    costs = transmute(found, rule = "PATTERN_UNPREFERRED", aux, coef = weight)
+  )
+}
+
+check_unpreferred <- function(si, inputs) {
+  candidates <- unpreferred_candidates(inputs)
+  if (nrow(candidates) == 0) {
+    return(NULL)
+  }
+  mondays <- inputs$period$start + rota_weeks(inputs) - 1
+  masks <- summarise(pattern_days(inputs), pattern_mask = sum(2^offset), .by = pattern_id)
+  rota_slots(si, inputs) |>
+    filter(slot %in% candidates$slot) |>
+    distinct(doctor_id, slot, date) |>
+    mutate(monday = date - lubridate::wday(date, week_start = 1) + 1) |>
+    filter(monday %in% mondays) |>
+    summarise(mask = sum(2^as.numeric(date - monday)), .by = c(doctor_id, slot, monday)) |>
+    inner_join(candidates, by = c("doctor_id", "slot"), relationship = "many-to-many") |>
+    inner_join(masks, by = "pattern_id") |>
+    filter(bitwAnd(as.integer(mask), as.integer(pattern_mask)) == pattern_mask) |>
+    with(violations("PATTERN_UNPREFERRED", doctor_id, monday, monday + 6,
+                    detail = paste("Works the", pattern_id, "pattern without preferring it")))
+}
