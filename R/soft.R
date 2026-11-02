@@ -7,29 +7,7 @@
 #
 # Each function returns a model part (see assemble_model()): new helper
 # variables keyed by `aux`, constraint `terms`, objective `costs` and
-# constant `offset`s.
-
-soft_parts <- function(x, weekend, inputs, n_days) {
-  list(
-    placement_avoid_part(x, inputs),
-    leave_requested_part(x, inputs),
-    requests_part(x, weekend, inputs),
-    skill_mix_part(x, inputs),
-    weekend_target_part(weekend, inputs),
-    single_night_part(x, inputs, n_days),
-    run_target_part(x, inputs, n_days, "LONG_RUN", TRUE),
-    run_target_part(x, inputs, n_days, "LONG_NIGHT_RUN", x$is_night),
-    short_run_part(x, inputs, n_days, "ICU_SHORT_RUN", is_icu_day(x)),
-    isolated_day_off_part(x, inputs, n_days),
-    split_weekend_part(x, inputs),
-    fair_part(filter(x, is_on_call), inputs, "FAIR_ONCALL"),
-    fair_part(filter(x, is_night), inputs, "FAIR_NIGHTS"),
-    fair_part(weekend, inputs, "FAIR_WEEKENDS"),
-    hours_target_part(x, inputs),
-    normal_day_spread_part(x, inputs)
-  ) |>
-    compact()
-}
+# constant `offset`s. The registry (R/rules.R) says when each is used.
 
 # Rule weight, or 0 if the rule is switched off or not in the rules sheet
 soft_weight <- function(inputs, id) {

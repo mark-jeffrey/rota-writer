@@ -62,13 +62,7 @@ check_rota <- function(rota, inputs) {
   inputs <- as_rota_inputs(inputs)
   si <- shift_instances(as_rota(rota), inputs)
 
-  checks <- list(
-    check_cover, check_in_post, check_competency, check_placement,
-    check_nights_exempt, check_ltft_day, check_leave, check_max_shift,
-    check_min_rest, check_max_7day, check_avg_hours, check_consecutive,
-    check_nights, check_weekends, check_requests, check_skill_mix,
-    check_hours_target, check_normal_day_spread, check_wellbeing
-  )
+  checks <- compact(map(active_rules(inputs), "check"))
 
   map(checks, \(check) check(si, inputs)) |>
     list_rbind() |>
@@ -98,11 +92,11 @@ rule_value <- function(inputs, id) {
 
 finalise_violations <- function(v, inputs) {
   rules <- inputs$rules |>
-    select(rule_id, hard_soft, rule_weight = weight, enabled)
+    select(rule_id, hard_soft, rule_weight = weight)
 
   v |>
     left_join(rules, by = "rule_id") |>
-    filter(is.na(enabled) | enabled) |>
+    filter(map_lgl(rule_id, \(id) rule_on(inputs, id))) |>
     mutate(
       hard_soft = coalesce(hard_soft, "hard"),
       penalty = if_else(hard_soft == "soft", coalesce(weight, 1) * coalesce(rule_weight, 1), NA_real_)
@@ -455,7 +449,8 @@ check_consecutive <- function(si, inputs) {
     MAX_CONSEC_LATE   = day_runs(si, is_late)
   )
 
-  imap(run_rules, \(runs, id) {
+  on <- map_lgl(names(run_rules), \(id) rule_on(inputs, id))
+  imap(run_rules[on], \(runs, id) {
     max_n <- rule_value(inputs, id)
     what <- c(MAX_CONSEC_SHIFTS = "shifts", MAX_CONSEC_LONG = "long shifts",
               MAX_CONSEC_LATE = "long evening shifts")[[id]]
@@ -465,14 +460,16 @@ check_consecutive <- function(si, inputs) {
         with(violations(id, doctor_id, first, last,
                         detail = sprintf("%d consecutive %s (max %g)", n, what, max_n))),
       runs |>
-        filter(n == max_n, rest_after < rest) |>
+        filter(n == max_n, rest_after < (if (length(rest) == 1) rest else -Inf)) |>
         with(violations("REST_AFTER_RUN", doctor_id, first, last,
                         detail = sprintf("%.1f h rest after %d consecutive %s (min %g)",
                                          rest_after, n, what, rest)))
     )
   }) |>
     list_rbind() |>
-    bind_rows(run_target(run_rules$MAX_CONSEC_SHIFTS, inputs, "LONG_RUN", "shifts"))
+    bind_rows(if (rule_on(inputs, "LONG_RUN")) {
+      run_target(run_rules$MAX_CONSEC_SHIFTS, inputs, "LONG_RUN", "shifts")
+    })
 }
 
 # Soft: each day of a run beyond the rule's value costs the weight
@@ -493,14 +490,18 @@ check_nights <- function(si, inputs) {
   runs <- day_runs(si, is_night)
 
   bind_rows(
-    runs |>
-      filter(n > max_n) |>
-      with(violations("MAX_CONSEC_NIGHTS", doctor_id, first, last,
-                      detail = sprintf("%d consecutive nights (max %g)", n, max_n))),
-    runs |>
-      filter(rest_after < rest) |>
-      with(violations("REST_AFTER_NIGHTS", doctor_id, first, last,
-                      detail = sprintf("%.1f h rest after nights (min %g)", rest_after, rest))),
+    if (rule_on(inputs, "MAX_CONSEC_NIGHTS")) {
+      runs |>
+        filter(n > max_n) |>
+        with(violations("MAX_CONSEC_NIGHTS", doctor_id, first, last,
+                        detail = sprintf("%d consecutive nights (max %g)", n, max_n)))
+    },
+    if (rule_on(inputs, "REST_AFTER_NIGHTS")) {
+      runs |>
+        filter(rest_after < rest) |>
+        with(violations("REST_AFTER_NIGHTS", doctor_id, first, last,
+                        detail = sprintf("%.1f h rest after nights (min %g)", rest_after, rest)))
+    },
     runs |>
       filter(n == 1) |>
       with(violations("SINGLE_NIGHT", doctor_id, first, last, detail = "Isolated single night")),
@@ -595,16 +596,20 @@ check_weekends <- function(si, inputs) {
 
   # Frequency over the doctor's weekends in post, as in TCS Schedule 3
   bind_rows(
-    freq |>
-      filter(worked > total / hard_n) |>
-      with(violations("WEEKEND_MAX", doctor_id, from, to,
-                      detail = paste0(detail, " (more than 1 in ", hard_n, ")"))),
-    freq |>
-      mutate(excess = worked - floor(total / target_n)) |>
-      filter(excess > 0) |>
-      with(violations("WEEKEND_TARGET", doctor_id, from, to,
-                      detail = paste0(detail, " (", excess, " more than 1 in ", target_n, ")"),
-                      weight = excess))
+    if (rule_on(inputs, "WEEKEND_MAX")) {
+      freq |>
+        filter(worked > total / hard_n) |>
+        with(violations("WEEKEND_MAX", doctor_id, from, to,
+                        detail = paste0(detail, " (more than 1 in ", hard_n, ")")))
+    },
+    if (rule_on(inputs, "WEEKEND_TARGET")) {
+      freq |>
+        mutate(excess = worked - floor(total / target_n)) |>
+        filter(excess > 0) |>
+        with(violations("WEEKEND_TARGET", doctor_id, from, to,
+                        detail = paste0(detail, " (", excess, " more than 1 in ", target_n, ")"),
+                        weight = excess))
+    }
   )
 }
 

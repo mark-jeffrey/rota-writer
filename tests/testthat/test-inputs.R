@@ -27,3 +27,36 @@ test_that("validate_inputs reports in-post days with no placement", {
 
   expect_true(any(grepl("D01 has no placement", validate_inputs(inputs)$problem)))
 })
+
+test_that("the rota type sets which rules are on when the rules sheet leaves them out", {
+  inputs <- test_inputs()
+  inputs$rules <- inputs$rules[inputs$rules$rule_id != "MIN_REST", ]
+  expect_true(rule_on(inputs, "MIN_REST"))
+
+  inputs$settings <- tibble::add_row(inputs$settings, key = "rota_type", value = "consultant")
+  expect_false(rule_on(inputs, "MIN_REST"))
+  expect_true(rule_on(inputs, "COVER"))
+
+  inputs$settings$value[inputs$settings$key == "rota_type"] <- "surgeons"
+  expect_error(rule_on(inputs, "MIN_REST"), "Unknown rota_type \"surgeons\"")
+})
+
+test_that("sheets a rota type does not need are read as empty", {
+  path <- withr::local_tempfile(fileext = ".xlsx")
+  sheets <- map(set_names(readxl::excel_sheets(system.file("extdata", "rota_inputs.xlsx",
+                                                          package = "rotawriter"))),
+                \(s) readxl::read_excel(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"),
+                                        sheet = s))
+  sheets$settings <- tibble::add_row(sheets$settings, key = "rota_type", value = "consultant")
+  sheets[c("grades", "placements", "placement_roles", "requests", "skill_mix")] <- NULL
+  openxlsx2::write_xlsx(sheets, path)
+
+  inputs <- read_rota_inputs(path)
+  expect_equal(nrow(inputs$placements), 0)
+  expect_equal(nrow(inputs$patterns), 0)
+  expect_s3_class(inputs$requests$date, "Date")
+
+  sheets$settings$value[sheets$settings$key == "rota_type"] <- "resident"
+  openxlsx2::write_xlsx(sheets, path)
+  expect_error(read_rota_inputs(path), "Missing sheets.*grades")
+})

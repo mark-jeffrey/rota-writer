@@ -1,10 +1,5 @@
 # Reading and validating the rota input workbook and rotas.
 
-required_sheets <- c(
-  "settings", "rules", "grades", "shifts", "cover", "bank_holidays", "staff",
-  "placements", "placement_roles", "leave", "requests", "skill_mix"
-)
-
 yn_columns <- c("is_on_call", "is_night", "is_long", "is_late",
                 "nights_exempt", "opted_out_wtr", "enabled")
 
@@ -19,10 +14,17 @@ yn_columns <- c("is_on_call", "is_night", "is_long", "is_late",
 #' Run [validate_inputs()] afterwards to catch inconsistent data, such as
 #' leave for a doctor who is not in the staff list.
 #'
-#' @param path Path to an `.xlsx` workbook with the sheets `settings`,
-#'   `rules`, `grades`, `shifts`, `cover`, `bank_holidays`, `staff`,
-#'   `placements`, `placement_roles`, `leave`, `requests` and `skill_mix`.
-#'   See `inst/extdata/rota_inputs.xlsx` for the layout.
+#' @param path Path to an `.xlsx` workbook. Which sheets it needs depends on
+#'   the `rota_type` setting:
+#'   * `resident` (the default): `settings`, `rules`, `grades`, `shifts`,
+#'     `cover`, `bank_holidays`, `staff`, `placements`, `placement_roles`,
+#'     `leave`, `requests` and `skill_mix`. See
+#'     `inst/extdata/rota_inputs.xlsx`.
+#'   * `consultant`: `settings`, `rules`, `shifts`, `cover`, `bank_holidays`,
+#'     `staff` and `leave`. See `inst/extdata/icu_consultant_inputs.xlsx`.
+#'
+#'   Either may add `patterns`, `preferences` and `sequences` sheets. Sheets
+#'   left out are read as empty.
 #'
 #' @returns A `rota_inputs` object: a named list with one tibble per sheet
 #'   (e.g. `inputs$staff`), plus `period`, a list holding the rota's `start`
@@ -36,14 +38,18 @@ yn_columns <- c("is_on_call", "is_night", "is_long", "is_late",
 read_rota_inputs <- function(path) {
   check_file(path, "inputs workbook")
   sheets <- readxl::excel_sheets(path)
-  missing <- setdiff(required_sheets, sheets)
-  if (length(missing) > 0) {
-    stop("Missing sheets in ", path, ": ", paste(missing, collapse = ", "), call. = FALSE)
+  if (!"settings" %in% sheets) {
+    stop("Missing sheets in ", path, ": settings", call. = FALSE)
   }
 
   inputs <- set_names(sheets) |>
     map(\(s) readxl::read_excel(path, sheet = s)) |>
     map(tidy_sheet)
+  missing <- setdiff(rota_types[[rota_type(inputs$settings)]]$required, sheets)
+  if (length(missing) > 0) {
+    stop("Missing sheets in ", path, ": ", paste(missing, collapse = ", "), call. = FALSE)
+  }
+  inputs <- add_optional_inputs(inputs)
 
   setting <- set_names(inputs$settings$value, inputs$settings$key)
   inputs$period <- list(
@@ -202,7 +208,7 @@ validate_inputs <- function(inputs) {
 
   list(
     problem("staff", anyDuplicated(ids) > 0, "Duplicate doctor_id in staff"),
-    problem("staff", which(!inputs$staff$grade %in% inputs$grades$grade),
+    problem("staff", which(!is.na(inputs$staff$grade) & !inputs$staff$grade %in% inputs$grades$grade),
             paste("Unknown grade:", inputs$staff$grade)),
     problem("staff", which(!between(inputs$staff$wte, 0.1, 1)),
             paste("WTE out of range for", ids)),
@@ -222,7 +228,7 @@ validate_inputs <- function(inputs) {
             paste("Unknown shift_code:", skill_shifts)),
     problem("skill_mix", which(!inputs$skill_mix$min_grade %in% inputs$grades$grade),
             paste("Unknown grade:", inputs$skill_mix$min_grade)),
-    missing_placements(inputs)
+    if (rule_on(inputs, "PLACEMENT")) missing_placements(inputs)
   ) |>
     list_rbind()
 }

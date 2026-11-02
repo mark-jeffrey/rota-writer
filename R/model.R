@@ -66,7 +66,6 @@ build_rota_model <- function(inputs) {
   x <- shift_vars(inputs, shifts) |>
     mutate(j = row_number())
 
-  run_rules <- run_rule_table(inputs, shifts)
   touches <- weekend_touches(x)
   vars <- bind_rows(
     mutate(x, kind = "x", type = "I"),
@@ -76,18 +75,11 @@ build_rota_model <- function(inputs) {
   x <- filter(vars, kind == "x")
   weekend <- filter(vars, kind == "weekend")
 
-  hard <- list(
-    one_shift_terms(x),
-    if (rule_on(inputs, "MIN_REST")) min_rest_terms(x, shifts, rule_value(inputs, "MIN_REST")),
-    if (rule_on(inputs, "MAX_7DAY")) max_7day_terms(x, shifts, rule_value(inputs, "MAX_7DAY"), n_days),
-    if (rule_on(inputs, "AVG_HOURS")) avg_hours_terms(x, inputs),
-    run_terms(x, run_rules, shifts, n_days),
-    night_terms(x, shifts, inputs, n_days),
-    weekend_terms(x, weekend, touches, inputs)
-  )
-  soft <- soft_parts(x, weekend, inputs, n_days)
+  ctx <- list(inputs = inputs, shifts = shifts, x = x, weekend = weekend, touches = touches,
+              n_days = n_days)
+  parts <- map(active_rules(inputs), \(entry) if (!is.null(entry$model)) entry$model(ctx))
 
-  assemble_model(vars, c(list(cover_part(x, inputs)), map(hard, \(terms) list(terms = terms)), soft))
+  assemble_model(vars, compact(parts))
 }
 
 # Combine model parts, each a list of optional tibbles: `vars` (new helper
@@ -141,11 +133,6 @@ print.rota_model <- function(x, ...) {
   by_rule <- count(x$rows, rule)
   cat(sprintf("  %-18s %6d rows\n", by_rule$rule, by_rule$n), sep = "")
   invisible(x)
-}
-
-# Rules are on unless switched off in the rules sheet
-rule_on <- function(inputs, id) {
-  !isFALSE(inputs$rules$enabled[match(id, inputs$rules$rule_id)])
 }
 
 hhmm_hours <- function(x) {
@@ -289,12 +276,13 @@ run_rule_table <- function(inputs, shifts) {
     "MAX_CONSEC_LONG",   shifts$is_long & !shifts$is_night,
     "MAX_CONSEC_LATE",   shifts$is_late
   ) |>
+    filter(map_lgl(rule, \(id) rule_on(inputs, id))) |>
     mutate(
       shift_codes = map(category, \(keep) shifts$shift_code[keep]),
       n = map_dbl(rule, \(id) rule_value(inputs, id)),
       rest = if (rule_on(inputs, "REST_AFTER_RUN")) rest else NA_real_
     ) |>
-    filter(map_lgl(rule, \(id) rule_on(inputs, id)), lengths(shift_codes) > 0) |>
+    filter(lengths(shift_codes) > 0) |>
     select(rule, shift_codes, n, rest)
 }
 
