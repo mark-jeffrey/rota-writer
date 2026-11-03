@@ -5,11 +5,7 @@
 # Writes inst/extdata/rota_inputs.xlsx and inst/extdata/example_rota_output.xlsx.
 # Deterministic: fixed seed and fixed workbook timestamps.
 
-suppressPackageStartupMessages({
-  library(tidyverse)
-  library(lubridate)
-  library(openxlsx2)
-})
+source("data-raw/template_parts.R")
 
 set.seed(20270201)
 out_dir <- "inst/extdata"
@@ -37,44 +33,9 @@ settings <- tribble(
 # Rules -------------------------------------------------------------------
 # Contract rules: 2016 TCS Schedule 3 (2019 refresh). See docs/contract-rules.md.
 
-rules <- tribble(
-  ~rule_id,             ~description,                                                ~value, ~unit,      ~hard_soft, ~weight, ~enabled,
-  "AVG_HOURS",          "Max average weekly hours over reference period (x WTE)",    48,     "hours",    "hard",     NA,      "Y",
-  "AVG_HOURS_OPTOUT",   "Max average weekly hours if opted out of WTR (x WTE)",      56,     "hours",    "hard",     NA,      "Y",
-  "MAX_7DAY",           "Max hours in any 168-hour period",                          72,     "hours",    "hard",     NA,      "Y",
-  "MAX_SHIFT",          "Max shift length",                                          13,     "hours",    "hard",     NA,      "Y",
-  "MIN_REST",           "Min rest between shifts",                                   11,     "hours",    "hard",     NA,      "Y",
-  "MAX_CONSEC_SHIFTS",  "Max consecutive shifts (then 48h rest)",                    7,      "shifts",   "hard",     NA,      "Y",
-  "MAX_CONSEC_LONG",    "Max consecutive long shifts >10h (then 48h rest)",          4,      "shifts",   "hard",     NA,      "Y",
-  "MAX_CONSEC_LATE",    "Max consecutive long evening shifts (then 48h rest)",       4,      "shifts",   "hard",     NA,      "Y",
-  "REST_AFTER_RUN",     "Rest after max consecutive shift/long/late runs",           48,     "hours",    "hard",     NA,      "Y",
-  "MAX_CONSEC_NIGHTS",  "Max consecutive night shifts",                              4,      "shifts",   "hard",     NA,      "Y",
-  "REST_AFTER_NIGHTS",  "Rest after any run of nights",                              46,     "hours",    "hard",     NA,      "Y",
-  "WEEKEND_MAX",        "Weekend frequency hard limit (1 in N)",                     2,      "1 in N",   "hard",     NA,      "Y",
-  "WEEKEND_TARGET",     "Weekend frequency target (1 in N)",                         3,      "1 in N",   "soft",     50,      "Y",
-  "LTFT_FIXED_DAY",     "No work on LTFT fixed non-working day",                     NA,     "",         "hard",     NA,      "Y",
-  "COVER",              "All on-call slots filled; day cover minimum met",           NA,     "",         "hard",     NA,      "Y",
-  "IN_POST",            "Only rostered between staff start_date and end_date",       NA,     "",         "hard",     NA,      "Y",
-  "COMPETENCY",         "Only work roles signed off for (staff can_* columns)",      NA,     "",         "hard",     NA,      "Y",
-  "PLACEMENT",          "Only work roles listed for current placement",              NA,     "",         "hard",     NA,      "Y",
-  "PLACEMENT_AVOID",    "Discouraged placement roles (penalty per shift in placement_roles)", NA, "",  "soft",     1,       "Y",
-  "NIGHTS_EXEMPT",      "Nights-exempt doctors never rostered nights",               NA,     "",         "hard",     NA,      "Y",
-  "LEAVE_APPROVED",     "Approved leave honoured",                                   NA,     "",         "hard",     NA,      "Y",
-  "LEAVE_REQUESTED",    "Requested leave honoured (penalty per day not granted)",    NA,     "",         "soft",     500,     "Y",
-  "REQUESTS",           "Preference requests (weight per row in requests sheet)",    NA,     "",         "soft",     1,       "Y",
-  "SKILL_MIX",          "Skill mix rules (weight per row in skill_mix sheet)",       NA,     "",         "soft",     1,       "Y",
-  "FAIR_ONCALL",        "On-call shifts close to WTE-weighted share",                NA,     "",         "soft",     10,      "Y",
-  "FAIR_NIGHTS",        "Nights close to WTE-weighted share",                        NA,     "",         "soft",     10,      "Y",
-  "FAIR_WEEKENDS",      "Weekends close to WTE-weighted share",                      NA,     "",         "soft",     10,      "Y",
-  "SINGLE_NIGHT",       "Avoid isolated single nights",                              NA,     "",         "soft",     100,     "Y",
-  "LONG_RUN",           "Consecutive shifts target (weight per shift beyond it)",    5,      "shifts",   "soft",     150,     "Y",
-  "LONG_NIGHT_RUN",     "Consecutive nights target (weight per night beyond it)",    2,      "shifts",   "soft",     50,      "N",
-  "ICU_SHORT_RUN",      "ICU day-shift runs at least this long, for continuity (weight per day short)", 3, "shifts", "soft", 5, "Y",
-  "ISOLATED_DAY_OFF",   "Avoid single days off between shifts",                      NA,     "",         "soft",     30,      "Y",
-  "SPLIT_WEEKEND",      "Avoid working only one day of a weekend",                   NA,     "",         "soft",     150,      "Y",
-  "HOURS_TARGET",       "Average weekly hours close to contracted (value: default hours x WTE if staff contracted_hours blank; weight per hour short)", 45, "hours", "soft", 5, "Y",
-  "NORMAL_DAY_SPREAD",  "Normal-day staffing even across the rota (weight per doctor-day from the average)", NA, "", "soft", 10, "Y"
-)
+# Every rule in rule_library except those written for consultant rotas
+rules <- rule_rows(setdiff(rule_library$rule_id, c("SEQUENCE", "SEQUENCE_SOFT", "PREFERENCE_ONLY", "PATTERNS",
+                                                   "PATTERN_UNPREFERRED", "FAIR_SLOTS", "PREFERENCES")))
 
 # Grades ------------------------------------------------------------------
 
@@ -145,11 +106,7 @@ cover <- bind_rows(
 ) |>
   arrange(match(shift_code, shifts$shift_code), day_type)
 
-bank_holidays <- tribble(
-  ~date,              ~name,
-  ymd("2027-03-26"),  "Good Friday",
-  ymd("2027-03-29"),  "Easter Monday"
-)
+bank_holidays <- england_bank_holidays(rota_start, rota_end)
 
 # Staff -------------------------------------------------------------------
 # Two staffing pools, each with its own fair shares. The anaesthetics team
@@ -352,7 +309,6 @@ leave <- bind_rows(planted_leave, random_leave) |>
 
 # Requests ----------------------------------------------------------------
 
-request_types <- c("no_oncall", "no_night", "no_weekend", "prefer_oncall")
 
 requests <- staff |>
   filter(pool == "anaesthetics", !doctor_id %in% c("D33", "D34")) |>
@@ -588,24 +544,6 @@ message(sprintf("Example rota: %d on-call slots, %d unfilled by round-robin", nr
 # Write workbooks ---------------------------------------------------------
 
 fixed_time <- as.POSIXct("2026-10-31 12:00:00", tz = "UTC")
-
-add_sheet <- function(wb, name, x, dropdowns = list()) {
-  wb <- wb |>
-    wb_add_worksheet(name) |>
-    wb_add_data_table(name, x, table_style = "TableStyleMedium2", na.strings = "") |>
-    wb_freeze_pane(name, first_row = TRUE) |>
-    wb_set_col_widths(name, cols = seq_along(x), widths = "auto")
-  for (col in names(dropdowns)) {
-    j <- match(col, names(x))
-    wb <- wb_add_data_validation(
-      wb, name,
-      dims = wb_dims(rows = 2:500, cols = j),
-      type = "list",
-      value = paste0('"', paste(dropdowns[[col]], collapse = ","), '"')
-    )
-  }
-  wb
-}
 
 yn_cols <- c("nights_exempt", "opted_out_wtr", paste0("can_", c("ICU1", "ICU2", "ANA1", "ANA2", "OBS")))
 

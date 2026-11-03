@@ -11,3 +11,6 @@ rotawriter_*.tar.gz
 
 # Solver output from your own runs (the example output is in examples/)
 out/
+
+# A department's real inputs, spec and solve output (see AGENTS.md)
+local/

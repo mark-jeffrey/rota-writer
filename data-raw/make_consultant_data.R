@@ -6,11 +6,7 @@
 # 2nd-on and night cover for 15 consultants. Deterministic: fixed seed and
 # fixed workbook timestamp. All names are fictional.
 
-suppressPackageStartupMessages({
-  library(tidyverse)
-  library(lubridate)
-  library(openxlsx2)
-})
+source("data-raw/template_parts.R")
 
 set.seed(20270201)
 out_dir <- "inst/extdata"
@@ -39,23 +35,14 @@ settings <- tribble(
 # here apply. Weights follow the order: requested leave, then blocks, then
 # fairness, then individual preferences.
 
-rules <- tribble(
-  ~rule_id,          ~description,                                                       ~value, ~unit,    ~hard_soft, ~weight, ~enabled,
-  "COVER",           "1st on, 2nd on and night filled every day",                        NA,     "",       "hard",     NA,      "Y",
-  "IN_POST",         "Only rostered between staff start_date and end_date",              NA,     "",       "hard",     NA,      "Y",
-  "LEAVE_APPROVED",  "Approved leave honoured",                                          NA,     "",       "hard",     NA,      "Y",
-  "MIN_REST",        "Min rest between shifts: off the day after a night or 24 h",       11,     "hours",  "hard",     NA,      "Y",
-  "WEEKEND_MAX",     "Weekend frequency hard limit (1 in N)",                            3,      "1 in N", "hard",     NA,      "Y",
-  "SEQUENCE",        "Shift sequences in the sequences sheet with no weight",            NA,     "",       "hard",     NA,      "Y",
-  "PREFERENCE_ONLY", "Shifts and patterns open only to consultants who prefer them",     NA,     "",       "hard",     NA,      "Y",
-  "LEAVE_REQUESTED", "Requested leave honoured (penalty per day not granted)",           NA,     "",       "soft",     500,     "Y",
-  "PATTERNS",        "1st on and nights in the blocks in the patterns sheet (per day outside a block)", NA, "", "soft", 100, "Y",
-  "PATTERN_UNPREFERRED", "A preference-only pattern (7-day 1st on) worked in full without preferring it (per week)", NA, "", "soft", 100, "Y",
-  "FAIR_SLOTS",      "1st on, 2nd on and nights close to WTE-weighted share",            NA,     "",       "soft",     10,      "Y",
-  "FAIR_WEEKENDS",   "Weekends close to WTE-weighted share",                             NA,     "",       "soft",     10,      "Y",
-  "SPLIT_WEEKEND",   "Avoid working only one day of a weekend",                          NA,     "",       "soft",     20,      "Y",
-  "PREFERENCES",     "Standing preferences (weight per row in preferences sheet)",       NA,     "",       "soft",     1,       "Y",
-  "REQUESTS",        "Preference requests (weight per row in requests sheet)",           NA,     "",       "soft",     1,       "Y"
+rules <- rule_rows(
+  c("COVER", "IN_POST", "LEAVE_APPROVED", "MIN_REST", "WEEKEND_MAX", "SEQUENCE", "PREFERENCE_ONLY",
+    "LEAVE_REQUESTED", "PATTERNS", "PATTERN_UNPREFERRED", "FAIR_SLOTS", "FAIR_WEEKENDS", "SPLIT_WEEKEND",
+    "PREFERENCES", "REQUESTS"),
+  COVER = list(description = "1st on, 2nd on and night filled every day"),
+  MIN_REST = list(description = "Min rest between shifts: off the day after a night or 24 h"),
+  WEEKEND_MAX = list(value = 3),
+  SPLIT_WEEKEND = list(weight = 20)
 )
 
 # Shifts and cover --------------------------------------------------------
@@ -77,17 +64,7 @@ cover <- crossing(shift_code = c("1ST", "2ND", "NIGHT"),
                   day_type = c("weekday", "weekend", "bank_holiday")) |>
   mutate(n_min = 1, n_max = 1)
 
-bank_holidays <- tribble(
-  ~date,              ~name,
-  ymd("2027-03-26"),  "Good Friday",
-  ymd("2027-03-29"),  "Easter Monday",
-  ymd("2027-05-03"),  "Early May bank holiday",
-  ymd("2027-05-31"),  "Spring bank holiday",
-  ymd("2027-08-30"),  "Summer bank holiday",
-  ymd("2027-12-27"),  "Christmas Day (substitute)",
-  ymd("2027-12-28"),  "Boxing Day (substitute)",
-  ymd("2028-01-03"),  "New Year's Day (substitute)"
-)
+bank_holidays <- england_bank_holidays(rota_start, rota_end)
 
 # Blocks: 1st on Mon-Thu and Fri-Sun, or the whole week for those who prefer
 # it; nights split between two consultants each week
@@ -179,7 +156,6 @@ preferences <- tribble(
   "C10",      "avoid_pattern",  "N_MWFS", 10,      "Prefers the shorter night block"
 )
 
-request_types <- c("no_oncall", "no_night", "no_weekend", "prefer_oncall")
 requests <- staff |>
   select(doctor_id) |>
   slice_sample(n = 10) |>
@@ -192,25 +168,6 @@ requests <- staff |>
 
 fixed_time <- as.POSIXct("2026-11-02 12:00:00", tz = "UTC")
 
-add_sheet <- function(wb, name, x, dropdowns = list()) {
-  wb <- wb |>
-    wb_add_worksheet(name) |>
-    wb_add_data_table(name, x, table_style = "TableStyleMedium2", na.strings = "") |>
-    wb_freeze_pane(name, first_row = TRUE) |>
-    wb_set_col_widths(name, cols = seq_along(x), widths = "auto")
-  for (col in names(dropdowns)) {
-    j <- match(col, names(x))
-    wb <- wb_add_data_validation(
-      wb, name,
-      dims = wb_dims(rows = 2:500, cols = j),
-      type = "list",
-      value = paste0('"', paste(dropdowns[[col]], collapse = ","), '"')
-    )
-  }
-  wb
-}
-
-yes_no <- c("Y", "N")
 inputs_wb <- wb_workbook(creator = "rota-writer", datetime_created = fixed_time) |>
   add_sheet("settings", settings) |>
   add_sheet("rules", rules, list(hard_soft = c("hard", "soft"), enabled = yes_no)) |>

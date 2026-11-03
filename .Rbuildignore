@@ -5,3 +5,8 @@
 ^LICENSE\.md$
 ^LICENSE-docs\.md$
 ^examples$
+^AGENTS\.md$
+^CLAUDE\.md$
+^\.agents$
+^\.claude$
+^local$

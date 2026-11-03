@@ -10,20 +10,24 @@ using constrained optimisation (mixed-integer linear programming) in R.
 
 ## Installation
 
-You need R ≥ 4.3 and `cmake` (the `highs` solver package builds from source):
+You need R ≥ 4.3 ([cran.r-project.org](https://cran.r-project.org)). On Linux you also need `cmake`,
+because the `highs` solver package builds from source there:
 
 ```sh
-sudo apt install cmake        # or: sudo pacman -S cmake / brew install cmake
-git clone https://github.com/mark-jeffrey/rota-writer.git
+sudo apt install cmake        # Linux only; or: sudo dnf install cmake / sudo pacman -S cmake
+git clone https://github.com/mark-jeffrey/rota-writer.git   # or download the ZIP from GitHub
 cd rota-writer
-Rscript -e 'install.packages(c("dplyr", "highs", "lubridate", "Matrix", "openxlsx2", "purrr",
-  "readxl", "rlang", "stringr", "tibble", "tidyr", "withr", "pkgload", "testthat"))'
-# For the app:
-Rscript -e 'install.packages(c("shiny", "bslib", "reactable", "callr", "zip"))'
+Rscript scripts/setup.R
 ```
 
-The scripts load the package straight from the folder, so there is nothing else to install. Run
-them from the project root.
+`setup.R` installs the R packages that are missing, then solves the example rota for a minute to
+check that everything works. Add `--no-app` to skip the app's packages, or `--templates` to add
+tidyverse for writing new input templates. The scripts load the package straight from the folder,
+so there is nothing else to install. Run them from the project root.
+
+If you use an AI coding agent (Claude Code, Codex, Cursor, Gemini CLI or similar), open it in this
+folder and ask it to set up rota-writer. The `rota-setup` skill walks it through installing R on
+Windows, macOS or Linux. See [Working with an AI agent](#working-with-an-ai-agent).
 
 ## The app
 
@@ -283,9 +287,40 @@ consultants prefer 24-hour shifts. Consultants are off the day after a night (`M
 1st on the day before a night, and work at most 1 weekend in 3. The search frees four whole weeks or
 five consultants at a time (`neighbourhood_days`, `neighbourhood_doctors` in `settings`).
 
-To add another kind of rota, such as anaesthetic consultants: write a template workbook, reuse a
-type or add one to `rota_types` in `R/rules.R`, and register any new rule in `rule_registry()` with
-the function that adds it to the model and the one that checks it.
+To add another kind of rota, such as anaesthetic consultants: write a template workbook (the
+`data-raw/make_*_data.R` scripts build theirs from the shared pieces in
+`data-raw/template_parts.R`), reuse a type or add one to `rota_types` in `R/rules.R`, and register
+any new rule in `rule_registry()` with the function that adds it to the model and the one that
+checks it. The `rota-ruleset` agent skill guides you through this step by step (see below).
+
+## Working with an AI agent
+
+Setting up a rota for a new department is mostly translation: from how the rota works to sheets,
+rules and penalty weights. An AI coding agent can do the technical part while you describe your
+rota and judge the results. [`AGENTS.md`](AGENTS.md) tells any agent how the project works, and two
+skills in [`.agents/skills/`](.agents/skills/) give it step-by-step workflows:
+
+- **`rota-setup`**: installs R and the packages on Windows, macOS or Linux, checks the install, and
+  starts the app.
+- **`rota-ruleset`**: builds and tunes a rota for your department:
+  1. **Intake:** the agent asks about your contract, shifts, cover, staff, skill mix, the
+     conventions to keep (blocks, night splits), leave and preferences. If you have your current
+     rota, share it.
+  2. **Mapping:** each requirement is matched to a sheet or rule. Anything rota-writer can't do
+     yet is flagged, and you rank the soft requirements.
+  3. **Gaps:** you decide whether each gap is left out, approximated or added as a new rule.
+  4. **Build:** a feasibility check (enough people for the shifts?), then your inputs workbook.
+  5. **Weights:** penalty weights from your ranking, each one checked against a concrete trade-off.
+  6. **Trial:** short trial solves, with a review of the rota's fairness, patterns and broken
+     preferences.
+  7. **Tuning:** the agent asks about specific examples ("is this the right call?") and changes one
+     weight at a time.
+  8. **Handover:** a full-length solve, and how to run the next rota period.
+
+Everything is recorded in a plain-English spec (`local/<dept>/rota-spec.md`) that you can read and
+correct. Another session, or another agent, can pick up from it. Your real staff data stays in
+`local/`, which git ignores. Claude Code finds the skills through `.claude/skills/`. Other agents
+are pointed to them by `AGENTS.md`.
 
 ## Compliance checker
 
@@ -369,6 +404,8 @@ The project is an R package (`rotawriter`), loaded with `pkgload::load_all()`.
 
 ```
 README.md
+AGENTS.md                     guide for AI coding agents (CLAUDE.md points to it)
+.agents/skills/               agent skills: rota-setup, rota-ruleset
 LICENSE.md                    AGPL-3.0-or-later (code)
 LICENSE-docs.md               CC BY-SA 4.0 (documentation)
 DESCRIPTION, NAMESPACE        package metadata
@@ -386,8 +423,10 @@ man/                          help pages, generated by roxygen2 (do not edit)
 scripts/check_rota.R          command-line checker
 scripts/solve_rota.R          command-line solver
 scripts/run_app.R             starts the app from the source folder
+scripts/setup.R               installs missing packages and checks the install
 tests/testthat/               tests for each rule, plus the planted violations
 docs/contract-rules.md        rules reference with sources
+data-raw/template_parts.R     shared pieces for input templates (rule library, bank holidays)
 data-raw/make_test_data.R     regenerates the test workbooks (deterministic)
 data-raw/make_consultant_data.R  regenerates the ICU consultant inputs
 inst/extdata/rota_inputs.xlsx test inputs: 42 fictional doctors in two pools, 13 weeks from 1 Feb 2027
