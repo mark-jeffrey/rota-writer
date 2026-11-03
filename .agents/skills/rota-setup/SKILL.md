@@ -105,7 +105,8 @@ project folder, using the full path to `R.exe` if needed). Then copy
 ## 6. Next
 
 Once the example works, offer the **`rota-ruleset`** skill to set up their own department's rota.
-If they'd rather just adapt the example, the README's "Quick start" explains the workbook sheets.
+If they'd rather just adapt an example, the README's "Setting up a rota by hand" and "The inputs
+workbook" sections explain the sheets.
 
 ## Troubleshooting
 

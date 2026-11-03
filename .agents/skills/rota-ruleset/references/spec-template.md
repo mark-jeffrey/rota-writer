@@ -39,7 +39,7 @@ Bank holidays: nation, and any one-off holidays in the period
 - Placements or blocks (who works which roles, and when):
 - LTFT fixed days off, nights exemptions, WTR opt-outs:
 - Start and end dates within the period:
-- Source of the staff list (file in `local/<dept>/`):
+- Source of the staff list (anonymised or dummy file in `local/<dept>/`):
 
 ## 5. Skill mix
 
@@ -52,7 +52,7 @@ Bank holidays: nation, and any one-off holidays in the period
 - Night splits:
 - Sequences (never X before Y; off after Z):
 - Continuity:
-- Evidence from the current rota (file, and what it shows):
+- Evidence from the current rota (anonymised file, and what it shows):
 
 ## 7. Leave and preferences
 

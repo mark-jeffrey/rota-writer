@@ -59,8 +59,8 @@ From R: `pkgload::load_all()`, then `read_rota_inputs()`, `validate_inputs()`, `
 
 - **Every rule is in the registry.** A rule is a `rule_entry()` in `rule_registry()`
   (`R/rules.R`) with a function that adds it to the model and one that checks a rota against it.
-  A new rule also needs a row in `rule_library` (`data-raw/template_parts.R`), a line in the README
-  catalogue and tests in `tests/testthat/`.
+  A new rule also needs a row in `rule_library` (`data-raw/template_parts.R`), a row in the README
+  rule catalogue and tests in `tests/testthat/`.
 - **The solver's penalty for a soft rule equals the checker's** (fairness aside). Test it.
 - **The checker never reuses the model's formulation.** It works on clock-time intervals, so each
   can catch the other's mistakes.
@@ -77,7 +77,9 @@ From R: `pkgload::load_all()`, then `read_rota_inputs()`, `validate_inputs()`, `
 
 Real staff names, leave and preferences are personal data. Keep a department's real inputs and
 outputs in `local/` (gitignored) and never commit them, paste them into issues, or send them to an
-outside service. The example data is fictional. A template shared in the repository must use
+outside service. Reading them sends them to your model's provider, so develop a department's rule
+set on anonymised or dummy staff data. The user puts in the real data and solves locally, without
+an agent. The example data is fictional. A template shared in the repository must use
 fictional staff too.
 
 ## Git

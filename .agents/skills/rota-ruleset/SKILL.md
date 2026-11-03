@@ -19,8 +19,15 @@ tidyverse: `Rscript scripts/setup.R --templates`.
   [references/spec-template.md](references/spec-template.md). Write each answer into it as you
   go. Log every decision with its date and reason in the decision log. The spec, not your memory,
   is the record: another session or another agent must be able to pick up from it.
-- **Real data stays in `local/`** (gitignored). Never commit it or send it to any outside service.
-  Commit a template only if the user asks, and only with fictional staff.
+- **Work on anonymised or dummy data.** Whatever the user shows you goes to your model's provider.
+  The rule set depends on the shape of the staff group (head count, grades, WTE, competencies, LTFT
+  days, typical leave), not on who they are. So ask for staff codes (`C01`, "Consultant A") instead
+  of names, and realistic but made-up leave and preferences, or generate them as the
+  `data-raw/make_*_data.R` scripts do. If the user starts pasting real names or leave, stop, explain
+  why, and suggest anonymising it, unless they confirm their organisation has approved this AI tool
+  for personal data. The user puts the real data in themselves after handover (phase 8).
+- **Everything stays in `local/`** (gitignored). Never commit it or send it to any other outside
+  service. Commit a template only if the user asks, and only with fictional staff.
 - **Ask a few questions at a time** (three to five), in their language, not the tool's. After each
   batch, read your understanding back in a short summary and ask them to correct it.
 - **Don't guess what matters to them.** Whether a requirement is hard or soft, and how heavily it
@@ -50,15 +57,15 @@ checklist, roughly in this order:
 2. **Structure.** The roles or tiers, the shifts each one works (start and end times, on site or
    from home), how many are needed on each shift by day type (weekday, weekend, bank holiday), and
    the normal (non-on-call) days, if the rota should place them.
-3. **Workforce.** Head count, grades, WTE (and what makes up the rest of each person's job), start
+3. **Workforce**, by staff code, not name. Head count, grades, WTE (and what makes up the rest of each person's job), start
    and end dates, LTFT fixed days off, nights exemptions, staffing pools that are shared fairly
    among themselves, and who can work which role (competencies, placements).
 4. **Skill mix.** Seniority needed together on a shift, e.g. "at least one ST3+ across these three
    tiers at night".
 5. **Conventions to keep.** Blocks (e.g. Mon–Thu / Fri–Sun), how nights are split, sequences
    ("never 1st on the day before a night", "off the day after a night"), and continuity. **Ask for
-   the current rota**, as an export or a screenshot: it is the best evidence of conventions people
-   rely on without saying so. If they can export it in long format (`doctor_id`, `date`, `code`),
+   the current rota**, as an export or a screenshot, with names replaced by the same staff codes:
+   it is the best evidence of conventions people rely on without saying so. If they can export it in long format (`doctor_id`, `date`, `code`),
    save it in `local/<dept>/current_rota.xlsx` as a baseline for later.
 6. **Leave and preferences.** How leave is booked, and which requests should be firm (approved)
    and which flexible (requested). Standing preferences (e.g. "prefers 24-hour shifts", "never
@@ -118,9 +125,9 @@ worth more than a complete spec.
    - the workbook with `add_sheet()` and the drop-down vectors.
 
    Copy the shape of `data-raw/make_consultant_data.R` (short, optional sheets) or
-   `data-raw/make_test_data.R` (resident, with grades, placements and skill mix). Real staff, leave
-   and preferences are read from whatever the user provides (their spreadsheet in `local/<dept>/`),
-   not typed into the script. Write `local/<dept>/inputs.xlsx`.
+   `data-raw/make_test_data.R` (resident, with grades, placements and skill mix). Staff, leave
+   and preferences are read from the user's anonymised or dummy list in `local/<dept>/`, or
+   generated with a fixed seed, not typed into the script. Write `local/<dept>/inputs.xlsx`.
 
    If the user would rather keep editing in Excel, the generator is a one-off. From then on,
    `inputs.xlsx` is the source, and the spec records that.
@@ -187,10 +194,16 @@ over the year or leave clusters.
 - Final full-length solve into `local/<dept>/out/final/`.
 - Tell the user, in the spec and in your reply:
   - which files are which;
-  - how to update leave, requests and staff for the next rota period (in Excel, or by rerunning
-    the generator);
+  - **how to put in their real data without you:** in Excel, replace the dummy rows in `staff`,
+    `leave`, `requests` and `preferences` (and `placements`) with real ones, keeping the columns
+    and the role codes in `can_*`, and leave the structure sheets (`rules`, `shifts`, `cover`,
+    `patterns`, `sequences`, `skill_mix`) alone. Then solve locally in the app or with
+    `scripts/solve_rota.R`. If validation fails or slots go unfilled, the real staff group differs
+    from the dummy one in a way that matters: they can fix it, or describe the difference to an
+    agent in anonymised terms;
+  - how to update leave, requests and staff for the next rota period (the same way);
   - how to re-check hand edits (`scripts/check_rota.R`, or the app's Check tab);
   - that the rota coordinator must still review the rota before it's issued (README disclaimer).
 - Optional, if the user wants to share their template: write a fictional version as
-  `data-raw/make_<dept>_data.R` → `inst/extdata/<dept>_inputs.xlsx`, add it to the README's rota
-  types section, and add a test that it validates. Commit only when asked.
+  `data-raw/make_<dept>_data.R` → `inst/extdata/<dept>_inputs.xlsx`, add it to the README's "Example
+  rule sets" section, and add a test that it validates. Commit only when asked.

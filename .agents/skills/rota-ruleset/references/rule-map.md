@@ -1,7 +1,7 @@
 # Requirement → sheet / rule map
 
-How to express common rota requirements in an inputs workbook. The README sections "Input data",
-"Rota types" and "Constraint catalogue" have the full column lists. `data-raw/template_parts.R`
+How to express common rota requirements in an inputs workbook. The README sections "The inputs
+workbook", "Rota types" and "Rule catalogue" have the full column lists. `data-raw/template_parts.R`
 (`rule_library`) has every rule with its usual description, value and weight. If a requirement
 isn't here, check `rule_registry()` in `R/rules.R` before calling it a gap.
 
