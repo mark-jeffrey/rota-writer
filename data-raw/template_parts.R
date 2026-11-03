@@ -62,6 +62,9 @@ rule_library <- tribble(
   "PREFERENCE_ONLY",    "Shifts and patterns open only to consultants who prefer them", NA,  "",         "hard",     NA,      "Y",
   "PATTERNS",           "1st on and nights in the blocks in the patterns sheet (per day outside a block)", NA, "", "soft", 100, "Y",
   "PATTERN_UNPREFERRED", "A preference-only pattern (7-day 1st on) worked in full without preferring it (per week)", NA, "", "soft", 100, "Y",
+  "PATTERN_SEQUENCE",   "Patterns back to back across two weeks in the pattern_sequences sheet (weight per row)", NA, "", "soft", 1, "Y",
+  "BLOCK_REST",         "Rest before and after the big blocks in the block_rest sheet (per shift in the rest)", NA, "", "soft", 1000, "Y",
+  "CONSEC_NIGHT_WEEKS", "Nights in two Mon-Sun weeks running (per pair of weeks)",   NA,     "",         "soft",     500,     "Y",
   "FAIR_SLOTS",         "1st on, 2nd on and nights close to WTE-weighted share",     NA,     "",         "soft",     10,      "Y",
   "PREFERENCES",        "Standing preferences (weight per row in preferences sheet)", NA,    "",         "soft",     1,       "Y"
 )

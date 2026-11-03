@@ -23,8 +23,9 @@ yn_columns <- c("is_on_call", "is_night", "is_long", "is_late",
 #'   * `consultant`: `settings`, `rules`, `shifts`, `cover`, `bank_holidays`,
 #'     `staff` and `leave`. See `inst/extdata/icu_consultant_inputs.xlsx`.
 #'
-#'   Either may add `patterns`, `preferences` and `sequences` sheets. Sheets
-#'   left out are read as empty.
+#'   Either may add `patterns`, `preferences`, `sequences`,
+#'   `pattern_sequences` and `block_rest` sheets. Sheets left out are read as
+#'   empty.
 #'
 #' @returns A `rota_inputs` object: a named list with one tibble per sheet
 #'   (e.g. `inputs$staff`), plus `period`, a list holding the rota's `start`
@@ -182,8 +183,8 @@ read_rota <- function(path, sheet = "long") {
 #'   `skill_mix`
 #' * in-post days with no placement
 #' * unknown shift codes, patterns, weekdays or preference types in the
-#'   shifts sheet's `covers` column and the `patterns`, `preferences` and
-#'   `sequences` sheets
+#'   shifts sheet's `covers` column and the `patterns`, `preferences`,
+#'   `sequences`, `pattern_sequences` and `block_rest` sheets
 #'
 #' @inheritParams check_rota
 #'
@@ -238,7 +239,8 @@ validate_inputs <- function(inputs) {
     list_rbind()
 }
 
-# The covers column, and the patterns, preferences and sequences sheets
+# The covers column, and the patterns, preferences, sequences, pattern_sequences
+# and block_rest sheets
 validate_slots_and_patterns <- function(inputs) {
   problem <- function(sheet, bad, msg) tibble::tibble(sheet = rep(sheet, length(bad)), problem = msg)
   codes <- inputs$shifts$shift_code
@@ -255,6 +257,11 @@ validate_slots_and_patterns <- function(inputs) {
   bad_pattern_slots <- setdiff(days$slot, codes)
   bad_days <- unique(days$pattern_id[is.na(days$offset)])
   bad_seq <- setdiff(c(inputs$sequences$from_shift, inputs$sequences$to_shift), codes)
+  bad_pattern_seq <- setdiff(c(inputs$pattern_sequences$from_pattern, inputs$pattern_sequences$to_pattern),
+                             pattern_ids)
+  bad_rest_patterns <- setdiff(inputs$block_rest$pattern_id, pattern_ids)
+  rest_shifts <- stringr::str_trim(unlist(stringr::str_split(na.omit(as.character(inputs$block_rest$shifts)), ";")))
+  bad_rest_shifts <- setdiff(rest_shifts, codes)
 
   bind_rows(
     problem("shifts", bad_slots, paste("Unknown shift_code in covers:", bad_slots)),
@@ -268,6 +275,9 @@ validate_slots_and_patterns <- function(inputs) {
     check_values("avoid_pattern", pattern_ids),
     check_values("day_off", weekday_names),
     problem("sequences", bad_seq, paste("Unknown shift_code:", bad_seq)),
+    problem("pattern_sequences", bad_pattern_seq, paste("Unknown pattern_id:", bad_pattern_seq)),
+    problem("block_rest", bad_rest_patterns, paste("Unknown pattern_id:", bad_rest_patterns)),
+    problem("block_rest", bad_rest_shifts, paste("Unknown shift_code:", bad_rest_shifts)),
     if (isTRUE(rota_types[[rota_type(inputs$settings)]]$search$whole_weeks) &&
         lubridate::wday(inputs$period$start, week_start = 1) != 1) {
       problem("settings", 1, "rota_start should be a Monday, so blocks fill whole weeks")

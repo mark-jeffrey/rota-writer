@@ -33,12 +33,13 @@ settings <- tribble(
 # Rules -------------------------------------------------------------------
 # Consultants are not on the resident doctors' TCS: only the rules listed
 # here apply. Weights follow the order: requested leave, then blocks, then
-# fairness, then individual preferences.
+# fairness, then individual preferences. Rest around big blocks is almost
+# hard, and nights in weeks running come close behind requested leave.
 
 rules <- rule_rows(
   c("COVER", "IN_POST", "LEAVE_APPROVED", "MIN_REST", "WEEKEND_MAX", "SEQUENCE", "PREFERENCE_ONLY",
-    "LEAVE_REQUESTED", "PATTERNS", "PATTERN_UNPREFERRED", "FAIR_SLOTS", "FAIR_WEEKENDS", "SPLIT_WEEKEND",
-    "PREFERENCES", "REQUESTS"),
+    "LEAVE_REQUESTED", "BLOCK_REST", "CONSEC_NIGHT_WEEKS", "PATTERNS", "PATTERN_UNPREFERRED",
+    "PATTERN_SEQUENCE", "FAIR_SLOTS", "FAIR_WEEKENDS", "SPLIT_WEEKEND", "PREFERENCES", "REQUESTS"),
   COVER = list(description = "1st on, 2nd on and night filled every day"),
   MIN_REST = list(description = "Min rest between shifts: off the day after a night or 24 h"),
   WEEKEND_MAX = list(value = 3),
@@ -82,6 +83,21 @@ sequences <- tribble(
   ~from_shift, ~to_shift, ~days_after, ~weight,
   "1ST",       "NIGHT",   1,           NA,
   "1ST",       "24H",     1,           NA
+)
+
+# Not 1st on Fri-Sun then Mon-Thu: 7 days running across the weekend
+pattern_sequences <- tribble(
+  ~from_pattern, ~to_pattern, ~weight, ~notes,
+  "1ST_FS",      "1ST_MT",    500,     "7 days 1st on across the weekend"
+)
+
+# 48 hours off before and after a 7-day 1st-on week, and a night block
+# worked all as 24-hour shifts
+block_rest <- tribble(
+  ~pattern_id, ~shifts, ~rest_before_h, ~rest_after_h, ~notes,
+  "1ST_7D",    "1ST",   48,             48,            "7 days 1st on",
+  "N_MWFS",    "24H",   48,             48,            "A week of 24-hour shifts",
+  "N_TTS",     "24H",   48,             48,            "A week of 24-hour shifts"
 )
 
 # Staff -------------------------------------------------------------------
@@ -187,7 +203,9 @@ inputs_wb <- wb_workbook(creator = "rota-writer", datetime_created = fixed_time)
   add_sheet("preferences", preferences, list(
     preference = c("prefer_shift", "avoid_shift", "day_off", "prefer_pattern", "avoid_pattern")
   )) |>
-  add_sheet("sequences", sequences)
+  add_sheet("sequences", sequences) |>
+  add_sheet("pattern_sequences", pattern_sequences) |>
+  add_sheet("block_rest", block_rest)
 
 wb_save(inputs_wb, file.path(out_dir, "icu_consultant_inputs.xlsx"), overwrite = TRUE)
 message("Wrote ", file.path(out_dir, "icu_consultant_inputs.xlsx"))

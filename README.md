@@ -321,6 +321,8 @@ Either type can use these optional pieces:
 | `patterns` sheet | Blocks a slot is worked in within a Mon–Sun week (`pattern_id`, `slot`, `days` such as `Mon;Tue;Wed;Thu`, `open_to`) | `PATTERNS`, `PATTERN_UNPREFERRED` |
 | `preferences` sheet | Standing preferences with a weight each: `prefer_shift`, `avoid_shift`, `day_off`, `prefer_pattern`, `avoid_pattern` | `PREFERENCES` |
 | `sequences` sheet | `to_shift` worked `days_after` days after `from_shift`, e.g. no 1st on the day before a night. A blank weight makes the row hard. | `SEQUENCE`, `SEQUENCE_SOFT` |
+| `pattern_sequences` sheet | `to_pattern` worked in full the week after `from_pattern`, e.g. 1st on Fri–Sun then Mon–Thu (7 days running across the weekend), with a weight per row | `PATTERN_SEQUENCE` |
+| `block_rest` sheet | Hours off before and after a big block: a `pattern_id` worked on every one of its days with the listed `shifts` (blank: any shift filling its slot), e.g. 48 h either side of a 7-day 1st-on week or a night block all as 24-hour shifts (`rest_before_h`, `rest_after_h`) | `BLOCK_REST` |
 
 ## Rule catalogue
 
@@ -364,6 +366,9 @@ code. The contract rules, their parameters and sources are in
 | `ISOLATED_DAY_OFF`, `SPLIT_WEEKEND` | Each single day off between shifts; each weekend with only one day worked (BMA / NHS Employers Good Rostering Guide) |
 | `ICU_SHORT_RUN` | Each day an ICU run falls short of 3 days, for continuity |
 | `PATTERNS`, `PATTERN_UNPREFERRED` | Each day of a slot outside a block; each week of a preference-only block worked by someone who didn't ask for it |
+| `PATTERN_SEQUENCE` | Each pair of patterns in the `pattern_sequences` sheet worked back to back, × the row's weight |
+| `BLOCK_REST` | Each shift in the rest before or after a big block in the `block_rest` sheet. Weighted high (1000) so it only gives way when nothing else fits. |
+| `CONSEC_NIGHT_WEEKS` | Each pair of Mon–Sun weeks running with nights (or 24-hour shifts) in both |
 | `SEQUENCE_SOFT` | Each soft shift sequence broken |
 
 ## Technical methods

@@ -15,7 +15,7 @@ test_that("the consultant template reads and validates cleanly", {
   expect_true(rule_on(inputs, "PATTERNS"))
 })
 
-test_that("validate_inputs reports bad patterns, preferences and sequences", {
+test_that("validate_inputs reports bad patterns, preferences, sequences and block rest", {
   inputs <- consultant_inputs()
   inputs$patterns$days[1] <- "Mon;Funday"
   inputs$patterns$slot[2] <- "3RD"
@@ -23,6 +23,9 @@ test_that("validate_inputs reports bad patterns, preferences and sequences", {
   inputs$preferences$preference[2] <- "prefers_lie_ins"
   inputs$sequences$to_shift[1] <- "NITE"
   inputs$shifts$covers[4] <- "2ND;NITE"
+  inputs$block_rest$pattern_id[1] <- "1ST_8D"
+  inputs$pattern_sequences$to_pattern[1] <- "1ST_TW"
+  inputs$block_rest$shifts[2] <- "24H;36H"
 
   problems <- validate_inputs(inputs)$problem
   expect_true(any(grepl("1ST_MT: days must be", problems)))
@@ -31,6 +34,9 @@ test_that("validate_inputs reports bad patterns, preferences and sequences", {
   expect_true(any(grepl("Unknown preference: prefers_lie_ins", problems)))
   expect_true(any(grepl("sequences|Unknown shift_code: NITE", problems)))
   expect_true(any(grepl("Unknown shift_code in covers: NITE", problems)))
+  expect_true(any(grepl("Unknown pattern_id: 1ST_8D", problems)))
+  expect_true(any(grepl("Unknown pattern_id: 1ST_TW", problems)))
+  expect_true(any(grepl("Unknown shift_code: 36H", problems)))
 })
 
 test_that("a 24-hour shift fills both the 2nd-on and night slots", {
@@ -87,6 +93,89 @@ test_that("days outside a block pattern are penalised, split into blocks the che
   # A 24-hour shift can be one of a night block's nights
   v <- hits(rota_of("C02", mwfs, c("NIGHT", "24H", "NIGHT", "NIGHT")), inputs)
   expect_equal(penalty_of(v, "PATTERNS"), 0)
+})
+
+test_that("big blocks need rest before and after them, timed in clock hours", {
+  inputs <- consultant_inputs(weeks = 3)
+  week2 <- days_from("2027-02-08", 7)
+  rest <- \(rota) hits(rota, inputs)[hits(rota, inputs)$rule_id == "BLOCK_REST", ]
+  seven_days_and <- \(dates, codes) dplyr::bind_rows(rota_of("C03", week2, "1ST"),
+                                                      rota_of("C03", dates, codes))
+
+  # 2nd on the Saturday before, or a night starting 17:00 the Tuesday after
+  expect_equal(nrow(rest(seven_days_and("2027-02-06", "2ND"))), 1)
+  expect_equal(nrow(rest(seven_days_and("2027-02-16", "NIGHT"))), 1)
+  expect_equal(rest(seven_days_and("2027-02-16", "NIGHT"))$penalty, 1000)
+  # A Friday night ends 48 h before Monday 08:00; Wednesday is 48 h after Sunday 18:00
+  expect_equal(nrow(rest(seven_days_and(c("2027-02-05", "2027-02-17"), c("NIGHT", "2ND")))), 0)
+  # Six days of 1st on is not a 7-day block
+  expect_equal(nrow(rest(dplyr::bind_rows(rota_of("C03", week2[-7], "1ST"),
+                                          rota_of("C03", "2027-02-06", "2ND")))), 0)
+
+  # A night block all as 24-hour shifts, but not one with an ordinary night in it
+  mwfs <- as.Date("2027-02-08") + c(0, 2, 4, 6)
+  expect_equal(nrow(rest(rota_of("C02", c(mwfs, as.Date("2027-02-16")), c(rep("24H", 4), "2ND")))), 1)
+  expect_equal(nrow(rest(rota_of("C02", c("2027-02-06", "2027-02-09"), "2ND") |>
+                           dplyr::bind_rows(rota_of("C02", mwfs[-2] + c(0, 1, 0), "24H")))), 0)
+  expect_equal(nrow(rest(rota_of("C02", c(mwfs, as.Date("2027-02-16")),
+                                 c("24H", "NIGHT", "24H", "24H", "2ND")))), 0)
+})
+
+test_that("nights in two weeks running are penalised once per pair of weeks", {
+  inputs <- consultant_inputs(weeks = 3)
+  pairs <- \(dates) {
+    v <- hits(rota_of("C01", dates, "NIGHT"), inputs)
+    v[v$rule_id == "CONSEC_NIGHT_WEEKS", ]
+  }
+
+  expect_equal(nrow(pairs(c("2027-02-07", "2027-02-09"))), 1) # Sunday, then Tuesday
+  expect_equal(pairs(c("2027-02-07", "2027-02-09"))$penalty, 500)
+  expect_equal(nrow(pairs(c("2027-02-02", "2027-02-09", "2027-02-16"))), 2)
+  expect_equal(nrow(pairs(c("2027-02-02", "2027-02-16"))), 0)
+  # A 24-hour shift counts as a night
+  v <- hits(rota_of("C02", c("2027-02-07", "2027-02-09"), "24H"), inputs)
+  expect_equal(sum(v$rule_id == "CONSEC_NIGHT_WEEKS"), 1)
+})
+
+test_that("1st on Fri-Sun then Mon-Thu the next week is penalised", {
+  inputs <- consultant_inputs(weeks = 3)
+  pairs <- \(dates) {
+    v <- hits(rota_of("C01", dates, "1ST"), inputs)
+    v[v$rule_id == "PATTERN_SEQUENCE", ]
+  }
+
+  expect_equal(pairs(days_from("2027-02-05", 7))$penalty, 500) # Fri 5 to Thu 11
+  expect_equal(pairs(days_from("2027-02-05", 7))$end_date, as.Date("2027-02-11"))
+  expect_equal(nrow(pairs(days_from("2027-02-05", 6))), 0)     # only Mon-Wed after
+  expect_equal(nrow(pairs(days_from("2027-02-01", 7))), 0)     # Mon-Thu then Fri-Sun
+})
+
+test_that("the model scores block rest, night weeks and pattern sequences as the checker does", {
+  inputs <- consultant_inputs(weeks = 5)
+  rota <- dplyr::bind_rows(
+    rota_of("C03", days_from("2027-02-08", 7), "1ST"),        # 7 days 1st on...
+    rota_of("C03", c("2027-02-06", "2027-02-16"), c("2ND", "NIGHT")), # ...with a shift either side
+    rota_of("C02", as.Date("2027-02-01") + c(0, 2, 4, 6), "24H"), # a week of 24-hour shifts...
+    rota_of("C02", "2027-02-09", "2ND"),                       # ...and 2nd on the Tuesday after
+    rota_of("C05", c("2027-02-02", "2027-02-04", "2027-02-06", "2027-02-09", "2027-02-15"),
+            "NIGHT"),                                          # nights in three weeks running
+    rota_of("C08", "2027-02-12", "NIGHT"),                     # 48 h before 7 days 1st on
+    rota_of("C08", days_from("2027-02-15", 7), "1ST"),
+    rota_of("C01", days_from("2027-02-26", 7), "1ST")          # Fri-Sun then Mon-Thu
+  )
+  v <- check_rota(rota, inputs)
+  expect_equal(nrow(dplyr::filter(v, hard_soft == "hard", rule_id != "COVER")), 0)
+  checked <- v |>
+    dplyr::filter(hard_soft == "soft") |>
+    dplyr::summarise(penalty = sum(penalty), .by = rule_id) |>
+    dplyr::arrange(rule_id)
+  expect_equal(checked$penalty[checked$rule_id == "BLOCK_REST"], 3000)
+  expect_equal(checked$penalty[checked$rule_id == "CONSEC_NIGHT_WEEKS"], 1000)
+  expect_equal(checked$penalty[checked$rule_id == "PATTERN_SEQUENCE"], 500)
+
+  modelled <- model_penalties(rota, inputs)
+  expect_equal(modelled$rule, checked$rule_id)
+  expect_equal(modelled$penalty, checked$penalty)
 })
 
 test_that("standing preferences cost each shift against them", {

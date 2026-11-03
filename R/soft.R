@@ -173,6 +173,46 @@ single_night_part <- function(x, inputs, n_days) {
   )
 }
 
+# Nights in two Monday-Sunday weeks running, such as night blocks back to
+# back (per pair of weeks). With any[d, w] 1 if the doctor works a night in
+# week w:
+#   any[d, w] >= x[d, t, night] for each night in the week
+#   pair[d, w] >= any[d, w] + any[d, w + 1] - 1
+consec_night_weeks_part <- function(x, inputs) {
+  weight <- soft_weight(inputs, "CONSEC_NIGHT_WEEKS")
+  if (weight == 0) {
+    return(NULL)
+  }
+  nights <- x |>
+    filter(is_night) |>
+    mutate(week = t - lubridate::wday(date, week_start = 1) + 1L) |>
+    filter(week %in% rota_weeks(inputs))
+  weeks <- distinct(nights, doctor_id, week) |>
+    mutate(any = paste("CONSEC_NIGHT_WEEKS", doctor_id, week))
+  pairs <- weeks |>
+    inner_join(transmute(weeks, doctor_id, week = week - 7L, next_any = any), by = c("doctor_id", "week")) |>
+    mutate(aux = paste(any, "and next"))
+  if (nrow(pairs) == 0) {
+    return(NULL)
+  }
+  weeks <- filter(weeks, any %in% c(pairs$any, pairs$next_any))
+  nights <- inner_join(nights, weeks, by = c("doctor_id", "week")) |>
+    mutate(con = paste(any, j))
+
+  list(
+    vars = aux_vars(c(weeks$any, pairs$aux)),
+    terms = bind_rows(
+      transmute(nights, con, j, coef = 1, hi = 0),
+      transmute(nights, con, aux = any, coef = -1, hi = 0),
+      transmute(pairs, con = aux, aux = any, coef = 1, hi = 1),
+      transmute(pairs, con = aux, aux = next_any, coef = 1, hi = 1),
+      transmute(pairs, con = aux, aux, coef = -1, hi = 1)
+    ) |>
+      mutate(rule = "CONSEC_NIGHT_WEEKS", lo = -Inf),
+    costs = transmute(pairs, rule = "CONSEC_NIGHT_WEEKS", aux, coef = weight)
+  )
+}
+
 # Runs longer than the rule's value n, of any shift (LONG_RUN) or of nights
 # (LONG_NIGHT_RUN). A run of L days fills L - n windows of n + 1 days, so
 # each day beyond n costs the weight:

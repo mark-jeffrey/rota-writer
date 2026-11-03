@@ -35,7 +35,8 @@ settings <- tribble(
 
 # Every rule in rule_library except those written for consultant rotas
 rules <- rule_rows(setdiff(rule_library$rule_id, c("SEQUENCE", "SEQUENCE_SOFT", "PREFERENCE_ONLY", "PATTERNS",
-                                                   "PATTERN_UNPREFERRED", "FAIR_SLOTS", "PREFERENCES")))
+                                                   "PATTERN_UNPREFERRED", "FAIR_SLOTS", "PREFERENCES", "BLOCK_REST",
+                                                   "CONSEC_NIGHT_WEEKS", "PATTERN_SEQUENCE")))
 
 # Grades ------------------------------------------------------------------
 

@@ -42,7 +42,11 @@ optional_sheets <- list(
   preferences = tibble::tibble(doctor_id = character(), preference = character(),
                                value = character(), weight = numeric()),
   sequences = tibble::tibble(from_shift = character(), to_shift = character(),
-                             days_after = numeric(), weight = numeric())
+                             days_after = numeric(), weight = numeric()),
+  pattern_sequences = tibble::tibble(from_pattern = character(), to_pattern = character(),
+                                     weight = numeric()),
+  block_rest = tibble::tibble(pattern_id = character(), shifts = character(),
+                              rest_before_h = numeric(), rest_after_h = numeric())
 )
 
 # Columns a sheet may leave out, and their values when it does
@@ -154,6 +158,11 @@ rule_registry <- function() {
     rule_entry("SEQUENCE_SOFT", \(ctx) sequence_soft_part(ctx$x, ctx$inputs)),
     rule_entry("PATTERNS", \(ctx) patterns_part(ctx$x, ctx$inputs), check_patterns),
     rule_entry("PATTERN_UNPREFERRED", \(ctx) unpreferred_part(ctx$x, ctx$inputs), check_unpreferred),
+    rule_entry("PATTERN_SEQUENCE", \(ctx) pattern_sequence_part(ctx$x, ctx$inputs),
+               check_pattern_sequences),
+    rule_entry("BLOCK_REST", \(ctx) block_rest_part(ctx$x, ctx$inputs), check_block_rest),
+    rule_entry("CONSEC_NIGHT_WEEKS", \(ctx) consec_night_weeks_part(ctx$x, ctx$inputs),
+               check_consec_night_weeks),
     rule_entry("PREFERENCES", \(ctx) preferences_part(ctx$x, ctx$inputs), check_preferences),
     rule_entry("FAIR_ONCALL", \(ctx) fair_part(filter(ctx$x, is_on_call), ctx$inputs, "FAIR_ONCALL")),
     rule_entry("FAIR_NIGHTS", \(ctx) fair_part(filter(ctx$x, is_night), ctx$inputs, "FAIR_NIGHTS")),

@@ -26,8 +26,8 @@ or solved. It reports:
 \code{skill_mix}
 \item in-post days with no placement
 \item unknown shift codes, patterns, weekdays or preference types in the
-shifts sheet's \code{covers} column and the \code{patterns}, \code{preferences} and
-\code{sequences} sheets
+shifts sheet's \code{covers} column and the \code{patterns}, \code{preferences},
+\code{sequences}, \code{pattern_sequences} and \code{block_rest} sheets
 }
 }
 \examples{

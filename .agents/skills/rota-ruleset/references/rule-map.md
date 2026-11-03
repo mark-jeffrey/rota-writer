@@ -60,6 +60,9 @@ listed ones apply. Change a limit through its `value` in `rules`, never in code.
 | Allowed odd days in a patterned slot (e.g. single weekday on-calls, with Fri–Sun as a block) | One-day patterns (`days` = `Mon`, …) beside the block patterns | Without them, every day worked outside a listed block costs |
 | A block only some people want (e.g. 7-day weeks) | `patterns$open_to` = `preference` + `prefer_pattern`; `PATTERN_UNPREFERRED` | week worked in full without preferring it |
 | Avoid X shortly after Y | `sequences` row with a weight (`SEQUENCE_SOFT`) | occurrence × row weight |
+| No block straight after another (e.g. 1st on Fri–Sun then Mon–Thu) | `pattern_sequences` row + `PATTERN_SEQUENCE` | pair × row weight |
+| Rest either side of a big block (e.g. 48 h around a 7-day week or a week of 24-hour shifts) | `block_rest` sheet + `BLOCK_REST` | shift in the rest |
+| No night blocks back to back | `CONSEC_NIGHT_WEEKS` | pair of weeks running with nights in both |
 | No single nights | `SINGLE_NIGHT` | isolated night |
 | Runs of at most N shifts / N nights | `LONG_RUN` / `LONG_NIGHT_RUN` (value = N) | shift beyond N |
 | Continuity: runs of at least N days in a unit | `ICU_SHORT_RUN` | day short. ICU-specific: day shifts whose `role` starts with `ICU`. Another unit is a gap. |

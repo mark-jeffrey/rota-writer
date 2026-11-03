@@ -556,6 +556,23 @@ check_nights <- function(si, inputs) {
   )
 }
 
+# Each pair of whole Monday-Sunday weeks running with a night in both
+check_consec_night_weeks <- function(si, inputs) {
+  # Skipped for workbooks without the rule, as it is on when unlisted for residents
+  if (!"CONSEC_NIGHT_WEEKS" %in% inputs$rules$rule_id) {
+    return(NULL)
+  }
+  mondays <- inputs$period$start + rota_weeks(inputs) - 1
+  weeks <- si |>
+    filter(is_night) |>
+    distinct(doctor_id, monday = date - lubridate::wday(date, week_start = 1) + 1) |>
+    filter(monday %in% mondays)
+  weeks |>
+    semi_join(transmute(weeks, doctor_id, monday = monday - 7), by = c("doctor_id", "monday")) |>
+    with(violations("CONSEC_NIGHT_WEEKS", doctor_id, monday, monday + 13,
+                    detail = "Nights in two weeks running"))
+}
+
 # Soft rules on the shape of each doctor's pattern: ICU runs too short for
 # continuity, single days off between working days, and split weekends
 check_wellbeing <- function(si, inputs) {

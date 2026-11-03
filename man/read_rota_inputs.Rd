@@ -18,8 +18,9 @@ the \code{rota_type} setting:
 \code{staff} and \code{leave}. See \code{inst/extdata/icu_consultant_inputs.xlsx}.
 }
 
-Either may add \code{patterns}, \code{preferences} and \code{sequences} sheets. Sheets
-left out are read as empty.}
+Either may add \code{patterns}, \code{preferences}, \code{sequences},
+\code{pattern_sequences} and \code{block_rest} sheets. Sheets left out are read as
+empty.}
 }
 \value{
 A \code{rota_inputs} object: a named list with one tibble per sheet
