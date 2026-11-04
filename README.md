@@ -482,7 +482,7 @@ There is no maintained open-source NHS rota **optimiser** that we know of. Relat
   the reference compliance check for the 2016 contract.
 - Academic work: a [2017 rostering problem set based on the junior doctor contract](https://e-space.mmu.ac.uk/619524)
   (simulated annealing); an [anaesthetist rota system using constraint satisfaction](https://aaai.org/?p=65521);
-  and a [MIP model for anaesthetist rostering](https://ftsm.ukm.my/v6/public/assets/file/technicalreport/LP-CAIT-FTSM-2021-001.pdf).
+  and a [MILP model for fair anaesthetist rostering](https://doi.org/10.1109/ACCESS.2025.3526842) (IEEE Access, 2025).
 - Industry: [Hartree Centre / Alder Hey on-call optimisation](https://www.hartree.stfc.ac.uk/case-studies/2026/03/09/modernising-nhs-staffing-schedules-with-advanced-rota-optimisation/) (2026),
   and Lantum (built on the open-source [Timefold](https://timefold.ai) solver).
 - General tools: Google OR-Tools CP-SAT and Timefold. Nurse rostering is the closest
