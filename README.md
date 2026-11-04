@@ -1,42 +1,61 @@
-# rota-writer
+<div align="center">
+
+# 🩺 rota-writer
+
+**Fair, contract-compliant on-call rotas for doctors**
+
+[![Licence: AGPL v3+](https://img.shields.io/badge/licence-AGPL--3.0--or--later-blue)](LICENSE.md)
+[![Docs: CC BY-SA 4.0](https://img.shields.io/badge/docs-CC%20BY--SA%204.0-lightgrey)](LICENSE-docs.md)
+[![Built with R](https://img.shields.io/badge/built%20with-R-276DC3?logo=r&logoColor=white)](https://www.r-project.org)
+[![Solver: HiGHS](https://img.shields.io/badge/solver-HiGHS-2e8b57)](https://highs.dev)
+![Runs locally](https://img.shields.io/badge/runs-locally-success)
+
+</div>
 
 Fair, contract-compliant on-call rotas for doctors, written by mathematical optimisation and checked
 independently. You describe your rota in one Excel workbook; rota-writer finds the best rota that
 meets every hard rule, and a separate checker proves it.
 
-> **Disclaimer: this project is aggressively open source, privacy-respecting, interoperable and
-> copyleft.**
->
-> - **Open source, and staying that way.** The code is [AGPL-3.0-or-later](LICENSE.md) and the
->   documentation [CC BY-SA 4.0](LICENSE-docs.md). Anyone may use, study, change and share it,
->   including commercially. In return, anything built from it must be released under the same
->   terms, **including a modified version run as a hosted service**: its users must be offered the
->   source code. It cannot be taken private, wrapped in a closed product or sold back to the NHS as
->   a black box.
-> - **Privacy-respecting.** Staff names, leave and preferences are personal data, and they never
->   leave your computer. The solver, checker and app all run locally, with no tracking or analytics;
->   the only time anything is downloaded is when setup installs the R packages. If you use an AI
->   agent to set up a rota, whatever you show it goes to that agent's provider. So **develop your
->   rule set with the agent on anonymised or dummy staff data**, then put your real staff, leave
->   and preferences into the inputs workbook yourself and run the solver locally, with no AI
->   involved (see [Setting up a rota with an AI agent](#setting-up-a-rota-with-an-ai-agent)).
-> - **Interoperable, with no lock-in.** Inputs and outputs are ordinary Excel workbooks (they open
->   in Excel, LibreOffice or Google Sheets) and standard `.ics` calendars (Outlook, Google, Apple).
->   The solver is the open-source [HiGHS](https://highs.dev). It runs on Windows, macOS or Linux,
->   on your own computer, with no account, licence key or cloud service. The AI agent instructions
->   are plain text that works with any coding agent, not one vendor's.
-> - **Not an official tool.** It is not endorsed by the BMA, NHS Employers or any trust. Any rota it
->   produces must be reviewed by the rota coordinator and be consistent with the generic work
->   schedule. Concerns about working hours go to your Guardian of Safe Working.
->
-> Rotas, reports and calendars you produce with it are yours and are not covered by either licence.
+rota-writer is **open source and copyleft**: the code is [AGPL-3.0-or-later](LICENSE.md) and the
+docs [CC BY-SA 4.0](LICENSE-docs.md), so it can never be taken private or sold back as a black box.
+It is **privacy-respecting**, running entirely on your own computer with no accounts, tracking or
+cloud service, and **interoperable**, reading and writing ordinary Excel workbooks and `.ics`
+calendars with the open-source [HiGHS](https://highs.dev) solver underneath.
 
-**Status:** early development, but working end to end: a point-and-click app, the command line and
+🚧 **Status:** early development, but working end to end: a point-and-click app, the command line and
 R all solve and check rotas, with a coordinator workbook, a compliance report and per-doctor
 calendars. Two worked examples are included: [resident doctors](#resident-doctors-anaesthesia-and-icu)
 and [ICU consultants](#icu-consultants).
 
-## Why optimisation, not "AI rota-writing"
+<details>
+<summary><strong>Contents</strong></summary>
+
+- [Why optimisation, not "AI rota-writing"](#-why-optimisation-not-ai-rota-writing)
+  - [Where AI does help: turning your requirements into rules](#where-ai-does-help-turning-your-requirements-into-rules)
+- [Installation](#-installation)
+  - [With an AI agent](#with-an-ai-agent)
+  - [Manual installation](#manual-installation)
+- [Usage](#-usage)
+  - [Setting up a rota with an AI agent](#setting-up-a-rota-with-an-ai-agent)
+  - [Setting up a rota by hand](#setting-up-a-rota-by-hand)
+  - [Solving and checking: the app](#solving-and-checking-the-app)
+  - [Solving and checking: the command line](#solving-and-checking-the-command-line)
+  - [From R](#from-r)
+- [Example rule sets](#-example-rule-sets)
+  - [Resident doctors: anaesthesia and ICU](#resident-doctors-anaesthesia-and-icu)
+  - [ICU consultants](#icu-consultants)
+- [The inputs workbook](#-the-inputs-workbook)
+  - [Rota types](#rota-types)
+- [Rule catalogue](#-rule-catalogue)
+- [Technical methods](#-technical-methods)
+- [Development](#-development)
+  - [Roadmap](#roadmap)
+- [Prior art](#-prior-art)
+- [Licence](#-licence)
+
+</details>
+
+## 🧮 Why optimisation, not "AI rota-writing"
 
 A rota is a puzzle with thousands of interlocking rules: rest after nights, weekend frequency,
 average hours, who is signed off for what, leave, fairness, and the local conventions everyone
@@ -82,7 +101,7 @@ The division of labour is strict:
 The language model never decides who works when, and nothing it writes is hidden: the spec, the
 workbook and the report are all readable by the rota coordinator.
 
-## Installation
+## 📦 Installation
 
 ### With an AI agent
 
@@ -120,7 +139,7 @@ To start the app from a desktop icon on Windows, install the package once (`R CM
 copy `inst/launchers/rota-writer.bat` to the desktop. With the package installed,
 `rotawriter::run_app()` also starts the app from any R session.
 
-## Usage
+## 🚀 Usage
 
 ### Setting up a rota with an AI agent
 
@@ -164,9 +183,9 @@ anonymised description of the difference back to the agent. Keep real workbooks 
 
 1. **Start from the closest example.** Copy [`examples/residents/input/inputs.xlsx`](examples/residents/input/inputs.xlsx)
    (resident doctors) or [`examples/icu-consultants/input/inputs.xlsx`](examples/icu-consultants/input/inputs.xlsx)
-   (consultants); see [Example rule sets](#example-rule-sets).
+   (consultants); see [Example rule sets](#-example-rule-sets).
 2. **Replace the example data with yours:** the green sheets (rota dates in `settings`, staff,
-   placements, leave and requests), then your shifts and cover in the grey ones. Each sheet is described in [The inputs workbook](#the-inputs-workbook).
+   placements, leave and requests), then your shifts and cover in the grey ones. Each sheet is described in [The inputs workbook](#-the-inputs-workbook).
    Leave the rules and weights as they are to begin with.
 3. **Solve** a short trial (see below), look at the report, and adjust the weights in the `rules`
    sheet until the trade-offs go the way you would choose.
@@ -236,7 +255,7 @@ write_calendars(solution$rota, inputs, "calendars")
 
 Each function has a help page, e.g. `?solve_rota`, `?check_rota`, `?rotawriter`.
 
-## Example rule sets
+## 🧩 Example rule sets
 
 Both examples use fictional staff. Each has a folder in [`examples/`](examples/): its inputs
 workbook in `input/`, and its solved rota, report and calendars in `output/`. From R,
@@ -290,7 +309,7 @@ two consultants who prefer them work 7-day 1st-on weeks. Each consultant is with
 share of 1st-on days, and within 1 of their 2nd-on days, nights and weekends. 16 shifts fall on a
 preferred day off and 7 weekends are split.
 
-## The inputs workbook
+## 📗 The inputs workbook
 
 One workbook with one sheet per table. It opens on an `about` sheet describing the workbook and
 its sheets, which the solver ignores. The other sheets are grouped and coloured by who changes them
@@ -347,7 +366,7 @@ Either type can use these optional pieces:
 | `pattern_sequences` sheet | `to_pattern` worked in full the week after `from_pattern`, e.g. 1st on Fri–Sun then Mon–Thu (7 days running across the weekend), with a weight per row | `PATTERN_SEQUENCE` |
 | `block_rest` sheet | Hours off before and after a big block: a `pattern_id` worked on every one of its days with the listed `shifts` (blank: any shift filling its slot), e.g. 48 h either side of a 7-day 1st-on week or a night block all as 24-hour shifts (`rest_before_h`, `rest_after_h`) | `BLOCK_REST` |
 
-## Rule catalogue
+## 📋 Rule catalogue
 
 Every rule has a row in the `rules` sheet, where its parameter and weight can be changed without
 code. The contract rules, their parameters and sources are in
@@ -394,7 +413,7 @@ code. The contract rules, their parameters and sources are in
 | `CONSEC_NIGHT_WEEKS` | Each pair of Mon–Sun weeks running with nights (or 24-hour shifts) in both |
 | `SEQUENCE_SOFT` | Each soft shift sequence broken |
 
-## Technical methods
+## ⚙️ Technical methods
 
 - **Model.** One binary variable per doctor, day and shift they could work. Variables a doctor could
   never use (competency, placement, leave, LTFT day, not in post) are left out, so the resident
@@ -422,7 +441,7 @@ code. The contract rules, their parameters and sources are in
 - **Tests.** `tests/testthat/fixtures/example_rota_output.xlsx` is a naive rota with contract breaches planted
   in it; the tests check that the checker finds every one.
 
-## Development
+## 🛠️ Development
 
 The project is an R package (`rotawriter`). [`AGENTS.md`](AGENTS.md) describes the layout and the
 rules for changing the code; every rule is registered in `rule_registry()` (`R/rules.R`) with one
@@ -446,7 +465,7 @@ and new rule sets.
 1. Editing leave and requests in the app, and saving and reopening sessions.
 2. Re-solving mid-rota with existing shifts fixed, swaps, and non-resident on-call.
 
-## Prior art
+## 📚 Prior art
 
 There is no maintained open-source NHS rota **optimiser** that we know of. Related work:
 
@@ -462,7 +481,7 @@ There is no maintained open-source NHS rota **optimiser** that we know of. Relat
 - General tools: Google OR-Tools CP-SAT and Timefold. Nurse rostering is the closest
   well-studied problem.
 
-## Licence
+## ⚖️ Licence
 
 Copyright © 2026 Mark Jeffrey.
 
@@ -476,3 +495,7 @@ Copyright © 2026 Mark Jeffrey.
 
 Rotas, reports and calendars produced with the tool belong to whoever produces them and are not
 covered by either licence.
+
+rota-writer is not an official tool and is not endorsed by the BMA, NHS Employers or any trust. Any
+rota it produces must be reviewed by the rota coordinator and be consistent with the generic work
+schedule. Concerns about working hours go to your Guardian of Safe Working.
