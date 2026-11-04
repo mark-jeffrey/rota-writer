@@ -7,8 +7,8 @@ results_ui <- function(id) {
   shiny::tagList(
     shiny::uiOutput(ns("summary")),
     bslib::navset_card_underline(
-      bslib::nav_panel("Rota", reactable::reactableOutput(ns("grid"))),
-      bslib::nav_panel("By shift", reactable::reactableOutput(ns("by_shift"))),
+      bslib::nav_panel("By role", reactable::reactableOutput(ns("by_shift"))),
+      bslib::nav_panel("By doctor", reactable::reactableOutput(ns("grid"))),
       bslib::nav_panel("Fairness", shiny::uiOutput(ns("fairness_note")),
                        reactable::reactableOutput(ns("fairness"))),
       bslib::nav_panel("Patterns", reactable::reactableOutput(ns("patterns"))),
@@ -66,8 +66,9 @@ results_server <- function(id, inputs, rota, solution) {
       grid <- rota_grid(ready()$rota, ready()$inputs)
       doctors <- setdiff(names(grid), c("date", "day", "holiday"))
       weekend <- grid$day %in% c("Sat", "Sun")
+      colours <- code_colours(ready()$inputs$shifts)
       code_cell <- reactable::colDef(minWidth = 80, align = "center", style = function(value) {
-        c(list(whiteSpace = "nowrap", fontSize = "0.85em"), cell_style(code_style(value, ready()$inputs$shifts)))
+        c(list(whiteSpace = "nowrap", fontSize = "0.85em"), code_cell_style(value, colours))
       })
       reactable::reactable(
         grid,
@@ -89,9 +90,17 @@ results_server <- function(id, inputs, rota, solution) {
     output$by_shift <- reactable::renderReactable({
       x <- shift_table(ready()$rota, ready()$inputs, rota_days(ready()$inputs))
       shifts <- setdiff(names(x), c("date", "day", "holiday"))
-      who_cell <- reactable::colDef(minWidth = 140, style = function(value) {
-        if (!is.na(value) && grepl("UNFILLED", value)) cell_style("unfilled")
-      })
+      colours <- code_colours(ready()$inputs$shifts)
+      # Each shift's column in its colour, as in the workbook's by_role sheet
+      # Normal days list many doctors, so their columns are wider
+      who_cell <- function(code) {
+        long <- max(c(0, nchar(x[[code]])), na.rm = TRUE) > 40
+        reactable::colDef(minWidth = if (long) 400 else 130, style = function(value) {
+          style <- if (!is.na(value) && grepl("UNFILLED", value)) cell_style("unfilled")
+                   else if (!is.na(value)) code_cell_style(code, colours)
+          c(list(fontSize = "0.85em"), style)
+        })
+      }
       reactable::reactable(
         x,
         pagination = FALSE, compact = TRUE, bordered = TRUE, height = 650,
@@ -103,7 +112,7 @@ results_server <- function(id, inputs, rota, solution) {
                                     style = date_style(x)),
             holiday = reactable::colDef(name = "Holiday", minWidth = 110)
           ),
-          set_names(rep(list(who_cell), length(shifts)), shifts)
+          set_names(map(shifts, who_cell), shifts)
         )
       )
     })
@@ -179,6 +188,16 @@ cell_style <- function(style) {
     return(NULL)
   }
   compact(list(background = colours$fill, color = if (!is.na(colours$text)) colours$text))
+}
+
+# CSS for a rota code's cell, in its colour from code_colours() (NULL for
+# none)
+code_cell_style <- function(code, colours) {
+  i <- match(code, colours$code)
+  if (length(code) == 0 || is.na(i)) {
+    return(NULL)
+  }
+  compact(list(background = colours$fill[i], color = if (!is.na(colours$text[i])) colours$text[i]))
 }
 
 # Date columns shaded for weekends and bank holidays, as in the workbook

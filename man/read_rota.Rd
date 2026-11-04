@@ -20,9 +20,8 @@ Blank rows are dropped.
 }
 \description{
 Reads a rota in long format: one row per doctor per working day. This is
-the format \code{\link[=check_rota]{check_rota()}} uses. A rota workbook also has a \code{grid} sheet
-(dates down, doctors across) for people to read, but that is not read
-here.
+the format \code{\link[=check_rota]{check_rota()}} uses. A rota workbook also has \code{by_role} and
+\code{by_doctor} sheets for people to read, but those are not read here.
 }
 \examples{
 read_rota(rota_example("residents", "output/rota.xlsx"))

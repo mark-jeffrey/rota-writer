@@ -52,11 +52,11 @@ rules <- rule_rows(
 # slots, and is open only to consultants who prefer it.
 
 shifts <- tribble(
-  ~shift_code, ~role,    ~shift_type, ~start,  ~end,    ~hours, ~covers,      ~open_to,     ~label,
-  "1ST",       "FIRST",  "long_day",  "08:00", "18:00", 10,     NA,           "all",        "1st on",
-  "2ND",       "SECOND", "long_day",  "08:00", "18:00", 10,     NA,           "all",        "2nd on",
-  "NIGHT",     "NIGHT",  "night",     "17:00", "08:00", 15,     NA,           "all",        "Night (on site to 22:00)",
-  "24H",       "SECOND", "night",     "08:00", "08:00", 24,     "2ND;NIGHT",  "preference", "2nd on into the night"
+  ~shift_code, ~role,    ~area,    ~shift_type, ~start,  ~end,    ~hours, ~covers,      ~open_to,     ~label,
+  "1ST",       "FIRST",  "1st on", "long_day",  "08:00", "18:00", 10,     NA,           "all",        "1st on",
+  "2ND",       "SECOND", "2nd on", "long_day",  "08:00", "18:00", 10,     NA,           "all",        "2nd on",
+  "NIGHT",     "NIGHT",  "Nights", "night",     "17:00", "08:00", 15,     NA,           "all",        "Night (on site to 22:00)",
+  "24H",       "SECOND", "2nd on", "night",     "08:00", "08:00", 24,     "2ND;NIGHT",  "preference", "2nd on into the night"
 ) |>
   mutate(is_on_call = "Y", is_night = if_else(shift_type == "night", "Y", "N"), is_long = "N",
          is_late = "N", .after = hours)

@@ -54,7 +54,7 @@ optional_columns <- list(
   staff = list(grade = NA_character_, pool = NA_character_, contracted_hours = NA_real_,
                ltft_fixed_day_off = NA_character_, nights_exempt = FALSE, opted_out_wtr = FALSE),
   shifts = list(is_long = FALSE, is_late = FALSE, covers = NA_character_, open_to = "all",
-                label = NA_character_)
+                label = NA_character_, area = NA_character_)
 )
 
 rota_type <- function(settings) {

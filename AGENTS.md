@@ -33,6 +33,7 @@ Rscript -e 'pkgload::load_all(); testthat::test_dir("tests/testthat", load_packa
 Rscript -e 'roxygen2::roxygenise()'         # after changing roxygen comments
 Rscript data-raw/make_test_data.R           # regenerate the resident inputs and the test fixture rota
 Rscript data-raw/make_consultant_data.R     # regenerate the ICU consultant inputs
+Rscript data-raw/make_screenshots.R         # retake the README's app screenshots (needs Chromium)
 ```
 
 From R: `pkgload::load_all()`, then `read_rota_inputs()`, `validate_inputs()`, `solve_rota()`,

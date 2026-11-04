@@ -38,9 +38,11 @@ test_that("the results views and downloads work for a rota", {
       expect_gt(sum(violations()$hard_soft == "hard"), 0)
       expect_equal(nrow(doctors()), 42)
       expect_true(file.exists(output$rota_xlsx))
-      expect_equal(readxl::excel_sheets(output$rota_xlsx), c("grid", "by_shift", "doctors", "key", "long"))
+      expect_equal(readxl::excel_sheets(output$rota_xlsx), c("by_role", "by_doctor", "doctors", "key", "long"))
       expect_true("doctors" %in% readxl::excel_sheets(output$report_xlsx))
-      expect_length(zip::zip_list(output$calendars_zip)$filename, 42)
+      calendars <- zip::zip_list(output$calendars_zip)$filename
+      expect_length(calendars, 43) # one per doctor, and one for everyone
+      expect_true("All_doctors.ics" %in% calendars)
     }
   )
 })
@@ -67,9 +69,12 @@ test_that("a solve runs in the background, reports progress and returns a compli
 })
 
 test_that("the cell colours match the workbook styles", {
-  expect_equal(code_style(c("ICU1_N", "ANA1_LD", "AL", "ICU_DAY", NA)),
-               c("night", "long_day", "leave", NA, NA))
-  expect_equal(cell_style("night"), list(background = "#3F3F7F", color = "#FFFFFF"))
+  colours <- code_colours(test_inputs()$shifts)
+  night <- colours[colours$code == "ICU1_N", ]
+  expect_equal(code_cell_style("ICU1_N", colours), list(background = night$fill, color = "#FFFFFF"))
+  expect_equal(names(code_cell_style("ICU_DAY", colours)), "background")
+  expect_null(code_cell_style(NA, colours))
+  expect_equal(cell_style("unfilled"), list(background = "#F4C7C3", color = "#9C0006"))
   expect_null(cell_style(NA))
   expect_null(diff_style(0))
   expect_equal(diff_style(-4)$background, "rgb(90, 138, 198)")

@@ -10,6 +10,7 @@ Encoding: UTF-8
 Depends: R (>= 4.3)
 Imports:
     dplyr (>= 1.1.0),
+    grDevices,
     highs,
     lubridate,
     Matrix,

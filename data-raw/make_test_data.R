@@ -66,19 +66,19 @@ grades <- tribble(
 # Shifts and cover --------------------------------------------------------
 
 shifts <- tribble(
-  ~shift_code, ~role,     ~shift_type,  ~start,  ~end,    ~hours,
-  "ICU_DAY",   "ICU_DAY", "normal_day", "08:00", "17:00", 9,
-  "ANA_DAY",   "ANA_DAY", "normal_day", "08:00", "17:00", 9,
-  "ICU1_LD",   "ICU1",    "long_day",   "08:00", "20:30", 12.5,
-  "ICU1_N",    "ICU1",    "night",      "20:00", "08:30", 12.5,
-  "ICU2_LD",   "ICU2",    "long_day",   "08:00", "20:30", 12.5,
-  "ICU2_N",    "ICU2",    "night",      "20:00", "08:30", 12.5,
-  "ANA1_LD",   "ANA1",    "long_day",   "08:00", "20:30", 12.5,
-  "ANA1_N",    "ANA1",    "night",      "20:00", "08:30", 12.5,
-  "ANA2_LD",   "ANA2",    "long_day",   "08:00", "20:30", 12.5,
-  "ANA2_N",    "ANA2",    "night",      "20:00", "08:30", 12.5,
-  "OBS_LD",    "OBS",     "long_day",   "08:00", "20:30", 12.5,
-  "OBS_N",     "OBS",     "night",      "20:00", "08:30", 12.5
+  ~shift_code, ~role,     ~area,        ~shift_type,  ~start,  ~end,    ~hours,
+  "ICU_DAY",   "ICU_DAY", "ICU",        "normal_day", "08:00", "17:00", 9,
+  "ANA_DAY",   "ANA_DAY", "Theatres",   "normal_day", "08:00", "17:00", 9,
+  "ICU1_LD",   "ICU1",    "ICU",        "long_day",   "08:00", "20:30", 12.5,
+  "ICU1_N",    "ICU1",    "ICU",        "night",      "20:00", "08:30", 12.5,
+  "ICU2_LD",   "ICU2",    "ICU",        "long_day",   "08:00", "20:30", 12.5,
+  "ICU2_N",    "ICU2",    "ICU",        "night",      "20:00", "08:30", 12.5,
+  "ANA1_LD",   "ANA1",    "Theatres",   "long_day",   "08:00", "20:30", 12.5,
+  "ANA1_N",    "ANA1",    "Theatres",   "night",      "20:00", "08:30", 12.5,
+  "ANA2_LD",   "ANA2",    "Theatres",   "long_day",   "08:00", "20:30", 12.5,
+  "ANA2_N",    "ANA2",    "Theatres",   "night",      "20:00", "08:30", 12.5,
+  "OBS_LD",    "OBS",     "Obstetrics", "long_day",   "08:00", "20:30", 12.5,
+  "OBS_N",     "OBS",     "Obstetrics", "night",      "20:00", "08:30", 12.5
 ) |>
   mutate(
     is_on_call = yn(shift_type != "normal_day"),

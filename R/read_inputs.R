@@ -109,7 +109,7 @@ check_rota_columns <- function(rota, where = "`rota`") {
   if (length(missing) > 0) {
     stop(where, " must be in long format with columns doctor_id, date and code ",
          "(missing: ", paste(missing, collapse = ", "), "). ",
-         "In a rota workbook this is the \"long\" sheet, not the \"grid\".", call. = FALSE)
+         "In a rota workbook this is the \"long\" sheet, not \"by_doctor\".", call. = FALSE)
   }
 }
 
@@ -174,9 +174,8 @@ rota_example <- function(name = "residents", file = "input/inputs.xlsx") {
 #' Read a rota
 #'
 #' Reads a rota in long format: one row per doctor per working day. This is
-#' the format [check_rota()] uses. A rota workbook also has a `grid` sheet
-#' (dates down, doctors across) for people to read, but that is not read
-#' here.
+#' the format [check_rota()] uses. A rota workbook also has `by_role` and
+#' `by_doctor` sheets for people to read, but those are not read here.
 #'
 #' @param path Path to a rota workbook, such as
 #'   `rota_example("residents", "output/rota.xlsx")`.

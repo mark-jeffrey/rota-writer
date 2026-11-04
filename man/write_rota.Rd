@@ -23,19 +23,30 @@ Saves a rota as an Excel workbook for the rota coordinator. It can be read
 back with \code{\link[=read_rota]{read_rota()}} and checked with \code{\link[=check_rota]{check_rota()}}, including after
 editing the \code{long} sheet by hand. Sheets:
 \itemize{
-\item \code{grid}: one row per date and one column per doctor, holding shift and
-leave codes. Weekends and bank holidays are shaded, nights and long days
-coloured.
-\item \code{by_shift}: one row per date and one column per shift, holding who is
-on it. Slots short of their minimum cover say \code{UNFILLED}.
+\item \code{by_role}: one row per date and one column per shift, holding who is on
+it. On-call shifts come first, then normal days, each grouped by area
+(the shifts sheet's \code{area} column, or else the shift's role) under a
+band naming the area. Slots short of their minimum cover say
+\code{UNFILLED}. Doctors are named without their ID unless two share a name.
+\item \code{by_doctor}: one row per date and one column per doctor, holding shift
+and leave codes. Doctors are ordered by grade, most senior first, under
+a band of grades. Below the rota, each doctor's shifts, hours, nights,
+weekend days and leave days are formulas, so they follow hand edits.
 \item \code{doctors}: each doctor's hours, on-calls, nights and weekends against
 their fair share (see \code{\link[=summarise_doctors]{summarise_doctors()}}).
-\item \code{key}: what the shift and leave codes mean.
+\item \code{key}: what the shift and leave codes mean, in their colours.
 \item \code{long}: one row per doctor per day (\code{doctor_id}, \code{date}, \code{code}), the
 format the checker reads.
 }
 }
 \details{
+Each area has its own colour, pale for normal days, mid for long days and
+dark for nights, and both rota sheets use the same colours. They are
+conditional formats, so a code typed into \code{by_doctor} takes its colour.
+Weekends and bank holidays are shaded, and a line under each Sunday
+marks the weeks. Both rota sheets print landscape,
+one page wide, with their headings on every page.
+
 Approved leave is shown as \code{AL} (annual), \code{SL} (study), \code{EX} (exam) or
 \code{PL} (parental) on days the doctor has no shift.
 }

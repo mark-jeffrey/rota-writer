@@ -231,6 +231,7 @@ column_notes <- tribble(
   "shifts",            "is_late",            "Y: a long evening shift, for the consecutive late shift rule.",
   "shifts",            "covers",             "Cover slots this shift fills, separated by ;. Blank: its own code.",
   "shifts",            "label",              "The shift's name in the rota key and calendars.",
+  "shifts",            "area",               "Where the shift works, e.g. ICU or Theatres. The rota groups and colours shifts by area. Blank: its role.",
   "cover",             "day_type",           "weekday, weekend or bank_holiday.",
   "cover",             "n_min",              "Fewest doctors needed.",
   "cover",             "n_max",              "Most doctors allowed. Blank: no limit. Equal to n_min for on-call.",

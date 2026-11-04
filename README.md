@@ -184,13 +184,15 @@ anywhere.
    solving waits until they are fixed in Excel.
 2. **Solve:** choose a time limit and press Solve. The penalty falls as the solver improves the rota.
    **Stop and keep best rota** finishes early with the best rota so far.
-3. **Results:** the rota grid, who is on each shift, fairness within each staffing pool, patterns,
-   and every rule broken. **Download** gives `rota.xlsx`, `report.xlsx` and `calendars.zip`.
+3. **Results:** who is on each shift (by role), each doctor's rota (by doctor), fairness within
+   each staffing pool, patterns, and every rule broken. **Download** gives `rota.xlsx`, `report.xlsx` and `calendars.zip`.
 4. **Check a rota:** upload a rota workbook, such as one edited by hand, to check it.
 
 ![The Solve tab: a progress bar and the best penalty so far, falling over a 3-minute solve](docs/images/app-solve.png)
 
-![The results for the example rota: no hard rules broken, every shift covered, and the rota grid coloured by shift](docs/images/app-results.png)
+![The results for the example rota: no hard rules broken, every shift covered, and who is on each shift, coloured by area and shift type](docs/images/app-results.png)
+
+![The same rota by doctor: each doctor's shifts, in the same colours](docs/images/app-by-doctor.png)
 
 ### Solving and checking: the command line
 
@@ -204,12 +206,18 @@ problems and stops, or writes:
 
 | File | Contents |
 |---|---|
-| `rota.xlsx` | `grid`: dates down, doctors across, with shift and leave codes, coloured by shift. `by_shift`: who is on each shift, with `UNFILLED` where cover is short. `doctors`: hours, on-calls, nights and weekends against each doctor's fair share. `key`: what the codes mean. `long`: one row per shift worked (`doctor_id`, `date`, `code`), the format the checker reads. |
+| `rota.xlsx` | `by_role`: dates down and shifts across, holding who is on each, with `UNFILLED` where cover is short. On-call shifts come first, then normal days, each grouped under a band naming its area (ICU, theatres, obstetrics...). `by_doctor`: dates down, doctors across, with shift and leave codes, ordered by grade under a band of grades, with each doctor's shifts, hours, nights, weekend days and leave days at the foot. `doctors`: hours, on-calls, nights and weekends against each doctor's fair share. `key`: what the codes mean. `long`: one row per shift worked (`doctor_id`, `date`, `code`), the format the checker reads. |
 | `report.xlsx` | The checker's report: violations by rule, one row per violation with its penalty, per-doctor hours and fair shares (shaded blue for fewer, red for more), and a `patterns` sheet of runs, single nights, split weekends and single days off. |
-| `calendars/` | One `.ics` file per doctor, with their shifts and approved leave. |
+| `calendars/` | One `.ics` file per doctor, with their shifts and approved leave, and `All_doctors.ics` with everyone's shifts titled like "ICU1 night: Dr Ada Alder", for a department calendar. |
 
-To re-check a hand-edited rota, edit the `long` sheet of `rota.xlsx` (the `grid` sheet is for
-reading only) and run `check_rota.R`. Both scripts exit with status 1 if a hard rule is broken
+Both rota sheets use the same colours: one per area, pale for normal days, mid for long days and dark
+for nights, with approved leave in green and weekends and bank holidays shaded. In `by_doctor` they
+are conditional formats, so a code typed in by hand takes its colour, and the totals at the foot are
+formulas that follow hand edits. A line under each Sunday marks the weeks. The `key` sheet shows every
+code in its colour. Both sheets print landscape, one page wide, with their headings on every page.
+
+To re-check a hand-edited rota, edit the `long` sheet of `rota.xlsx` (the `by_role` and
+`by_doctor` sheets are for reading only) and run `check_rota.R`. Both scripts exit with status 1 if a hard rule is broken
 (including unfilled slots), and the checker with 2 if the inputs fail validation.
 
 ### From R
@@ -332,6 +340,7 @@ Either type can use these optional pieces:
 | `shifts$covers` | Cover slots one shift fills, separated by `;`. A 24-hour shift covering `2ND;NIGHT` fills the 2nd-on day and the night. | `COVER` |
 | `shifts$open_to` | `preference`: only doctors with a matching `prefer_shift` row may work it | `PREFERENCE_ONLY` |
 | `shifts$label` | The shift's name in the workbook key and calendars | |
+| `shifts$area` | Where the shift works, e.g. `ICU` or `Theatres`. The rota groups and colours shifts by area; blank means the shift's role. | |
 | `patterns` sheet | Blocks a slot is worked in within a Mon–Sun week (`pattern_id`, `slot`, `days` such as `Mon;Tue;Wed;Thu`, `open_to`) | `PATTERNS`, `PATTERN_UNPREFERRED` |
 | `preferences` sheet | Standing preferences with a weight each: `prefer_shift`, `avoid_shift`, `day_off`, `prefer_pattern`, `avoid_pattern` | `PREFERENCES` |
 | `sequences` sheet | `to_shift` worked `days_after` days after `from_shift`, e.g. no 1st on the day before a night. A blank weight makes the row hard. | `SEQUENCE`, `SEQUENCE_SOFT` |

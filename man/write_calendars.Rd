@@ -4,7 +4,7 @@
 \alias{write_calendars}
 \title{Write per-doctor calendars}
 \usage{
-write_calendars(rota, inputs, dir, doctors = NULL)
+write_calendars(rota, inputs, dir, doctors = NULL, all_doctors = TRUE)
 }
 \arguments{
 \item{rota}{A rota in long format, e.g. \code{solve_rota(inputs)$rota}.}
@@ -18,6 +18,9 @@ they exist.}
 
 \item{doctors}{Doctor IDs to write calendars for. Defaults to every doctor
 in the staff list with at least one shift or day of leave.}
+
+\item{all_doctors}{Also write \code{All_doctors.ics}, with the shifts of every
+doctor in \code{doctors}.}
 }
 \value{
 The paths of the files written, invisibly.
@@ -25,7 +28,8 @@ The paths of the files written, invisibly.
 \description{
 Writes one iCalendar (\code{.ics}) file per doctor with their shifts and
 approved leave, which they can import into Outlook, Google Calendar or
-Apple Calendar. Shift times are local wall-clock times (no time zone), so
+Apple Calendar, and one for the whole department, \code{All_doctors.ics}, with
+everyone's shifts titled like \code{"ICU1 night: Dr Ada Alder"}. Shift times are local wall-clock times (no time zone), so
 they show as rostered whatever the calendar's time zone.
 }
 \examples{
