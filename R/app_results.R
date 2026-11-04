@@ -21,6 +21,12 @@ results_ui <- function(id) {
           shiny::downloadButton(ns("rota_xlsx"), "Rota workbook (rota.xlsx)"),
           shiny::downloadButton(ns("report_xlsx"), "Compliance report (report.xlsx)"),
           shiny::downloadButton(ns("calendars_zip"), "Calendars (calendars.zip)")
+        ),
+        shiny::p(class = "mt-3", "Plain CSV files, for other software such as staffing systems or Power BI."),
+        shiny::div(
+          class = "d-flex flex-wrap gap-2",
+          shiny::downloadButton(ns("rota_csv"), "Rota (rota.csv)"),
+          shiny::downloadButton(ns("violations_csv"), "Rules broken (violations.csv)")
         )
       )
     )
@@ -168,6 +174,14 @@ results_server <- function(id, inputs, rota, solution) {
     output$report_xlsx <- shiny::downloadHandler(
       filename = "report.xlsx",
       content = function(file) write_check_report(violations(), doctors(), file, patterns = patterns())
+    )
+    output$rota_csv <- shiny::downloadHandler(
+      filename = "rota.csv",
+      content = function(file) write_rota_csv(ready()$rota, ready()$inputs, file)
+    )
+    output$violations_csv <- shiny::downloadHandler(
+      filename = "violations.csv",
+      content = function(file) write_violations_csv(violations(), file)
     )
     output$calendars_zip <- shiny::downloadHandler(
       filename = "calendars.zip",

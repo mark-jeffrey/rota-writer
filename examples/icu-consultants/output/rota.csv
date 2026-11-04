@@ -1,0 +1,1547 @@
+﻿"doctor_id","name","grade","date","day","code","kind","description","area","shift_type","start","end","hours"
+"C07","Dr Gwen Glaslyn",,"2027-02-01","Mon","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-02-01","Mon","2ND","shift","2nd on","2nd on","long_day","2027-02-01 08:00","2027-02-01 18:00",10
+"C10","Dr Joss Jed",,"2027-02-01","Mon","1ST","shift","1st on","1st on","long_day","2027-02-01 08:00","2027-02-01 18:00",10
+"C15","Dr Orla Ouse",,"2027-02-01","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-01 17:00","2027-02-02 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-02-02","Tue","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-02-02","Tue","2ND","shift","2nd on","2nd on","long_day","2027-02-02 08:00","2027-02-02 18:00",10
+"C10","Dr Joss Jed",,"2027-02-02","Tue","1ST","shift","1st on","1st on","long_day","2027-02-02 08:00","2027-02-02 18:00",10
+"C12","Dr Luca Lune",,"2027-02-02","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-02 17:00","2027-02-03 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-02-03","Wed","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-02-03","Wed","1ST","shift","1st on","1st on","long_day","2027-02-03 08:00","2027-02-03 18:00",10
+"C13","Dr Mali Medway",,"2027-02-03","Wed","2ND","shift","2nd on","2nd on","long_day","2027-02-03 08:00","2027-02-03 18:00",10
+"C15","Dr Orla Ouse",,"2027-02-03","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-03 17:00","2027-02-04 08:00",15
+"C01","Dr Alys Avon",,"2027-02-04","Thu","2ND","shift","2nd on","2nd on","long_day","2027-02-04 08:00","2027-02-04 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-02-04","Thu","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-02-04","Thu","1ST","shift","1st on","1st on","long_day","2027-02-04 08:00","2027-02-04 18:00",10
+"C12","Dr Luca Lune",,"2027-02-04","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-04 17:00","2027-02-05 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-02-05","Fri","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-02-05","Fri","2ND","shift","2nd on","2nd on","long_day","2027-02-05 08:00","2027-02-05 18:00",10
+"C14","Dr Nye Nidd",,"2027-02-05","Fri","1ST","shift","1st on","1st on","long_day","2027-02-05 08:00","2027-02-05 18:00",10
+"C15","Dr Orla Ouse",,"2027-02-05","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-05 17:00","2027-02-06 08:00",15
+"C03","Dr Cleo Calder",,"2027-02-06","Sat","2ND","shift","2nd on","2nd on","long_day","2027-02-06 08:00","2027-02-06 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-02-06","Sat","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-02-06","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-06 17:00","2027-02-07 08:00",15
+"C14","Dr Nye Nidd",,"2027-02-06","Sat","1ST","shift","1st on","1st on","long_day","2027-02-06 08:00","2027-02-06 18:00",10
+"C03","Dr Cleo Calder",,"2027-02-07","Sun","2ND","shift","2nd on","2nd on","long_day","2027-02-07 08:00","2027-02-07 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-02-07","Sun","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-02-07","Sun","1ST","shift","1st on","1st on","long_day","2027-02-07 08:00","2027-02-07 18:00",10
+"C15","Dr Orla Ouse",,"2027-02-07","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-07 17:00","2027-02-08 08:00",15
+"C03","Dr Cleo Calder",,"2027-02-08","Mon","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-02-08","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-08 17:00","2027-02-09 08:00",15
+"C10","Dr Joss Jed",,"2027-02-08","Mon","2ND","shift","2nd on","2nd on","long_day","2027-02-08 08:00","2027-02-08 18:00",10
+"C12","Dr Luca Lune",,"2027-02-08","Mon","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-02-08","Mon","1ST","shift","1st on","1st on","long_day","2027-02-08 08:00","2027-02-08 18:00",10
+"C01","Dr Alys Avon",,"2027-02-09","Tue","2ND","shift","2nd on","2nd on","long_day","2027-02-09 08:00","2027-02-09 18:00",10
+"C03","Dr Cleo Calder",,"2027-02-09","Tue","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-02-09","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-09 17:00","2027-02-10 08:00",15
+"C12","Dr Luca Lune",,"2027-02-09","Tue","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-02-09","Tue","1ST","shift","1st on","1st on","long_day","2027-02-09 08:00","2027-02-09 18:00",10
+"C01","Dr Alys Avon",,"2027-02-10","Wed","2ND","shift","2nd on","2nd on","long_day","2027-02-10 08:00","2027-02-10 18:00",10
+"C03","Dr Cleo Calder",,"2027-02-10","Wed","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-02-10","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-10 17:00","2027-02-11 08:00",15
+"C12","Dr Luca Lune",,"2027-02-10","Wed","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-02-10","Wed","1ST","shift","1st on","1st on","long_day","2027-02-10 08:00","2027-02-10 18:00",10
+"C03","Dr Cleo Calder",,"2027-02-11","Thu","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-02-11","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-11 17:00","2027-02-12 08:00",15
+"C09","Dr Isla Irwell",,"2027-02-11","Thu","2ND","shift","2nd on","2nd on","long_day","2027-02-11 08:00","2027-02-11 18:00",10
+"C12","Dr Luca Lune",,"2027-02-11","Thu","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-02-11","Thu","1ST","shift","1st on","1st on","long_day","2027-02-11 08:00","2027-02-11 18:00",10
+"C03","Dr Cleo Calder",,"2027-02-12","Fri","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-02-12","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-12 17:00","2027-02-13 08:00",15
+"C09","Dr Isla Irwell",,"2027-02-12","Fri","2ND","shift","2nd on","2nd on","long_day","2027-02-12 08:00","2027-02-12 18:00",10
+"C12","Dr Luca Lune",,"2027-02-12","Fri","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-02-12","Fri","1ST","shift","1st on","1st on","long_day","2027-02-12 08:00","2027-02-12 18:00",10
+"C03","Dr Cleo Calder",,"2027-02-13","Sat","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-02-13","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-13 17:00","2027-02-14 08:00",15
+"C10","Dr Joss Jed",,"2027-02-13","Sat","2ND","shift","2nd on","2nd on","long_day","2027-02-13 08:00","2027-02-13 18:00",10
+"C12","Dr Luca Lune",,"2027-02-13","Sat","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-02-13","Sat","1ST","shift","1st on","1st on","long_day","2027-02-13 08:00","2027-02-13 18:00",10
+"C03","Dr Cleo Calder",,"2027-02-14","Sun","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-02-14","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-14 17:00","2027-02-15 08:00",15
+"C10","Dr Joss Jed",,"2027-02-14","Sun","2ND","shift","2nd on","2nd on","long_day","2027-02-14 08:00","2027-02-14 18:00",10
+"C12","Dr Luca Lune",,"2027-02-14","Sun","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-02-14","Sun","1ST","shift","1st on","1st on","long_day","2027-02-14 08:00","2027-02-14 18:00",10
+"C01","Dr Alys Avon",,"2027-02-15","Mon","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-02-15","Mon","2ND","shift","2nd on","2nd on","long_day","2027-02-15 08:00","2027-02-15 18:00",10
+"C06","Dr Fion Fal",,"2027-02-15","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-15 17:00","2027-02-16 08:00",15
+"C09","Dr Isla Irwell",,"2027-02-15","Mon","1ST","shift","1st on","1st on","long_day","2027-02-15 08:00","2027-02-15 18:00",10
+"C15","Dr Orla Ouse",,"2027-02-15","Mon","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-02-16","Tue","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-02-16","Tue","1ST","shift","1st on","1st on","long_day","2027-02-16 08:00","2027-02-16 18:00",10
+"C12","Dr Luca Lune",,"2027-02-16","Tue","2ND","shift","2nd on","2nd on","long_day","2027-02-16 08:00","2027-02-16 18:00",10
+"C13","Dr Mali Medway",,"2027-02-16","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-16 17:00","2027-02-17 08:00",15
+"C15","Dr Orla Ouse",,"2027-02-16","Tue","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-02-17","Wed","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-02-17","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-17 17:00","2027-02-18 08:00",15
+"C09","Dr Isla Irwell",,"2027-02-17","Wed","1ST","shift","1st on","1st on","long_day","2027-02-17 08:00","2027-02-17 18:00",10
+"C10","Dr Joss Jed",,"2027-02-17","Wed","2ND","shift","2nd on","2nd on","long_day","2027-02-17 08:00","2027-02-17 18:00",10
+"C15","Dr Orla Ouse",,"2027-02-17","Wed","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-02-18","Thu","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-02-18","Thu","2ND","shift","2nd on","2nd on","long_day","2027-02-18 08:00","2027-02-18 18:00",10
+"C09","Dr Isla Irwell",,"2027-02-18","Thu","1ST","shift","1st on","1st on","long_day","2027-02-18 08:00","2027-02-18 18:00",10
+"C13","Dr Mali Medway",,"2027-02-18","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-18 17:00","2027-02-19 08:00",15
+"C15","Dr Orla Ouse",,"2027-02-18","Thu","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-02-19","Fri","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-02-19","Fri","2ND","shift","2nd on","2nd on","long_day","2027-02-19 08:00","2027-02-19 18:00",10
+"C04","Dr Dara Dee",,"2027-02-19","Fri","1ST","shift","1st on","1st on","long_day","2027-02-19 08:00","2027-02-19 18:00",10
+"C06","Dr Fion Fal",,"2027-02-19","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-19 17:00","2027-02-20 08:00",15
+"C15","Dr Orla Ouse",,"2027-02-19","Fri","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-02-20","Sat","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-02-20","Sat","1ST","shift","1st on","1st on","long_day","2027-02-20 08:00","2027-02-20 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-02-20","Sat","2ND","shift","2nd on","2nd on","long_day","2027-02-20 08:00","2027-02-20 18:00",10
+"C13","Dr Mali Medway",,"2027-02-20","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-20 17:00","2027-02-21 08:00",15
+"C15","Dr Orla Ouse",,"2027-02-20","Sat","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-02-21","Sun","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-02-21","Sun","1ST","shift","1st on","1st on","long_day","2027-02-21 08:00","2027-02-21 18:00",10
+"C06","Dr Fion Fal",,"2027-02-21","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-02-21 17:00","2027-02-22 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-02-21","Sun","2ND","shift","2nd on","2nd on","long_day","2027-02-21 08:00","2027-02-21 18:00",10
+"C15","Dr Orla Ouse",,"2027-02-21","Sun","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-02-22","Mon","SL","leave","Study leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-02-22","Mon","1ST","shift","1st on","1st on","long_day","2027-02-22 08:00","2027-02-22 18:00",10
+"C09","Dr Isla Irwell",,"2027-02-22","Mon","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-02-22","Mon","24H","shift","2nd on into the night","2nd on","night","2027-02-22 08:00","2027-02-23 08:00",24
+"C15","Dr Orla Ouse",,"2027-02-22","Mon","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-02-23","Tue","SL","leave","Study leave",,,,,
+"C05","Dr Emyr Esk",,"2027-02-23","Tue","24H","shift","2nd on into the night","2nd on","night","2027-02-23 08:00","2027-02-24 08:00",24
+"C07","Dr Gwen Glaslyn",,"2027-02-23","Tue","1ST","shift","1st on","1st on","long_day","2027-02-23 08:00","2027-02-23 18:00",10
+"C09","Dr Isla Irwell",,"2027-02-23","Tue","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-02-23","Tue","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-02-24","Wed","1ST","shift","1st on","1st on","long_day","2027-02-24 08:00","2027-02-24 18:00",10
+"C09","Dr Isla Irwell",,"2027-02-24","Wed","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-02-24","Wed","24H","shift","2nd on into the night","2nd on","night","2027-02-24 08:00","2027-02-25 08:00",24
+"C15","Dr Orla Ouse",,"2027-02-24","Wed","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-02-25","Thu","24H","shift","2nd on into the night","2nd on","night","2027-02-25 08:00","2027-02-26 08:00",24
+"C07","Dr Gwen Glaslyn",,"2027-02-25","Thu","1ST","shift","1st on","1st on","long_day","2027-02-25 08:00","2027-02-25 18:00",10
+"C09","Dr Isla Irwell",,"2027-02-25","Thu","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-02-25","Thu","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-02-26","Fri","1ST","shift","1st on","1st on","long_day","2027-02-26 08:00","2027-02-26 18:00",10
+"C09","Dr Isla Irwell",,"2027-02-26","Fri","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-02-26","Fri","24H","shift","2nd on into the night","2nd on","night","2027-02-26 08:00","2027-02-27 08:00",24
+"C15","Dr Orla Ouse",,"2027-02-26","Fri","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-02-27","Sat","24H","shift","2nd on into the night","2nd on","night","2027-02-27 08:00","2027-02-28 08:00",24
+"C06","Dr Fion Fal",,"2027-02-27","Sat","1ST","shift","1st on","1st on","long_day","2027-02-27 08:00","2027-02-27 18:00",10
+"C09","Dr Isla Irwell",,"2027-02-27","Sat","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-02-27","Sat","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-02-28","Sun","1ST","shift","1st on","1st on","long_day","2027-02-28 08:00","2027-02-28 18:00",10
+"C09","Dr Isla Irwell",,"2027-02-28","Sun","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-02-28","Sun","24H","shift","2nd on into the night","2nd on","night","2027-02-28 08:00","2027-03-01 08:00",24
+"C15","Dr Orla Ouse",,"2027-02-28","Sun","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-03-01","Mon","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-03-01","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-01 17:00","2027-03-02 08:00",15
+"C09","Dr Isla Irwell",,"2027-03-01","Mon","2ND","shift","2nd on","2nd on","long_day","2027-03-01 08:00","2027-03-01 18:00",10
+"C13","Dr Mali Medway",,"2027-03-01","Mon","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-03-01","Mon","1ST","shift","1st on","1st on","long_day","2027-03-01 08:00","2027-03-01 18:00",10
+"C01","Dr Alys Avon",,"2027-03-02","Tue","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-03-02","Tue","24H","shift","2nd on into the night","2nd on","night","2027-03-02 08:00","2027-03-03 08:00",24
+"C13","Dr Mali Medway",,"2027-03-02","Tue","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-03-02","Tue","1ST","shift","1st on","1st on","long_day","2027-03-02 08:00","2027-03-02 18:00",10
+"C01","Dr Alys Avon",,"2027-03-03","Wed","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-03-03","Wed","2ND","shift","2nd on","2nd on","long_day","2027-03-03 08:00","2027-03-03 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-03-03","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-03 17:00","2027-03-04 08:00",15
+"C13","Dr Mali Medway",,"2027-03-03","Wed","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-03-03","Wed","1ST","shift","1st on","1st on","long_day","2027-03-03 08:00","2027-03-03 18:00",10
+"C01","Dr Alys Avon",,"2027-03-04","Thu","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-03-04","Thu","24H","shift","2nd on into the night","2nd on","night","2027-03-04 08:00","2027-03-05 08:00",24
+"C13","Dr Mali Medway",,"2027-03-04","Thu","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-03-04","Thu","1ST","shift","1st on","1st on","long_day","2027-03-04 08:00","2027-03-04 18:00",10
+"C01","Dr Alys Avon",,"2027-03-05","Fri","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-03-05","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-05 17:00","2027-03-06 08:00",15
+"C09","Dr Isla Irwell",,"2027-03-05","Fri","1ST","shift","1st on","1st on","long_day","2027-03-05 08:00","2027-03-05 18:00",10
+"C13","Dr Mali Medway",,"2027-03-05","Fri","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-03-05","Fri","2ND","shift","2nd on","2nd on","long_day","2027-03-05 08:00","2027-03-05 18:00",10
+"C01","Dr Alys Avon",,"2027-03-06","Sat","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-03-06","Sat","1ST","shift","1st on","1st on","long_day","2027-03-06 08:00","2027-03-06 18:00",10
+"C11","Dr Kezia Kennet",,"2027-03-06","Sat","24H","shift","2nd on into the night","2nd on","night","2027-03-06 08:00","2027-03-07 08:00",24
+"C13","Dr Mali Medway",,"2027-03-06","Sat","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-03-07","Sun","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-03-07","Sun","2ND","shift","2nd on","2nd on","long_day","2027-03-07 08:00","2027-03-07 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-03-07","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-07 17:00","2027-03-08 08:00",15
+"C09","Dr Isla Irwell",,"2027-03-07","Sun","1ST","shift","1st on","1st on","long_day","2027-03-07 08:00","2027-03-07 18:00",10
+"C13","Dr Mali Medway",,"2027-03-07","Sun","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-03-08","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-08 17:00","2027-03-09 08:00",15
+"C03","Dr Cleo Calder",,"2027-03-08","Mon","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-03-08","Mon","2ND","shift","2nd on","2nd on","long_day","2027-03-08 08:00","2027-03-08 18:00",10
+"C13","Dr Mali Medway",,"2027-03-08","Mon","1ST","shift","1st on","1st on","long_day","2027-03-08 08:00","2027-03-08 18:00",10
+"C03","Dr Cleo Calder",,"2027-03-09","Tue","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-03-09","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-09 17:00","2027-03-10 08:00",15
+"C10","Dr Joss Jed",,"2027-03-09","Tue","2ND","shift","2nd on","2nd on","long_day","2027-03-09 08:00","2027-03-09 18:00",10
+"C13","Dr Mali Medway",,"2027-03-09","Tue","1ST","shift","1st on","1st on","long_day","2027-03-09 08:00","2027-03-09 18:00",10
+"C01","Dr Alys Avon",,"2027-03-10","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-10 17:00","2027-03-11 08:00",15
+"C03","Dr Cleo Calder",,"2027-03-10","Wed","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-03-10","Wed","2ND","shift","2nd on","2nd on","long_day","2027-03-10 08:00","2027-03-10 18:00",10
+"C13","Dr Mali Medway",,"2027-03-10","Wed","1ST","shift","1st on","1st on","long_day","2027-03-10 08:00","2027-03-10 18:00",10
+"C03","Dr Cleo Calder",,"2027-03-11","Thu","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-03-11","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-11 17:00","2027-03-12 08:00",15
+"C09","Dr Isla Irwell",,"2027-03-11","Thu","2ND","shift","2nd on","2nd on","long_day","2027-03-11 08:00","2027-03-11 18:00",10
+"C13","Dr Mali Medway",,"2027-03-11","Thu","1ST","shift","1st on","1st on","long_day","2027-03-11 08:00","2027-03-11 18:00",10
+"C01","Dr Alys Avon",,"2027-03-12","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-12 17:00","2027-03-13 08:00",15
+"C03","Dr Cleo Calder",,"2027-03-12","Fri","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-03-12","Fri","2ND","shift","2nd on","2nd on","long_day","2027-03-12 08:00","2027-03-12 18:00",10
+"C10","Dr Joss Jed",,"2027-03-12","Fri","1ST","shift","1st on","1st on","long_day","2027-03-12 08:00","2027-03-12 18:00",10
+"C03","Dr Cleo Calder",,"2027-03-13","Sat","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-03-13","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-13 17:00","2027-03-14 08:00",15
+"C10","Dr Joss Jed",,"2027-03-13","Sat","1ST","shift","1st on","1st on","long_day","2027-03-13 08:00","2027-03-13 18:00",10
+"C15","Dr Orla Ouse",,"2027-03-13","Sat","2ND","shift","2nd on","2nd on","long_day","2027-03-13 08:00","2027-03-13 18:00",10
+"C01","Dr Alys Avon",,"2027-03-14","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-14 17:00","2027-03-15 08:00",15
+"C03","Dr Cleo Calder",,"2027-03-14","Sun","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-03-14","Sun","1ST","shift","1st on","1st on","long_day","2027-03-14 08:00","2027-03-14 18:00",10
+"C15","Dr Orla Ouse",,"2027-03-14","Sun","2ND","shift","2nd on","2nd on","long_day","2027-03-14 08:00","2027-03-14 18:00",10
+"C06","Dr Fion Fal",,"2027-03-15","Mon","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-03-15","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-15 17:00","2027-03-16 08:00",15
+"C08","Dr Huw Hodder",,"2027-03-15","Mon","2ND","shift","2nd on","2nd on","long_day","2027-03-15 08:00","2027-03-15 18:00",10
+"C12","Dr Luca Lune",,"2027-03-15","Mon","1ST","shift","1st on","1st on","long_day","2027-03-15 08:00","2027-03-15 18:00",10
+"C13","Dr Mali Medway",,"2027-03-15","Mon","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-03-16","Tue","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-03-16","Tue","2ND","shift","2nd on","2nd on","long_day","2027-03-16 08:00","2027-03-16 18:00",10
+"C10","Dr Joss Jed",,"2027-03-16","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-16 17:00","2027-03-17 08:00",15
+"C12","Dr Luca Lune",,"2027-03-16","Tue","1ST","shift","1st on","1st on","long_day","2027-03-16 08:00","2027-03-16 18:00",10
+"C13","Dr Mali Medway",,"2027-03-16","Tue","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-03-17","Wed","2ND","shift","2nd on","2nd on","long_day","2027-03-17 08:00","2027-03-17 18:00",10
+"C06","Dr Fion Fal",,"2027-03-17","Wed","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-03-17","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-17 17:00","2027-03-18 08:00",15
+"C12","Dr Luca Lune",,"2027-03-17","Wed","1ST","shift","1st on","1st on","long_day","2027-03-17 08:00","2027-03-17 18:00",10
+"C13","Dr Mali Medway",,"2027-03-17","Wed","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-03-18","Thu","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-03-18","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-18 17:00","2027-03-19 08:00",15
+"C12","Dr Luca Lune",,"2027-03-18","Thu","1ST","shift","1st on","1st on","long_day","2027-03-18 08:00","2027-03-18 18:00",10
+"C13","Dr Mali Medway",,"2027-03-18","Thu","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-03-18","Thu","2ND","shift","2nd on","2nd on","long_day","2027-03-18 08:00","2027-03-18 18:00",10
+"C01","Dr Alys Avon",,"2027-03-19","Fri","2ND","shift","2nd on","2nd on","long_day","2027-03-19 08:00","2027-03-19 18:00",10
+"C02","Dr Bryn Bure",,"2027-03-19","Fri","1ST","shift","1st on","1st on","long_day","2027-03-19 08:00","2027-03-19 18:00",10
+"C06","Dr Fion Fal",,"2027-03-19","Fri","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-03-19","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-19 17:00","2027-03-20 08:00",15
+"C13","Dr Mali Medway",,"2027-03-19","Fri","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-03-20","Sat","1ST","shift","1st on","1st on","long_day","2027-03-20 08:00","2027-03-20 18:00",10
+"C06","Dr Fion Fal",,"2027-03-20","Sat","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-03-20","Sat","2ND","shift","2nd on","2nd on","long_day","2027-03-20 08:00","2027-03-20 18:00",10
+"C10","Dr Joss Jed",,"2027-03-20","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-20 17:00","2027-03-21 08:00",15
+"C13","Dr Mali Medway",,"2027-03-20","Sat","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-03-21","Sun","1ST","shift","1st on","1st on","long_day","2027-03-21 08:00","2027-03-21 18:00",10
+"C06","Dr Fion Fal",,"2027-03-21","Sun","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-03-21","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-21 17:00","2027-03-22 08:00",15
+"C08","Dr Huw Hodder",,"2027-03-21","Sun","2ND","shift","2nd on","2nd on","long_day","2027-03-21 08:00","2027-03-21 18:00",10
+"C13","Dr Mali Medway",,"2027-03-21","Sun","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-03-22","Mon","2ND","shift","2nd on","2nd on","long_day","2027-03-22 08:00","2027-03-22 18:00",10
+"C02","Dr Bryn Bure",,"2027-03-22","Mon","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-03-22","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-22 17:00","2027-03-23 08:00",15
+"C13","Dr Mali Medway",,"2027-03-22","Mon","1ST","shift","1st on","1st on","long_day","2027-03-22 08:00","2027-03-22 18:00",10
+"C14","Dr Nye Nidd",,"2027-03-22","Mon","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-03-23","Tue","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-03-23","Tue","2ND","shift","2nd on","2nd on","long_day","2027-03-23 08:00","2027-03-23 18:00",10
+"C12","Dr Luca Lune",,"2027-03-23","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-23 17:00","2027-03-24 08:00",15
+"C13","Dr Mali Medway",,"2027-03-23","Tue","1ST","shift","1st on","1st on","long_day","2027-03-23 08:00","2027-03-23 18:00",10
+"C14","Dr Nye Nidd",,"2027-03-23","Tue","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-03-24","Wed","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-03-24","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-24 17:00","2027-03-25 08:00",15
+"C10","Dr Joss Jed",,"2027-03-24","Wed","2ND","shift","2nd on","2nd on","long_day","2027-03-24 08:00","2027-03-24 18:00",10
+"C13","Dr Mali Medway",,"2027-03-24","Wed","1ST","shift","1st on","1st on","long_day","2027-03-24 08:00","2027-03-24 18:00",10
+"C14","Dr Nye Nidd",,"2027-03-24","Wed","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-03-25","Thu","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-03-25","Thu","2ND","shift","2nd on","2nd on","long_day","2027-03-25 08:00","2027-03-25 18:00",10
+"C12","Dr Luca Lune",,"2027-03-25","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-25 17:00","2027-03-26 08:00",15
+"C13","Dr Mali Medway",,"2027-03-25","Thu","1ST","shift","1st on","1st on","long_day","2027-03-25 08:00","2027-03-25 18:00",10
+"C14","Dr Nye Nidd",,"2027-03-25","Thu","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-03-26","Fri","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-03-26","Fri","2ND","shift","2nd on","2nd on","long_day","2027-03-26 08:00","2027-03-26 18:00",10
+"C06","Dr Fion Fal",,"2027-03-26","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-26 17:00","2027-03-27 08:00",15
+"C09","Dr Isla Irwell",,"2027-03-26","Fri","1ST","shift","1st on","1st on","long_day","2027-03-26 08:00","2027-03-26 18:00",10
+"C14","Dr Nye Nidd",,"2027-03-26","Fri","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-03-27","Sat","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-03-27","Sat","1ST","shift","1st on","1st on","long_day","2027-03-27 08:00","2027-03-27 18:00",10
+"C12","Dr Luca Lune",,"2027-03-27","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-27 17:00","2027-03-28 08:00",15
+"C13","Dr Mali Medway",,"2027-03-27","Sat","2ND","shift","2nd on","2nd on","long_day","2027-03-27 08:00","2027-03-27 18:00",10
+"C14","Dr Nye Nidd",,"2027-03-27","Sat","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-03-28","Sun","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-03-28","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-28 17:00","2027-03-29 08:00",15
+"C09","Dr Isla Irwell",,"2027-03-28","Sun","1ST","shift","1st on","1st on","long_day","2027-03-28 08:00","2027-03-28 18:00",10
+"C13","Dr Mali Medway",,"2027-03-28","Sun","2ND","shift","2nd on","2nd on","long_day","2027-03-28 08:00","2027-03-28 18:00",10
+"C14","Dr Nye Nidd",,"2027-03-28","Sun","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-03-29","Mon","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-03-29","Mon","2ND","shift","2nd on","2nd on","long_day","2027-03-29 08:00","2027-03-29 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-03-29","Mon","1ST","shift","1st on","1st on","long_day","2027-03-29 08:00","2027-03-29 18:00",10
+"C13","Dr Mali Medway",,"2027-03-29","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-29 17:00","2027-03-30 08:00",15
+"C01","Dr Alys Avon",,"2027-03-30","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-30 17:00","2027-03-31 08:00",15
+"C03","Dr Cleo Calder",,"2027-03-30","Tue","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-03-30","Tue","SL","leave","Study leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-03-30","Tue","1ST","shift","1st on","1st on","long_day","2027-03-30 08:00","2027-03-30 18:00",10
+"C09","Dr Isla Irwell",,"2027-03-30","Tue","2ND","shift","2nd on","2nd on","long_day","2027-03-30 08:00","2027-03-30 18:00",10
+"C03","Dr Cleo Calder",,"2027-03-31","Wed","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-03-31","Wed","SL","leave","Study leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-03-31","Wed","1ST","shift","1st on","1st on","long_day","2027-03-31 08:00","2027-03-31 18:00",10
+"C12","Dr Luca Lune",,"2027-03-31","Wed","2ND","shift","2nd on","2nd on","long_day","2027-03-31 08:00","2027-03-31 18:00",10
+"C13","Dr Mali Medway",,"2027-03-31","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-03-31 17:00","2027-04-01 08:00",15
+"C01","Dr Alys Avon",,"2027-04-01","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-01 17:00","2027-04-02 08:00",15
+"C03","Dr Cleo Calder",,"2027-04-01","Thu","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-04-01","Thu","1ST","shift","1st on","1st on","long_day","2027-04-01 08:00","2027-04-01 18:00",10
+"C12","Dr Luca Lune",,"2027-04-01","Thu","2ND","shift","2nd on","2nd on","long_day","2027-04-01 08:00","2027-04-01 18:00",10
+"C03","Dr Cleo Calder",,"2027-04-02","Fri","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-04-02","Fri","2ND","shift","2nd on","2nd on","long_day","2027-04-02 08:00","2027-04-02 18:00",10
+"C13","Dr Mali Medway",,"2027-04-02","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-02 17:00","2027-04-03 08:00",15
+"C15","Dr Orla Ouse",,"2027-04-02","Fri","1ST","shift","1st on","1st on","long_day","2027-04-02 08:00","2027-04-02 18:00",10
+"C01","Dr Alys Avon",,"2027-04-03","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-03 17:00","2027-04-04 08:00",15
+"C03","Dr Cleo Calder",,"2027-04-03","Sat","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-04-03","Sat","2ND","shift","2nd on","2nd on","long_day","2027-04-03 08:00","2027-04-03 18:00",10
+"C15","Dr Orla Ouse",,"2027-04-03","Sat","1ST","shift","1st on","1st on","long_day","2027-04-03 08:00","2027-04-03 18:00",10
+"C03","Dr Cleo Calder",,"2027-04-04","Sun","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-04-04","Sun","2ND","shift","2nd on","2nd on","long_day","2027-04-04 08:00","2027-04-04 18:00",10
+"C13","Dr Mali Medway",,"2027-04-04","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-04 17:00","2027-04-05 08:00",15
+"C15","Dr Orla Ouse",,"2027-04-04","Sun","1ST","shift","1st on","1st on","long_day","2027-04-04 08:00","2027-04-04 18:00",10
+"C06","Dr Fion Fal",,"2027-04-05","Mon","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-04-05","Mon","1ST","shift","1st on","1st on","long_day","2027-04-05 08:00","2027-04-05 18:00",10
+"C11","Dr Kezia Kennet",,"2027-04-05","Mon","24H","shift","2nd on into the night","2nd on","night","2027-04-05 08:00","2027-04-06 08:00",24
+"C12","Dr Luca Lune",,"2027-04-05","Mon","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-04-06","Tue","24H","shift","2nd on into the night","2nd on","night","2027-04-06 08:00","2027-04-07 08:00",24
+"C06","Dr Fion Fal",,"2027-04-06","Tue","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-04-06","Tue","1ST","shift","1st on","1st on","long_day","2027-04-06 08:00","2027-04-06 18:00",10
+"C12","Dr Luca Lune",,"2027-04-06","Tue","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-04-07","Wed","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-04-07","Wed","1ST","shift","1st on","1st on","long_day","2027-04-07 08:00","2027-04-07 18:00",10
+"C11","Dr Kezia Kennet",,"2027-04-07","Wed","24H","shift","2nd on into the night","2nd on","night","2027-04-07 08:00","2027-04-08 08:00",24
+"C12","Dr Luca Lune",,"2027-04-07","Wed","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-04-08","Thu","24H","shift","2nd on into the night","2nd on","night","2027-04-08 08:00","2027-04-09 08:00",24
+"C06","Dr Fion Fal",,"2027-04-08","Thu","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-04-08","Thu","1ST","shift","1st on","1st on","long_day","2027-04-08 08:00","2027-04-08 18:00",10
+"C12","Dr Luca Lune",,"2027-04-08","Thu","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-04-09","Fri","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-04-09","Fri","1ST","shift","1st on","1st on","long_day","2027-04-09 08:00","2027-04-09 18:00",10
+"C11","Dr Kezia Kennet",,"2027-04-09","Fri","24H","shift","2nd on into the night","2nd on","night","2027-04-09 08:00","2027-04-10 08:00",24
+"C12","Dr Luca Lune",,"2027-04-09","Fri","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-04-10","Sat","24H","shift","2nd on into the night","2nd on","night","2027-04-10 08:00","2027-04-11 08:00",24
+"C06","Dr Fion Fal",,"2027-04-10","Sat","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-04-10","Sat","1ST","shift","1st on","1st on","long_day","2027-04-10 08:00","2027-04-10 18:00",10
+"C12","Dr Luca Lune",,"2027-04-10","Sat","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-04-11","Sun","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-04-11","Sun","1ST","shift","1st on","1st on","long_day","2027-04-11 08:00","2027-04-11 18:00",10
+"C11","Dr Kezia Kennet",,"2027-04-11","Sun","24H","shift","2nd on into the night","2nd on","night","2027-04-11 08:00","2027-04-12 08:00",24
+"C12","Dr Luca Lune",,"2027-04-11","Sun","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-04-12","Mon","1ST","shift","1st on","1st on","long_day","2027-04-12 08:00","2027-04-12 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-04-12","Mon","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-04-12","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-12 17:00","2027-04-13 08:00",15
+"C13","Dr Mali Medway",,"2027-04-12","Mon","2ND","shift","2nd on","2nd on","long_day","2027-04-12 08:00","2027-04-12 18:00",10
+"C15","Dr Orla Ouse",,"2027-04-12","Mon","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-04-13","Tue","2ND","shift","2nd on","2nd on","long_day","2027-04-13 08:00","2027-04-13 18:00",10
+"C03","Dr Cleo Calder",,"2027-04-13","Tue","1ST","shift","1st on","1st on","long_day","2027-04-13 08:00","2027-04-13 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-04-13","Tue","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-04-13","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-13 17:00","2027-04-14 08:00",15
+"C15","Dr Orla Ouse",,"2027-04-13","Tue","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-04-14","Wed","1ST","shift","1st on","1st on","long_day","2027-04-14 08:00","2027-04-14 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-04-14","Wed","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-04-14","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-14 17:00","2027-04-15 08:00",15
+"C13","Dr Mali Medway",,"2027-04-14","Wed","2ND","shift","2nd on","2nd on","long_day","2027-04-14 08:00","2027-04-14 18:00",10
+"C15","Dr Orla Ouse",,"2027-04-14","Wed","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-04-15","Thu","1ST","shift","1st on","1st on","long_day","2027-04-15 08:00","2027-04-15 18:00",10
+"C04","Dr Dara Dee",,"2027-04-15","Thu","2ND","shift","2nd on","2nd on","long_day","2027-04-15 08:00","2027-04-15 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-04-15","Thu","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-04-15","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-15 17:00","2027-04-16 08:00",15
+"C15","Dr Orla Ouse",,"2027-04-15","Thu","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-04-16","Fri","1ST","shift","1st on","1st on","long_day","2027-04-16 08:00","2027-04-16 18:00",10
+"C06","Dr Fion Fal",,"2027-04-16","Fri","2ND","shift","2nd on","2nd on","long_day","2027-04-16 08:00","2027-04-16 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-04-16","Fri","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-04-16","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-16 17:00","2027-04-17 08:00",15
+"C15","Dr Orla Ouse",,"2027-04-16","Fri","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-04-17","Sat","2ND","shift","2nd on","2nd on","long_day","2027-04-17 08:00","2027-04-17 18:00",10
+"C03","Dr Cleo Calder",,"2027-04-17","Sat","1ST","shift","1st on","1st on","long_day","2027-04-17 08:00","2027-04-17 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-04-17","Sat","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-04-17","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-17 17:00","2027-04-18 08:00",15
+"C15","Dr Orla Ouse",,"2027-04-17","Sat","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-04-18","Sun","2ND","shift","2nd on","2nd on","long_day","2027-04-18 08:00","2027-04-18 18:00",10
+"C03","Dr Cleo Calder",,"2027-04-18","Sun","1ST","shift","1st on","1st on","long_day","2027-04-18 08:00","2027-04-18 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-04-18","Sun","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-04-18","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-18 17:00","2027-04-19 08:00",15
+"C15","Dr Orla Ouse",,"2027-04-18","Sun","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-04-19","Mon","2ND","shift","2nd on","2nd on","long_day","2027-04-19 08:00","2027-04-19 18:00",10
+"C05","Dr Emyr Esk",,"2027-04-19","Mon","1ST","shift","1st on","1st on","long_day","2027-04-19 08:00","2027-04-19 18:00",10
+"C06","Dr Fion Fal",,"2027-04-19","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-19 17:00","2027-04-20 08:00",15
+"C11","Dr Kezia Kennet",,"2027-04-19","Mon","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-04-19","Mon","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-04-20","Tue","1ST","shift","1st on","1st on","long_day","2027-04-20 08:00","2027-04-20 18:00",10
+"C08","Dr Huw Hodder",,"2027-04-20","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-20 17:00","2027-04-21 08:00",15
+"C10","Dr Joss Jed",,"2027-04-20","Tue","2ND","shift","2nd on","2nd on","long_day","2027-04-20 08:00","2027-04-20 18:00",10
+"C11","Dr Kezia Kennet",,"2027-04-20","Tue","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-04-20","Tue","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-04-21","Wed","1ST","shift","1st on","1st on","long_day","2027-04-21 08:00","2027-04-21 18:00",10
+"C06","Dr Fion Fal",,"2027-04-21","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-21 17:00","2027-04-22 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-04-21","Wed","2ND","shift","2nd on","2nd on","long_day","2027-04-21 08:00","2027-04-21 18:00",10
+"C11","Dr Kezia Kennet",,"2027-04-21","Wed","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-04-21","Wed","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-04-22","Thu","2ND","shift","2nd on","2nd on","long_day","2027-04-22 08:00","2027-04-22 18:00",10
+"C05","Dr Emyr Esk",,"2027-04-22","Thu","1ST","shift","1st on","1st on","long_day","2027-04-22 08:00","2027-04-22 18:00",10
+"C08","Dr Huw Hodder",,"2027-04-22","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-22 17:00","2027-04-23 08:00",15
+"C11","Dr Kezia Kennet",,"2027-04-22","Thu","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-04-22","Thu","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-04-23","Fri","1ST","shift","1st on","1st on","long_day","2027-04-23 08:00","2027-04-23 18:00",10
+"C04","Dr Dara Dee",,"2027-04-23","Fri","2ND","shift","2nd on","2nd on","long_day","2027-04-23 08:00","2027-04-23 18:00",10
+"C06","Dr Fion Fal",,"2027-04-23","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-23 17:00","2027-04-24 08:00",15
+"C11","Dr Kezia Kennet",,"2027-04-23","Fri","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-04-23","Fri","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-04-24","Sat","1ST","shift","1st on","1st on","long_day","2027-04-24 08:00","2027-04-24 18:00",10
+"C08","Dr Huw Hodder",,"2027-04-24","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-24 17:00","2027-04-25 08:00",15
+"C11","Dr Kezia Kennet",,"2027-04-24","Sat","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-04-24","Sat","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-04-24","Sat","2ND","shift","2nd on","2nd on","long_day","2027-04-24 08:00","2027-04-24 18:00",10
+"C02","Dr Bryn Bure",,"2027-04-25","Sun","1ST","shift","1st on","1st on","long_day","2027-04-25 08:00","2027-04-25 18:00",10
+"C06","Dr Fion Fal",,"2027-04-25","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-25 17:00","2027-04-26 08:00",15
+"C11","Dr Kezia Kennet",,"2027-04-25","Sun","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-04-25","Sun","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-04-25","Sun","2ND","shift","2nd on","2nd on","long_day","2027-04-25 08:00","2027-04-25 18:00",10
+"C01","Dr Alys Avon",,"2027-04-26","Mon","2ND","shift","2nd on","2nd on","long_day","2027-04-26 08:00","2027-04-26 18:00",10
+"C04","Dr Dara Dee",,"2027-04-26","Mon","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-04-26","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-26 17:00","2027-04-27 08:00",15
+"C10","Dr Joss Jed",,"2027-04-26","Mon","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-04-26","Mon","1ST","shift","1st on","1st on","long_day","2027-04-26 08:00","2027-04-26 18:00",10
+"C01","Dr Alys Avon",,"2027-04-27","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-27 17:00","2027-04-28 08:00",15
+"C04","Dr Dara Dee",,"2027-04-27","Tue","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-04-27","Tue","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-04-27","Tue","1ST","shift","1st on","1st on","long_day","2027-04-27 08:00","2027-04-27 18:00",10
+"C15","Dr Orla Ouse",,"2027-04-27","Tue","2ND","shift","2nd on","2nd on","long_day","2027-04-27 08:00","2027-04-27 18:00",10
+"C04","Dr Dara Dee",,"2027-04-28","Wed","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-04-28","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-28 17:00","2027-04-29 08:00",15
+"C10","Dr Joss Jed",,"2027-04-28","Wed","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-04-28","Wed","1ST","shift","1st on","1st on","long_day","2027-04-28 08:00","2027-04-28 18:00",10
+"C15","Dr Orla Ouse",,"2027-04-28","Wed","2ND","shift","2nd on","2nd on","long_day","2027-04-28 08:00","2027-04-28 18:00",10
+"C01","Dr Alys Avon",,"2027-04-29","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-29 17:00","2027-04-30 08:00",15
+"C04","Dr Dara Dee",,"2027-04-29","Thu","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-04-29","Thu","2ND","shift","2nd on","2nd on","long_day","2027-04-29 08:00","2027-04-29 18:00",10
+"C10","Dr Joss Jed",,"2027-04-29","Thu","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-04-29","Thu","1ST","shift","1st on","1st on","long_day","2027-04-29 08:00","2027-04-29 18:00",10
+"C02","Dr Bryn Bure",,"2027-04-30","Fri","1ST","shift","1st on","1st on","long_day","2027-04-30 08:00","2027-04-30 18:00",10
+"C04","Dr Dara Dee",,"2027-04-30","Fri","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-04-30","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-04-30 17:00","2027-05-01 08:00",15
+"C10","Dr Joss Jed",,"2027-04-30","Fri","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-04-30","Fri","2ND","shift","2nd on","2nd on","long_day","2027-04-30 08:00","2027-04-30 18:00",10
+"C01","Dr Alys Avon",,"2027-05-01","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-01 17:00","2027-05-02 08:00",15
+"C02","Dr Bryn Bure",,"2027-05-01","Sat","1ST","shift","1st on","1st on","long_day","2027-05-01 08:00","2027-05-01 18:00",10
+"C04","Dr Dara Dee",,"2027-05-01","Sat","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-05-01","Sat","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-05-01","Sat","2ND","shift","2nd on","2nd on","long_day","2027-05-01 08:00","2027-05-01 18:00",10
+"C02","Dr Bryn Bure",,"2027-05-02","Sun","1ST","shift","1st on","1st on","long_day","2027-05-02 08:00","2027-05-02 18:00",10
+"C04","Dr Dara Dee",,"2027-05-02","Sun","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-05-02","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-02 17:00","2027-05-03 08:00",15
+"C10","Dr Joss Jed",,"2027-05-02","Sun","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-05-02","Sun","2ND","shift","2nd on","2nd on","long_day","2027-05-02 08:00","2027-05-02 18:00",10
+"C05","Dr Emyr Esk",,"2027-05-03","Mon","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-05-03","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-03 17:00","2027-05-04 08:00",15
+"C09","Dr Isla Irwell",,"2027-05-03","Mon","2ND","shift","2nd on","2nd on","long_day","2027-05-03 08:00","2027-05-03 18:00",10
+"C15","Dr Orla Ouse",,"2027-05-03","Mon","1ST","shift","1st on","1st on","long_day","2027-05-03 08:00","2027-05-03 18:00",10
+"C01","Dr Alys Avon",,"2027-05-04","Tue","2ND","shift","2nd on","2nd on","long_day","2027-05-04 08:00","2027-05-04 18:00",10
+"C05","Dr Emyr Esk",,"2027-05-04","Tue","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-05-04","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-04 17:00","2027-05-05 08:00",15
+"C15","Dr Orla Ouse",,"2027-05-04","Tue","1ST","shift","1st on","1st on","long_day","2027-05-04 08:00","2027-05-04 18:00",10
+"C05","Dr Emyr Esk",,"2027-05-05","Wed","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-05-05","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-05 17:00","2027-05-06 08:00",15
+"C12","Dr Luca Lune",,"2027-05-05","Wed","2ND","shift","2nd on","2nd on","long_day","2027-05-05 08:00","2027-05-05 18:00",10
+"C15","Dr Orla Ouse",,"2027-05-05","Wed","1ST","shift","1st on","1st on","long_day","2027-05-05 08:00","2027-05-05 18:00",10
+"C04","Dr Dara Dee",,"2027-05-06","Thu","2ND","shift","2nd on","2nd on","long_day","2027-05-06 08:00","2027-05-06 18:00",10
+"C05","Dr Emyr Esk",,"2027-05-06","Thu","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-05-06","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-06 17:00","2027-05-07 08:00",15
+"C15","Dr Orla Ouse",,"2027-05-06","Thu","1ST","shift","1st on","1st on","long_day","2027-05-06 08:00","2027-05-06 18:00",10
+"C05","Dr Emyr Esk",,"2027-05-07","Fri","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-05-07","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-07 17:00","2027-05-08 08:00",15
+"C09","Dr Isla Irwell",,"2027-05-07","Fri","2ND","shift","2nd on","2nd on","long_day","2027-05-07 08:00","2027-05-07 18:00",10
+"C14","Dr Nye Nidd",,"2027-05-07","Fri","1ST","shift","1st on","1st on","long_day","2027-05-07 08:00","2027-05-07 18:00",10
+"C03","Dr Cleo Calder",,"2027-05-08","Sat","2ND","shift","2nd on","2nd on","long_day","2027-05-08 08:00","2027-05-08 18:00",10
+"C05","Dr Emyr Esk",,"2027-05-08","Sat","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-05-08","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-08 17:00","2027-05-09 08:00",15
+"C14","Dr Nye Nidd",,"2027-05-08","Sat","1ST","shift","1st on","1st on","long_day","2027-05-08 08:00","2027-05-08 18:00",10
+"C03","Dr Cleo Calder",,"2027-05-09","Sun","2ND","shift","2nd on","2nd on","long_day","2027-05-09 08:00","2027-05-09 18:00",10
+"C05","Dr Emyr Esk",,"2027-05-09","Sun","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-05-09","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-09 17:00","2027-05-10 08:00",15
+"C14","Dr Nye Nidd",,"2027-05-09","Sun","1ST","shift","1st on","1st on","long_day","2027-05-09 08:00","2027-05-09 18:00",10
+"C01","Dr Alys Avon",,"2027-05-10","Mon","2ND","shift","2nd on","2nd on","long_day","2027-05-10 08:00","2027-05-10 18:00",10
+"C03","Dr Cleo Calder",,"2027-05-10","Mon","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-05-10","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-10 17:00","2027-05-11 08:00",15
+"C13","Dr Mali Medway",,"2027-05-10","Mon","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-05-10","Mon","1ST","shift","1st on","1st on","long_day","2027-05-10 08:00","2027-05-10 18:00",10
+"C01","Dr Alys Avon",,"2027-05-11","Tue","2ND","shift","2nd on","2nd on","long_day","2027-05-11 08:00","2027-05-11 18:00",10
+"C03","Dr Cleo Calder",,"2027-05-11","Tue","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-05-11","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-11 17:00","2027-05-12 08:00",15
+"C13","Dr Mali Medway",,"2027-05-11","Tue","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-05-11","Tue","1ST","shift","1st on","1st on","long_day","2027-05-11 08:00","2027-05-11 18:00",10
+"C03","Dr Cleo Calder",,"2027-05-12","Wed","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-05-12","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-12 17:00","2027-05-13 08:00",15
+"C10","Dr Joss Jed",,"2027-05-12","Wed","2ND","shift","2nd on","2nd on","long_day","2027-05-12 08:00","2027-05-12 18:00",10
+"C13","Dr Mali Medway",,"2027-05-12","Wed","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-05-12","Wed","1ST","shift","1st on","1st on","long_day","2027-05-12 08:00","2027-05-12 18:00",10
+"C03","Dr Cleo Calder",,"2027-05-13","Thu","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-05-13","Thu","2ND","shift","2nd on","2nd on","long_day","2027-05-13 08:00","2027-05-13 18:00",10
+"C09","Dr Isla Irwell",,"2027-05-13","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-13 17:00","2027-05-14 08:00",15
+"C13","Dr Mali Medway",,"2027-05-13","Thu","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-05-13","Thu","1ST","shift","1st on","1st on","long_day","2027-05-13 08:00","2027-05-13 18:00",10
+"C03","Dr Cleo Calder",,"2027-05-14","Fri","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-05-14","Fri","1ST","shift","1st on","1st on","long_day","2027-05-14 08:00","2027-05-14 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-05-14","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-14 17:00","2027-05-15 08:00",15
+"C13","Dr Mali Medway",,"2027-05-14","Fri","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-05-14","Fri","2ND","shift","2nd on","2nd on","long_day","2027-05-14 08:00","2027-05-14 18:00",10
+"C01","Dr Alys Avon",,"2027-05-15","Sat","2ND","shift","2nd on","2nd on","long_day","2027-05-15 08:00","2027-05-15 18:00",10
+"C03","Dr Cleo Calder",,"2027-05-15","Sat","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-05-15","Sat","1ST","shift","1st on","1st on","long_day","2027-05-15 08:00","2027-05-15 18:00",10
+"C09","Dr Isla Irwell",,"2027-05-15","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-15 17:00","2027-05-16 08:00",15
+"C13","Dr Mali Medway",,"2027-05-15","Sat","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-05-16","Sun","2ND","shift","2nd on","2nd on","long_day","2027-05-16 08:00","2027-05-16 18:00",10
+"C03","Dr Cleo Calder",,"2027-05-16","Sun","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-05-16","Sun","1ST","shift","1st on","1st on","long_day","2027-05-16 08:00","2027-05-16 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-05-16","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-16 17:00","2027-05-17 08:00",15
+"C13","Dr Mali Medway",,"2027-05-16","Sun","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-05-17","Mon","24H","shift","2nd on into the night","2nd on","night","2027-05-17 08:00","2027-05-18 08:00",24
+"C08","Dr Huw Hodder",,"2027-05-17","Mon","1ST","shift","1st on","1st on","long_day","2027-05-17 08:00","2027-05-17 18:00",10
+"C12","Dr Luca Lune",,"2027-05-17","Mon","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-05-18","Tue","1ST","shift","1st on","1st on","long_day","2027-05-18 08:00","2027-05-18 18:00",10
+"C12","Dr Luca Lune",,"2027-05-18","Tue","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-05-18","Tue","24H","shift","2nd on into the night","2nd on","night","2027-05-18 08:00","2027-05-19 08:00",24
+"C02","Dr Bryn Bure",,"2027-05-19","Wed","24H","shift","2nd on into the night","2nd on","night","2027-05-19 08:00","2027-05-20 08:00",24
+"C05","Dr Emyr Esk",,"2027-05-19","Wed","SL","leave","Study leave",,,,,
+"C08","Dr Huw Hodder",,"2027-05-19","Wed","1ST","shift","1st on","1st on","long_day","2027-05-19 08:00","2027-05-19 18:00",10
+"C12","Dr Luca Lune",,"2027-05-19","Wed","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-05-20","Thu","SL","leave","Study leave",,,,,
+"C08","Dr Huw Hodder",,"2027-05-20","Thu","1ST","shift","1st on","1st on","long_day","2027-05-20 08:00","2027-05-20 18:00",10
+"C12","Dr Luca Lune",,"2027-05-20","Thu","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-05-20","Thu","24H","shift","2nd on into the night","2nd on","night","2027-05-20 08:00","2027-05-21 08:00",24
+"C02","Dr Bryn Bure",,"2027-05-21","Fri","24H","shift","2nd on into the night","2nd on","night","2027-05-21 08:00","2027-05-22 08:00",24
+"C08","Dr Huw Hodder",,"2027-05-21","Fri","1ST","shift","1st on","1st on","long_day","2027-05-21 08:00","2027-05-21 18:00",10
+"C12","Dr Luca Lune",,"2027-05-21","Fri","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-05-22","Sat","1ST","shift","1st on","1st on","long_day","2027-05-22 08:00","2027-05-22 18:00",10
+"C12","Dr Luca Lune",,"2027-05-22","Sat","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-05-22","Sat","24H","shift","2nd on into the night","2nd on","night","2027-05-22 08:00","2027-05-23 08:00",24
+"C02","Dr Bryn Bure",,"2027-05-23","Sun","24H","shift","2nd on into the night","2nd on","night","2027-05-23 08:00","2027-05-24 08:00",24
+"C08","Dr Huw Hodder",,"2027-05-23","Sun","1ST","shift","1st on","1st on","long_day","2027-05-23 08:00","2027-05-23 18:00",10
+"C12","Dr Luca Lune",,"2027-05-23","Sun","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-05-24","Mon","1ST","shift","1st on","1st on","long_day","2027-05-24 08:00","2027-05-24 18:00",10
+"C04","Dr Dara Dee",,"2027-05-24","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-24 17:00","2027-05-25 08:00",15
+"C06","Dr Fion Fal",,"2027-05-24","Mon","2ND","shift","2nd on","2nd on","long_day","2027-05-24 08:00","2027-05-24 18:00",10
+"C01","Dr Alys Avon",,"2027-05-25","Tue","1ST","shift","1st on","1st on","long_day","2027-05-25 08:00","2027-05-25 18:00",10
+"C06","Dr Fion Fal",,"2027-05-25","Tue","2ND","shift","2nd on","2nd on","long_day","2027-05-25 08:00","2027-05-25 18:00",10
+"C09","Dr Isla Irwell",,"2027-05-25","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-25 17:00","2027-05-26 08:00",15
+"C01","Dr Alys Avon",,"2027-05-26","Wed","1ST","shift","1st on","1st on","long_day","2027-05-26 08:00","2027-05-26 18:00",10
+"C04","Dr Dara Dee",,"2027-05-26","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-26 17:00","2027-05-27 08:00",15
+"C06","Dr Fion Fal",,"2027-05-26","Wed","2ND","shift","2nd on","2nd on","long_day","2027-05-26 08:00","2027-05-26 18:00",10
+"C01","Dr Alys Avon",,"2027-05-27","Thu","1ST","shift","1st on","1st on","long_day","2027-05-27 08:00","2027-05-27 18:00",10
+"C09","Dr Isla Irwell",,"2027-05-27","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-27 17:00","2027-05-28 08:00",15
+"C13","Dr Mali Medway",,"2027-05-27","Thu","2ND","shift","2nd on","2nd on","long_day","2027-05-27 08:00","2027-05-27 18:00",10
+"C04","Dr Dara Dee",,"2027-05-28","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-28 17:00","2027-05-29 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-05-28","Fri","1ST","shift","1st on","1st on","long_day","2027-05-28 08:00","2027-05-28 18:00",10
+"C12","Dr Luca Lune",,"2027-05-28","Fri","2ND","shift","2nd on","2nd on","long_day","2027-05-28 08:00","2027-05-28 18:00",10
+"C01","Dr Alys Avon",,"2027-05-29","Sat","2ND","shift","2nd on","2nd on","long_day","2027-05-29 08:00","2027-05-29 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-05-29","Sat","1ST","shift","1st on","1st on","long_day","2027-05-29 08:00","2027-05-29 18:00",10
+"C09","Dr Isla Irwell",,"2027-05-29","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-29 17:00","2027-05-30 08:00",15
+"C01","Dr Alys Avon",,"2027-05-30","Sun","2ND","shift","2nd on","2nd on","long_day","2027-05-30 08:00","2027-05-30 18:00",10
+"C04","Dr Dara Dee",,"2027-05-30","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-30 17:00","2027-05-31 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-05-30","Sun","1ST","shift","1st on","1st on","long_day","2027-05-30 08:00","2027-05-30 18:00",10
+"C01","Dr Alys Avon",,"2027-05-31","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-05-31 17:00","2027-06-01 08:00",15
+"C06","Dr Fion Fal",,"2027-05-31","Mon","2ND","shift","2nd on","2nd on","long_day","2027-05-31 08:00","2027-05-31 18:00",10
+"C11","Dr Kezia Kennet",,"2027-05-31","Mon","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-05-31","Mon","1ST","shift","1st on","1st on","long_day","2027-05-31 08:00","2027-05-31 18:00",10
+"C08","Dr Huw Hodder",,"2027-06-01","Tue","2ND","shift","2nd on","2nd on","long_day","2027-06-01 08:00","2027-06-01 18:00",10
+"C11","Dr Kezia Kennet",,"2027-06-01","Tue","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-06-01","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-01 17:00","2027-06-02 08:00",15
+"C13","Dr Mali Medway",,"2027-06-01","Tue","1ST","shift","1st on","1st on","long_day","2027-06-01 08:00","2027-06-01 18:00",10
+"C01","Dr Alys Avon",,"2027-06-02","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-02 17:00","2027-06-03 08:00",15
+"C06","Dr Fion Fal",,"2027-06-02","Wed","2ND","shift","2nd on","2nd on","long_day","2027-06-02 08:00","2027-06-02 18:00",10
+"C11","Dr Kezia Kennet",,"2027-06-02","Wed","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-06-02","Wed","1ST","shift","1st on","1st on","long_day","2027-06-02 08:00","2027-06-02 18:00",10
+"C10","Dr Joss Jed",,"2027-06-03","Thu","2ND","shift","2nd on","2nd on","long_day","2027-06-03 08:00","2027-06-03 18:00",10
+"C11","Dr Kezia Kennet",,"2027-06-03","Thu","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-06-03","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-03 17:00","2027-06-04 08:00",15
+"C13","Dr Mali Medway",,"2027-06-03","Thu","1ST","shift","1st on","1st on","long_day","2027-06-03 08:00","2027-06-03 18:00",10
+"C01","Dr Alys Avon",,"2027-06-04","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-04 17:00","2027-06-05 08:00",15
+"C02","Dr Bryn Bure",,"2027-06-04","Fri","1ST","shift","1st on","1st on","long_day","2027-06-04 08:00","2027-06-04 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-06-04","Fri","2ND","shift","2nd on","2nd on","long_day","2027-06-04 08:00","2027-06-04 18:00",10
+"C11","Dr Kezia Kennet",,"2027-06-04","Fri","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-06-05","Sat","1ST","shift","1st on","1st on","long_day","2027-06-05 08:00","2027-06-05 18:00",10
+"C03","Dr Cleo Calder",,"2027-06-05","Sat","2ND","shift","2nd on","2nd on","long_day","2027-06-05 08:00","2027-06-05 18:00",10
+"C11","Dr Kezia Kennet",,"2027-06-05","Sat","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-06-05","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-05 17:00","2027-06-06 08:00",15
+"C01","Dr Alys Avon",,"2027-06-06","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-06 17:00","2027-06-07 08:00",15
+"C02","Dr Bryn Bure",,"2027-06-06","Sun","1ST","shift","1st on","1st on","long_day","2027-06-06 08:00","2027-06-06 18:00",10
+"C03","Dr Cleo Calder",,"2027-06-06","Sun","2ND","shift","2nd on","2nd on","long_day","2027-06-06 08:00","2027-06-06 18:00",10
+"C11","Dr Kezia Kennet",,"2027-06-06","Sun","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-06-07","Mon","2ND","shift","2nd on","2nd on","long_day","2027-06-07 08:00","2027-06-07 18:00",10
+"C08","Dr Huw Hodder",,"2027-06-07","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-07 17:00","2027-06-08 08:00",15
+"C12","Dr Luca Lune",,"2027-06-07","Mon","1ST","shift","1st on","1st on","long_day","2027-06-07 08:00","2027-06-07 18:00",10
+"C13","Dr Mali Medway",,"2027-06-07","Mon","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-06-08","Tue","2ND","shift","2nd on","2nd on","long_day","2027-06-08 08:00","2027-06-08 18:00",10
+"C10","Dr Joss Jed",,"2027-06-08","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-08 17:00","2027-06-09 08:00",15
+"C12","Dr Luca Lune",,"2027-06-08","Tue","1ST","shift","1st on","1st on","long_day","2027-06-08 08:00","2027-06-08 18:00",10
+"C13","Dr Mali Medway",,"2027-06-08","Tue","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-06-09","Wed","2ND","shift","2nd on","2nd on","long_day","2027-06-09 08:00","2027-06-09 18:00",10
+"C08","Dr Huw Hodder",,"2027-06-09","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-09 17:00","2027-06-10 08:00",15
+"C12","Dr Luca Lune",,"2027-06-09","Wed","1ST","shift","1st on","1st on","long_day","2027-06-09 08:00","2027-06-09 18:00",10
+"C13","Dr Mali Medway",,"2027-06-09","Wed","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-06-10","Thu","2ND","shift","2nd on","2nd on","long_day","2027-06-10 08:00","2027-06-10 18:00",10
+"C10","Dr Joss Jed",,"2027-06-10","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-10 17:00","2027-06-11 08:00",15
+"C12","Dr Luca Lune",,"2027-06-10","Thu","1ST","shift","1st on","1st on","long_day","2027-06-10 08:00","2027-06-10 18:00",10
+"C13","Dr Mali Medway",,"2027-06-10","Thu","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-06-11","Fri","2ND","shift","2nd on","2nd on","long_day","2027-06-11 08:00","2027-06-11 18:00",10
+"C06","Dr Fion Fal",,"2027-06-11","Fri","1ST","shift","1st on","1st on","long_day","2027-06-11 08:00","2027-06-11 18:00",10
+"C08","Dr Huw Hodder",,"2027-06-11","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-11 17:00","2027-06-12 08:00",15
+"C13","Dr Mali Medway",,"2027-06-11","Fri","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-06-12","Sat","1ST","shift","1st on","1st on","long_day","2027-06-12 08:00","2027-06-12 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-06-12","Sat","2ND","shift","2nd on","2nd on","long_day","2027-06-12 08:00","2027-06-12 18:00",10
+"C10","Dr Joss Jed",,"2027-06-12","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-12 17:00","2027-06-13 08:00",15
+"C13","Dr Mali Medway",,"2027-06-12","Sat","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-06-13","Sun","1ST","shift","1st on","1st on","long_day","2027-06-13 08:00","2027-06-13 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-06-13","Sun","2ND","shift","2nd on","2nd on","long_day","2027-06-13 08:00","2027-06-13 18:00",10
+"C08","Dr Huw Hodder",,"2027-06-13","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-13 17:00","2027-06-14 08:00",15
+"C13","Dr Mali Medway",,"2027-06-13","Sun","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-06-14","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-14 17:00","2027-06-15 08:00",15
+"C10","Dr Joss Jed",,"2027-06-14","Mon","2ND","shift","2nd on","2nd on","long_day","2027-06-14 08:00","2027-06-14 18:00",10
+"C12","Dr Luca Lune",,"2027-06-14","Mon","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-06-14","Mon","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-06-14","Mon","1ST","shift","1st on","1st on","long_day","2027-06-14 08:00","2027-06-14 18:00",10
+"C05","Dr Emyr Esk",,"2027-06-15","Tue","24H","shift","2nd on into the night","2nd on","night","2027-06-15 08:00","2027-06-16 08:00",24
+"C12","Dr Luca Lune",,"2027-06-15","Tue","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-06-15","Tue","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-06-15","Tue","1ST","shift","1st on","1st on","long_day","2027-06-15 08:00","2027-06-15 18:00",10
+"C03","Dr Cleo Calder",,"2027-06-16","Wed","2ND","shift","2nd on","2nd on","long_day","2027-06-16 08:00","2027-06-16 18:00",10
+"C04","Dr Dara Dee",,"2027-06-16","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-16 17:00","2027-06-17 08:00",15
+"C12","Dr Luca Lune",,"2027-06-16","Wed","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-06-16","Wed","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-06-16","Wed","1ST","shift","1st on","1st on","long_day","2027-06-16 08:00","2027-06-16 18:00",10
+"C05","Dr Emyr Esk",,"2027-06-17","Thu","24H","shift","2nd on into the night","2nd on","night","2027-06-17 08:00","2027-06-18 08:00",24
+"C12","Dr Luca Lune",,"2027-06-17","Thu","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-06-17","Thu","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-06-17","Thu","1ST","shift","1st on","1st on","long_day","2027-06-17 08:00","2027-06-17 18:00",10
+"C01","Dr Alys Avon",,"2027-06-18","Fri","2ND","shift","2nd on","2nd on","long_day","2027-06-18 08:00","2027-06-18 18:00",10
+"C04","Dr Dara Dee",,"2027-06-18","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-18 17:00","2027-06-19 08:00",15
+"C11","Dr Kezia Kennet",,"2027-06-18","Fri","1ST","shift","1st on","1st on","long_day","2027-06-18 08:00","2027-06-18 18:00",10
+"C12","Dr Luca Lune",,"2027-06-18","Fri","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-06-18","Fri","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-06-19","Sat","24H","shift","2nd on into the night","2nd on","night","2027-06-19 08:00","2027-06-20 08:00",24
+"C11","Dr Kezia Kennet",,"2027-06-19","Sat","1ST","shift","1st on","1st on","long_day","2027-06-19 08:00","2027-06-19 18:00",10
+"C12","Dr Luca Lune",,"2027-06-19","Sat","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-06-19","Sat","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-06-20","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-20 17:00","2027-06-21 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-06-20","Sun","2ND","shift","2nd on","2nd on","long_day","2027-06-20 08:00","2027-06-20 18:00",10
+"C11","Dr Kezia Kennet",,"2027-06-20","Sun","1ST","shift","1st on","1st on","long_day","2027-06-20 08:00","2027-06-20 18:00",10
+"C12","Dr Luca Lune",,"2027-06-20","Sun","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-06-20","Sun","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-06-21","Mon","24H","shift","2nd on into the night","2nd on","night","2027-06-21 08:00","2027-06-22 08:00",24
+"C09","Dr Isla Irwell",,"2027-06-21","Mon","1ST","shift","1st on","1st on","long_day","2027-06-21 08:00","2027-06-21 18:00",10
+"C14","Dr Nye Nidd",,"2027-06-21","Mon","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-06-21","Mon","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-06-22","Tue","1ST","shift","1st on","1st on","long_day","2027-06-22 08:00","2027-06-22 18:00",10
+"C12","Dr Luca Lune",,"2027-06-22","Tue","2ND","shift","2nd on","2nd on","long_day","2027-06-22 08:00","2027-06-22 18:00",10
+"C13","Dr Mali Medway",,"2027-06-22","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-22 17:00","2027-06-23 08:00",15
+"C14","Dr Nye Nidd",,"2027-06-22","Tue","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-06-22","Tue","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-06-23","Wed","24H","shift","2nd on into the night","2nd on","night","2027-06-23 08:00","2027-06-24 08:00",24
+"C09","Dr Isla Irwell",,"2027-06-23","Wed","1ST","shift","1st on","1st on","long_day","2027-06-23 08:00","2027-06-23 18:00",10
+"C14","Dr Nye Nidd",,"2027-06-23","Wed","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-06-23","Wed","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-06-24","Thu","2ND","shift","2nd on","2nd on","long_day","2027-06-24 08:00","2027-06-24 18:00",10
+"C09","Dr Isla Irwell",,"2027-06-24","Thu","1ST","shift","1st on","1st on","long_day","2027-06-24 08:00","2027-06-24 18:00",10
+"C13","Dr Mali Medway",,"2027-06-24","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-24 17:00","2027-06-25 08:00",15
+"C14","Dr Nye Nidd",,"2027-06-24","Thu","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-06-24","Thu","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-06-25","Fri","24H","shift","2nd on into the night","2nd on","night","2027-06-25 08:00","2027-06-26 08:00",24
+"C05","Dr Emyr Esk",,"2027-06-25","Fri","1ST","shift","1st on","1st on","long_day","2027-06-25 08:00","2027-06-25 18:00",10
+"C14","Dr Nye Nidd",,"2027-06-25","Fri","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-06-25","Fri","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-06-26","Sat","2ND","shift","2nd on","2nd on","long_day","2027-06-26 08:00","2027-06-26 18:00",10
+"C05","Dr Emyr Esk",,"2027-06-26","Sat","1ST","shift","1st on","1st on","long_day","2027-06-26 08:00","2027-06-26 18:00",10
+"C13","Dr Mali Medway",,"2027-06-26","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-26 17:00","2027-06-27 08:00",15
+"C14","Dr Nye Nidd",,"2027-06-26","Sat","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-06-26","Sat","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-06-27","Sun","24H","shift","2nd on into the night","2nd on","night","2027-06-27 08:00","2027-06-28 08:00",24
+"C05","Dr Emyr Esk",,"2027-06-27","Sun","1ST","shift","1st on","1st on","long_day","2027-06-27 08:00","2027-06-27 18:00",10
+"C14","Dr Nye Nidd",,"2027-06-27","Sun","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-06-27","Sun","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-06-28","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-28 17:00","2027-06-29 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-06-28","Mon","1ST","shift","1st on","1st on","long_day","2027-06-28 08:00","2027-06-28 18:00",10
+"C08","Dr Huw Hodder",,"2027-06-28","Mon","2ND","shift","2nd on","2nd on","long_day","2027-06-28 08:00","2027-06-28 18:00",10
+"C15","Dr Orla Ouse",,"2027-06-28","Mon","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-06-29","Tue","1ST","shift","1st on","1st on","long_day","2027-06-29 08:00","2027-06-29 18:00",10
+"C10","Dr Joss Jed",,"2027-06-29","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-29 17:00","2027-06-30 08:00",15
+"C13","Dr Mali Medway",,"2027-06-29","Tue","2ND","shift","2nd on","2nd on","long_day","2027-06-29 08:00","2027-06-29 18:00",10
+"C15","Dr Orla Ouse",,"2027-06-29","Tue","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-06-30","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-06-30 17:00","2027-07-01 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-06-30","Wed","1ST","shift","1st on","1st on","long_day","2027-06-30 08:00","2027-06-30 18:00",10
+"C13","Dr Mali Medway",,"2027-06-30","Wed","2ND","shift","2nd on","2nd on","long_day","2027-06-30 08:00","2027-06-30 18:00",10
+"C15","Dr Orla Ouse",,"2027-06-30","Wed","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-07-01","Thu","1ST","shift","1st on","1st on","long_day","2027-07-01 08:00","2027-07-01 18:00",10
+"C10","Dr Joss Jed",,"2027-07-01","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-01 17:00","2027-07-02 08:00",15
+"C12","Dr Luca Lune",,"2027-07-01","Thu","2ND","shift","2nd on","2nd on","long_day","2027-07-01 08:00","2027-07-01 18:00",10
+"C15","Dr Orla Ouse",,"2027-07-01","Thu","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-07-02","Fri","1ST","shift","1st on","1st on","long_day","2027-07-02 08:00","2027-07-02 18:00",10
+"C06","Dr Fion Fal",,"2027-07-02","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-02 17:00","2027-07-03 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-07-02","Fri","2ND","shift","2nd on","2nd on","long_day","2027-07-02 08:00","2027-07-02 18:00",10
+"C15","Dr Orla Ouse",,"2027-07-02","Fri","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-07-03","Sat","1ST","shift","1st on","1st on","long_day","2027-07-03 08:00","2027-07-03 18:00",10
+"C08","Dr Huw Hodder",,"2027-07-03","Sat","2ND","shift","2nd on","2nd on","long_day","2027-07-03 08:00","2027-07-03 18:00",10
+"C10","Dr Joss Jed",,"2027-07-03","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-03 17:00","2027-07-04 08:00",15
+"C15","Dr Orla Ouse",,"2027-07-03","Sat","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-07-04","Sun","1ST","shift","1st on","1st on","long_day","2027-07-04 08:00","2027-07-04 18:00",10
+"C06","Dr Fion Fal",,"2027-07-04","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-04 17:00","2027-07-05 08:00",15
+"C08","Dr Huw Hodder",,"2027-07-04","Sun","2ND","shift","2nd on","2nd on","long_day","2027-07-04 08:00","2027-07-04 18:00",10
+"C15","Dr Orla Ouse",,"2027-07-04","Sun","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-07-05","Mon","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-07-05","Mon","2ND","shift","2nd on","2nd on","long_day","2027-07-05 08:00","2027-07-05 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-07-05","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-05 17:00","2027-07-06 08:00",15
+"C08","Dr Huw Hodder",,"2027-07-05","Mon","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-07-05","Mon","1ST","shift","1st on","1st on","long_day","2027-07-05 08:00","2027-07-05 18:00",10
+"C03","Dr Cleo Calder",,"2027-07-06","Tue","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-07-06","Tue","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-07-06","Tue","2ND","shift","2nd on","2nd on","long_day","2027-07-06 08:00","2027-07-06 18:00",10
+"C13","Dr Mali Medway",,"2027-07-06","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-06 17:00","2027-07-07 08:00",15
+"C15","Dr Orla Ouse",,"2027-07-06","Tue","1ST","shift","1st on","1st on","long_day","2027-07-06 08:00","2027-07-06 18:00",10
+"C03","Dr Cleo Calder",,"2027-07-07","Wed","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-07-07","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-07 17:00","2027-07-08 08:00",15
+"C08","Dr Huw Hodder",,"2027-07-07","Wed","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-07-07","Wed","2ND","shift","2nd on","2nd on","long_day","2027-07-07 08:00","2027-07-07 18:00",10
+"C15","Dr Orla Ouse",,"2027-07-07","Wed","1ST","shift","1st on","1st on","long_day","2027-07-07 08:00","2027-07-07 18:00",10
+"C03","Dr Cleo Calder",,"2027-07-08","Thu","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-07-08","Thu","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-07-08","Thu","2ND","shift","2nd on","2nd on","long_day","2027-07-08 08:00","2027-07-08 18:00",10
+"C13","Dr Mali Medway",,"2027-07-08","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-08 17:00","2027-07-09 08:00",15
+"C15","Dr Orla Ouse",,"2027-07-08","Thu","1ST","shift","1st on","1st on","long_day","2027-07-08 08:00","2027-07-08 18:00",10
+"C03","Dr Cleo Calder",,"2027-07-09","Fri","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-07-09","Fri","1ST","shift","1st on","1st on","long_day","2027-07-09 08:00","2027-07-09 18:00",10
+"C06","Dr Fion Fal",,"2027-07-09","Fri","2ND","shift","2nd on","2nd on","long_day","2027-07-09 08:00","2027-07-09 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-07-09","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-09 17:00","2027-07-10 08:00",15
+"C08","Dr Huw Hodder",,"2027-07-09","Fri","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-07-10","Sat","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-07-10","Sat","1ST","shift","1st on","1st on","long_day","2027-07-10 08:00","2027-07-10 18:00",10
+"C08","Dr Huw Hodder",,"2027-07-10","Sat","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-07-10","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-10 17:00","2027-07-11 08:00",15
+"C15","Dr Orla Ouse",,"2027-07-10","Sat","2ND","shift","2nd on","2nd on","long_day","2027-07-10 08:00","2027-07-10 18:00",10
+"C03","Dr Cleo Calder",,"2027-07-11","Sun","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-07-11","Sun","1ST","shift","1st on","1st on","long_day","2027-07-11 08:00","2027-07-11 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-07-11","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-11 17:00","2027-07-12 08:00",15
+"C08","Dr Huw Hodder",,"2027-07-11","Sun","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-07-11","Sun","2ND","shift","2nd on","2nd on","long_day","2027-07-11 08:00","2027-07-11 18:00",10
+"C02","Dr Bryn Bure",,"2027-07-12","Mon","1ST","shift","1st on","1st on","long_day","2027-07-12 08:00","2027-07-12 18:00",10
+"C03","Dr Cleo Calder",,"2027-07-12","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-12 17:00","2027-07-13 08:00",15
+"C09","Dr Isla Irwell",,"2027-07-12","Mon","2ND","shift","2nd on","2nd on","long_day","2027-07-12 08:00","2027-07-12 18:00",10
+"C10","Dr Joss Jed",,"2027-07-12","Mon","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-07-12","Mon","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-07-13","Tue","1ST","shift","1st on","1st on","long_day","2027-07-13 08:00","2027-07-13 18:00",10
+"C10","Dr Joss Jed",,"2027-07-13","Tue","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-07-13","Tue","2ND","shift","2nd on","2nd on","long_day","2027-07-13 08:00","2027-07-13 18:00",10
+"C13","Dr Mali Medway",,"2027-07-13","Tue","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-07-13","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-13 17:00","2027-07-14 08:00",15
+"C02","Dr Bryn Bure",,"2027-07-14","Wed","1ST","shift","1st on","1st on","long_day","2027-07-14 08:00","2027-07-14 18:00",10
+"C03","Dr Cleo Calder",,"2027-07-14","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-14 17:00","2027-07-15 08:00",15
+"C04","Dr Dara Dee",,"2027-07-14","Wed","2ND","shift","2nd on","2nd on","long_day","2027-07-14 08:00","2027-07-14 18:00",10
+"C10","Dr Joss Jed",,"2027-07-14","Wed","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-07-14","Wed","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-07-15","Thu","1ST","shift","1st on","1st on","long_day","2027-07-15 08:00","2027-07-15 18:00",10
+"C10","Dr Joss Jed",,"2027-07-15","Thu","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-07-15","Thu","2ND","shift","2nd on","2nd on","long_day","2027-07-15 08:00","2027-07-15 18:00",10
+"C13","Dr Mali Medway",,"2027-07-15","Thu","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-07-15","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-15 17:00","2027-07-16 08:00",15
+"C03","Dr Cleo Calder",,"2027-07-16","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-16 17:00","2027-07-17 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-07-16","Fri","2ND","shift","2nd on","2nd on","long_day","2027-07-16 08:00","2027-07-16 18:00",10
+"C10","Dr Joss Jed",,"2027-07-16","Fri","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-07-16","Fri","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-07-16","Fri","1ST","shift","1st on","1st on","long_day","2027-07-16 08:00","2027-07-16 18:00",10
+"C01","Dr Alys Avon",,"2027-07-17","Sat","2ND","shift","2nd on","2nd on","long_day","2027-07-17 08:00","2027-07-17 18:00",10
+"C10","Dr Joss Jed",,"2027-07-17","Sat","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-07-17","Sat","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-07-17","Sat","1ST","shift","1st on","1st on","long_day","2027-07-17 08:00","2027-07-17 18:00",10
+"C15","Dr Orla Ouse",,"2027-07-17","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-17 17:00","2027-07-18 08:00",15
+"C01","Dr Alys Avon",,"2027-07-18","Sun","2ND","shift","2nd on","2nd on","long_day","2027-07-18 08:00","2027-07-18 18:00",10
+"C03","Dr Cleo Calder",,"2027-07-18","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-18 17:00","2027-07-19 08:00",15
+"C10","Dr Joss Jed",,"2027-07-18","Sun","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-07-18","Sun","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-07-18","Sun","1ST","shift","1st on","1st on","long_day","2027-07-18 08:00","2027-07-18 18:00",10
+"C02","Dr Bryn Bure",,"2027-07-19","Mon","24H","shift","2nd on into the night","2nd on","night","2027-07-19 08:00","2027-07-20 08:00",24
+"C05","Dr Emyr Esk",,"2027-07-19","Mon","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-07-19","Mon","1ST","shift","1st on","1st on","long_day","2027-07-19 08:00","2027-07-19 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-07-19","Mon","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-07-20","Tue","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-07-20","Tue","1ST","shift","1st on","1st on","long_day","2027-07-20 08:00","2027-07-20 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-07-20","Tue","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-07-20","Tue","24H","shift","2nd on into the night","2nd on","night","2027-07-20 08:00","2027-07-21 08:00",24
+"C14","Dr Nye Nidd",,"2027-07-20","Tue","SL","leave","Study leave",,,,,
+"C02","Dr Bryn Bure",,"2027-07-21","Wed","24H","shift","2nd on into the night","2nd on","night","2027-07-21 08:00","2027-07-22 08:00",24
+"C05","Dr Emyr Esk",,"2027-07-21","Wed","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-07-21","Wed","1ST","shift","1st on","1st on","long_day","2027-07-21 08:00","2027-07-21 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-07-21","Wed","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-07-21","Wed","SL","leave","Study leave",,,,,
+"C05","Dr Emyr Esk",,"2027-07-22","Thu","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-07-22","Thu","1ST","shift","1st on","1st on","long_day","2027-07-22 08:00","2027-07-22 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-07-22","Thu","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-07-22","Thu","24H","shift","2nd on into the night","2nd on","night","2027-07-22 08:00","2027-07-23 08:00",24
+"C01","Dr Alys Avon",,"2027-07-23","Fri","1ST","shift","1st on","1st on","long_day","2027-07-23 08:00","2027-07-23 18:00",10
+"C02","Dr Bryn Bure",,"2027-07-23","Fri","24H","shift","2nd on into the night","2nd on","night","2027-07-23 08:00","2027-07-24 08:00",24
+"C05","Dr Emyr Esk",,"2027-07-23","Fri","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-07-23","Fri","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-07-24","Sat","1ST","shift","1st on","1st on","long_day","2027-07-24 08:00","2027-07-24 18:00",10
+"C05","Dr Emyr Esk",,"2027-07-24","Sat","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-07-24","Sat","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-07-24","Sat","24H","shift","2nd on into the night","2nd on","night","2027-07-24 08:00","2027-07-25 08:00",24
+"C01","Dr Alys Avon",,"2027-07-25","Sun","1ST","shift","1st on","1st on","long_day","2027-07-25 08:00","2027-07-25 18:00",10
+"C02","Dr Bryn Bure",,"2027-07-25","Sun","24H","shift","2nd on into the night","2nd on","night","2027-07-25 08:00","2027-07-26 08:00",24
+"C05","Dr Emyr Esk",,"2027-07-25","Sun","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-07-25","Sun","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-07-26","Mon","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-07-26","Mon","2ND","shift","2nd on","2nd on","long_day","2027-07-26 08:00","2027-07-26 18:00",10
+"C12","Dr Luca Lune",,"2027-07-26","Mon","1ST","shift","1st on","1st on","long_day","2027-07-26 08:00","2027-07-26 18:00",10
+"C13","Dr Mali Medway",,"2027-07-26","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-26 17:00","2027-07-27 08:00",15
+"C01","Dr Alys Avon",,"2027-07-27","Tue","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-07-27","Tue","2ND","shift","2nd on","2nd on","long_day","2027-07-27 08:00","2027-07-27 18:00",10
+"C09","Dr Isla Irwell",,"2027-07-27","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-27 17:00","2027-07-28 08:00",15
+"C12","Dr Luca Lune",,"2027-07-27","Tue","1ST","shift","1st on","1st on","long_day","2027-07-27 08:00","2027-07-27 18:00",10
+"C01","Dr Alys Avon",,"2027-07-28","Wed","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-07-28","Wed","2ND","shift","2nd on","2nd on","long_day","2027-07-28 08:00","2027-07-28 18:00",10
+"C12","Dr Luca Lune",,"2027-07-28","Wed","1ST","shift","1st on","1st on","long_day","2027-07-28 08:00","2027-07-28 18:00",10
+"C13","Dr Mali Medway",,"2027-07-28","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-28 17:00","2027-07-29 08:00",15
+"C01","Dr Alys Avon",,"2027-07-29","Thu","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-07-29","Thu","2ND","shift","2nd on","2nd on","long_day","2027-07-29 08:00","2027-07-29 18:00",10
+"C09","Dr Isla Irwell",,"2027-07-29","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-29 17:00","2027-07-30 08:00",15
+"C12","Dr Luca Lune",,"2027-07-29","Thu","1ST","shift","1st on","1st on","long_day","2027-07-29 08:00","2027-07-29 18:00",10
+"C01","Dr Alys Avon",,"2027-07-30","Fri","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-07-30","Fri","1ST","shift","1st on","1st on","long_day","2027-07-30 08:00","2027-07-30 18:00",10
+"C06","Dr Fion Fal",,"2027-07-30","Fri","2ND","shift","2nd on","2nd on","long_day","2027-07-30 08:00","2027-07-30 18:00",10
+"C13","Dr Mali Medway",,"2027-07-30","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-30 17:00","2027-07-31 08:00",15
+"C01","Dr Alys Avon",,"2027-07-31","Sat","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-07-31","Sat","1ST","shift","1st on","1st on","long_day","2027-07-31 08:00","2027-07-31 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-07-31","Sat","2ND","shift","2nd on","2nd on","long_day","2027-07-31 08:00","2027-07-31 18:00",10
+"C09","Dr Isla Irwell",,"2027-07-31","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-07-31 17:00","2027-08-01 08:00",15
+"C01","Dr Alys Avon",,"2027-08-01","Sun","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-08-01","Sun","1ST","shift","1st on","1st on","long_day","2027-08-01 08:00","2027-08-01 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-08-01","Sun","2ND","shift","2nd on","2nd on","long_day","2027-08-01 08:00","2027-08-01 18:00",10
+"C13","Dr Mali Medway",,"2027-08-01","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-01 17:00","2027-08-02 08:00",15
+"C01","Dr Alys Avon",,"2027-08-02","Mon","1ST","shift","1st on","1st on","long_day","2027-08-02 08:00","2027-08-02 18:00",10
+"C03","Dr Cleo Calder",,"2027-08-02","Mon","2ND","shift","2nd on","2nd on","long_day","2027-08-02 08:00","2027-08-02 18:00",10
+"C04","Dr Dara Dee",,"2027-08-02","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-02 17:00","2027-08-03 08:00",15
+"C01","Dr Alys Avon",,"2027-08-03","Tue","1ST","shift","1st on","1st on","long_day","2027-08-03 08:00","2027-08-03 18:00",10
+"C03","Dr Cleo Calder",,"2027-08-03","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-03 17:00","2027-08-04 08:00",15
+"C09","Dr Isla Irwell",,"2027-08-03","Tue","2ND","shift","2nd on","2nd on","long_day","2027-08-03 08:00","2027-08-03 18:00",10
+"C01","Dr Alys Avon",,"2027-08-04","Wed","1ST","shift","1st on","1st on","long_day","2027-08-04 08:00","2027-08-04 18:00",10
+"C04","Dr Dara Dee",,"2027-08-04","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-04 17:00","2027-08-05 08:00",15
+"C10","Dr Joss Jed",,"2027-08-04","Wed","2ND","shift","2nd on","2nd on","long_day","2027-08-04 08:00","2027-08-04 18:00",10
+"C01","Dr Alys Avon",,"2027-08-05","Thu","1ST","shift","1st on","1st on","long_day","2027-08-05 08:00","2027-08-05 18:00",10
+"C03","Dr Cleo Calder",,"2027-08-05","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-05 17:00","2027-08-06 08:00",15
+"C12","Dr Luca Lune",,"2027-08-05","Thu","2ND","shift","2nd on","2nd on","long_day","2027-08-05 08:00","2027-08-05 18:00",10
+"C04","Dr Dara Dee",,"2027-08-06","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-06 17:00","2027-08-07 08:00",15
+"C12","Dr Luca Lune",,"2027-08-06","Fri","2ND","shift","2nd on","2nd on","long_day","2027-08-06 08:00","2027-08-06 18:00",10
+"C13","Dr Mali Medway",,"2027-08-06","Fri","1ST","shift","1st on","1st on","long_day","2027-08-06 08:00","2027-08-06 18:00",10
+"C03","Dr Cleo Calder",,"2027-08-07","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-07 17:00","2027-08-08 08:00",15
+"C06","Dr Fion Fal",,"2027-08-07","Sat","2ND","shift","2nd on","2nd on","long_day","2027-08-07 08:00","2027-08-07 18:00",10
+"C13","Dr Mali Medway",,"2027-08-07","Sat","1ST","shift","1st on","1st on","long_day","2027-08-07 08:00","2027-08-07 18:00",10
+"C04","Dr Dara Dee",,"2027-08-08","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-08 17:00","2027-08-09 08:00",15
+"C06","Dr Fion Fal",,"2027-08-08","Sun","2ND","shift","2nd on","2nd on","long_day","2027-08-08 08:00","2027-08-08 18:00",10
+"C13","Dr Mali Medway",,"2027-08-08","Sun","1ST","shift","1st on","1st on","long_day","2027-08-08 08:00","2027-08-08 18:00",10
+"C06","Dr Fion Fal",,"2027-08-09","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-09 17:00","2027-08-10 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-08-09","Mon","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-08-09","Mon","2ND","shift","2nd on","2nd on","long_day","2027-08-09 08:00","2027-08-09 18:00",10
+"C11","Dr Kezia Kennet",,"2027-08-09","Mon","1ST","shift","1st on","1st on","long_day","2027-08-09 08:00","2027-08-09 18:00",10
+"C03","Dr Cleo Calder",,"2027-08-10","Tue","2ND","shift","2nd on","2nd on","long_day","2027-08-10 08:00","2027-08-10 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-08-10","Tue","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-08-10","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-10 17:00","2027-08-11 08:00",15
+"C11","Dr Kezia Kennet",,"2027-08-10","Tue","1ST","shift","1st on","1st on","long_day","2027-08-10 08:00","2027-08-10 18:00",10
+"C06","Dr Fion Fal",,"2027-08-11","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-11 17:00","2027-08-12 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-08-11","Wed","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-08-11","Wed","1ST","shift","1st on","1st on","long_day","2027-08-11 08:00","2027-08-11 18:00",10
+"C12","Dr Luca Lune",,"2027-08-11","Wed","2ND","shift","2nd on","2nd on","long_day","2027-08-11 08:00","2027-08-11 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-08-12","Thu","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-08-12","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-12 17:00","2027-08-13 08:00",15
+"C11","Dr Kezia Kennet",,"2027-08-12","Thu","1ST","shift","1st on","1st on","long_day","2027-08-12 08:00","2027-08-12 18:00",10
+"C13","Dr Mali Medway",,"2027-08-12","Thu","2ND","shift","2nd on","2nd on","long_day","2027-08-12 08:00","2027-08-12 18:00",10
+"C04","Dr Dara Dee",,"2027-08-13","Fri","1ST","shift","1st on","1st on","long_day","2027-08-13 08:00","2027-08-13 18:00",10
+"C06","Dr Fion Fal",,"2027-08-13","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-13 17:00","2027-08-14 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-08-13","Fri","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-08-13","Fri","2ND","shift","2nd on","2nd on","long_day","2027-08-13 08:00","2027-08-13 18:00",10
+"C04","Dr Dara Dee",,"2027-08-14","Sat","1ST","shift","1st on","1st on","long_day","2027-08-14 08:00","2027-08-14 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-08-14","Sat","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-08-14","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-14 17:00","2027-08-15 08:00",15
+"C13","Dr Mali Medway",,"2027-08-14","Sat","2ND","shift","2nd on","2nd on","long_day","2027-08-14 08:00","2027-08-14 18:00",10
+"C04","Dr Dara Dee",,"2027-08-15","Sun","1ST","shift","1st on","1st on","long_day","2027-08-15 08:00","2027-08-15 18:00",10
+"C06","Dr Fion Fal",,"2027-08-15","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-15 17:00","2027-08-16 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-08-15","Sun","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-08-15","Sun","2ND","shift","2nd on","2nd on","long_day","2027-08-15 08:00","2027-08-15 18:00",10
+"C03","Dr Cleo Calder",,"2027-08-16","Mon","1ST","shift","1st on","1st on","long_day","2027-08-16 08:00","2027-08-16 18:00",10
+"C05","Dr Emyr Esk",,"2027-08-16","Mon","24H","shift","2nd on into the night","2nd on","night","2027-08-16 08:00","2027-08-17 08:00",24
+"C01","Dr Alys Avon",,"2027-08-17","Tue","SL","leave","Study leave",,,,,
+"C03","Dr Cleo Calder",,"2027-08-17","Tue","1ST","shift","1st on","1st on","long_day","2027-08-17 08:00","2027-08-17 18:00",10
+"C11","Dr Kezia Kennet",,"2027-08-17","Tue","24H","shift","2nd on into the night","2nd on","night","2027-08-17 08:00","2027-08-18 08:00",24
+"C01","Dr Alys Avon",,"2027-08-18","Wed","SL","leave","Study leave",,,,,
+"C03","Dr Cleo Calder",,"2027-08-18","Wed","1ST","shift","1st on","1st on","long_day","2027-08-18 08:00","2027-08-18 18:00",10
+"C05","Dr Emyr Esk",,"2027-08-18","Wed","24H","shift","2nd on into the night","2nd on","night","2027-08-18 08:00","2027-08-19 08:00",24
+"C03","Dr Cleo Calder",,"2027-08-19","Thu","1ST","shift","1st on","1st on","long_day","2027-08-19 08:00","2027-08-19 18:00",10
+"C11","Dr Kezia Kennet",,"2027-08-19","Thu","24H","shift","2nd on into the night","2nd on","night","2027-08-19 08:00","2027-08-20 08:00",24
+"C03","Dr Cleo Calder",,"2027-08-20","Fri","1ST","shift","1st on","1st on","long_day","2027-08-20 08:00","2027-08-20 18:00",10
+"C05","Dr Emyr Esk",,"2027-08-20","Fri","24H","shift","2nd on into the night","2nd on","night","2027-08-20 08:00","2027-08-21 08:00",24
+"C03","Dr Cleo Calder",,"2027-08-21","Sat","1ST","shift","1st on","1st on","long_day","2027-08-21 08:00","2027-08-21 18:00",10
+"C11","Dr Kezia Kennet",,"2027-08-21","Sat","24H","shift","2nd on into the night","2nd on","night","2027-08-21 08:00","2027-08-22 08:00",24
+"C03","Dr Cleo Calder",,"2027-08-22","Sun","1ST","shift","1st on","1st on","long_day","2027-08-22 08:00","2027-08-22 18:00",10
+"C05","Dr Emyr Esk",,"2027-08-22","Sun","24H","shift","2nd on into the night","2nd on","night","2027-08-22 08:00","2027-08-23 08:00",24
+"C01","Dr Alys Avon",,"2027-08-23","Mon","1ST","shift","1st on","1st on","long_day","2027-08-23 08:00","2027-08-23 18:00",10
+"C08","Dr Huw Hodder",,"2027-08-23","Mon","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-08-23","Mon","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-08-23","Mon","24H","shift","2nd on into the night","2nd on","night","2027-08-23 08:00","2027-08-24 08:00",24
+"C01","Dr Alys Avon",,"2027-08-24","Tue","1ST","shift","1st on","1st on","long_day","2027-08-24 08:00","2027-08-24 18:00",10
+"C02","Dr Bryn Bure",,"2027-08-24","Tue","24H","shift","2nd on into the night","2nd on","night","2027-08-24 08:00","2027-08-25 08:00",24
+"C08","Dr Huw Hodder",,"2027-08-24","Tue","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-08-24","Tue","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-08-25","Wed","1ST","shift","1st on","1st on","long_day","2027-08-25 08:00","2027-08-25 18:00",10
+"C08","Dr Huw Hodder",,"2027-08-25","Wed","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-08-25","Wed","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-08-25","Wed","24H","shift","2nd on into the night","2nd on","night","2027-08-25 08:00","2027-08-26 08:00",24
+"C01","Dr Alys Avon",,"2027-08-26","Thu","1ST","shift","1st on","1st on","long_day","2027-08-26 08:00","2027-08-26 18:00",10
+"C02","Dr Bryn Bure",,"2027-08-26","Thu","24H","shift","2nd on into the night","2nd on","night","2027-08-26 08:00","2027-08-27 08:00",24
+"C08","Dr Huw Hodder",,"2027-08-26","Thu","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-08-26","Thu","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-08-27","Fri","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-08-27","Fri","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-08-27","Fri","1ST","shift","1st on","1st on","long_day","2027-08-27 08:00","2027-08-27 18:00",10
+"C14","Dr Nye Nidd",,"2027-08-27","Fri","24H","shift","2nd on into the night","2nd on","night","2027-08-27 08:00","2027-08-28 08:00",24
+"C02","Dr Bryn Bure",,"2027-08-28","Sat","24H","shift","2nd on into the night","2nd on","night","2027-08-28 08:00","2027-08-29 08:00",24
+"C08","Dr Huw Hodder",,"2027-08-28","Sat","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-08-28","Sat","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-08-28","Sat","1ST","shift","1st on","1st on","long_day","2027-08-28 08:00","2027-08-28 18:00",10
+"C08","Dr Huw Hodder",,"2027-08-29","Sun","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-08-29","Sun","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-08-29","Sun","1ST","shift","1st on","1st on","long_day","2027-08-29 08:00","2027-08-29 18:00",10
+"C14","Dr Nye Nidd",,"2027-08-29","Sun","24H","shift","2nd on into the night","2nd on","night","2027-08-29 08:00","2027-08-30 08:00",24
+"C04","Dr Dara Dee",,"2027-08-30","Mon","2ND","shift","2nd on","2nd on","long_day","2027-08-30 08:00","2027-08-30 18:00",10
+"C08","Dr Huw Hodder",,"2027-08-30","Mon","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-08-30","Mon","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-08-30","Mon","1ST","shift","1st on","1st on","long_day","2027-08-30 08:00","2027-08-30 18:00",10
+"C15","Dr Orla Ouse",,"2027-08-30","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-30 17:00","2027-08-31 08:00",15
+"C08","Dr Huw Hodder",,"2027-08-31","Tue","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-08-31","Tue","2ND","shift","2nd on","2nd on","long_day","2027-08-31 08:00","2027-08-31 18:00",10
+"C11","Dr Kezia Kennet",,"2027-08-31","Tue","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-08-31","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-08-31 17:00","2027-09-01 08:00",15
+"C13","Dr Mali Medway",,"2027-08-31","Tue","1ST","shift","1st on","1st on","long_day","2027-08-31 08:00","2027-08-31 18:00",10
+"C04","Dr Dara Dee",,"2027-09-01","Wed","2ND","shift","2nd on","2nd on","long_day","2027-09-01 08:00","2027-09-01 18:00",10
+"C08","Dr Huw Hodder",,"2027-09-01","Wed","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-09-01","Wed","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-09-01","Wed","1ST","shift","1st on","1st on","long_day","2027-09-01 08:00","2027-09-01 18:00",10
+"C15","Dr Orla Ouse",,"2027-09-01","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-01 17:00","2027-09-02 08:00",15
+"C04","Dr Dara Dee",,"2027-09-02","Thu","2ND","shift","2nd on","2nd on","long_day","2027-09-02 08:00","2027-09-02 18:00",10
+"C08","Dr Huw Hodder",,"2027-09-02","Thu","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-09-02","Thu","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-09-02","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-02 17:00","2027-09-03 08:00",15
+"C13","Dr Mali Medway",,"2027-09-02","Thu","1ST","shift","1st on","1st on","long_day","2027-09-02 08:00","2027-09-02 18:00",10
+"C01","Dr Alys Avon",,"2027-09-03","Fri","2ND","shift","2nd on","2nd on","long_day","2027-09-03 08:00","2027-09-03 18:00",10
+"C06","Dr Fion Fal",,"2027-09-03","Fri","1ST","shift","1st on","1st on","long_day","2027-09-03 08:00","2027-09-03 18:00",10
+"C08","Dr Huw Hodder",,"2027-09-03","Fri","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-09-03","Fri","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-09-03","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-03 17:00","2027-09-04 08:00",15
+"C06","Dr Fion Fal",,"2027-09-04","Sat","1ST","shift","1st on","1st on","long_day","2027-09-04 08:00","2027-09-04 18:00",10
+"C08","Dr Huw Hodder",,"2027-09-04","Sat","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-09-04","Sat","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-09-04","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-04 17:00","2027-09-05 08:00",15
+"C13","Dr Mali Medway",,"2027-09-04","Sat","2ND","shift","2nd on","2nd on","long_day","2027-09-04 08:00","2027-09-04 18:00",10
+"C06","Dr Fion Fal",,"2027-09-05","Sun","1ST","shift","1st on","1st on","long_day","2027-09-05 08:00","2027-09-05 18:00",10
+"C08","Dr Huw Hodder",,"2027-09-05","Sun","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-09-05","Sun","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-09-05","Sun","2ND","shift","2nd on","2nd on","long_day","2027-09-05 08:00","2027-09-05 18:00",10
+"C15","Dr Orla Ouse",,"2027-09-05","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-05 17:00","2027-09-06 08:00",15
+"C08","Dr Huw Hodder",,"2027-09-06","Mon","1ST","shift","1st on","1st on","long_day","2027-09-06 08:00","2027-09-06 18:00",10
+"C10","Dr Joss Jed",,"2027-09-06","Mon","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-09-06","Mon","24H","shift","2nd on into the night","2nd on","night","2027-09-06 08:00","2027-09-07 08:00",24
+"C08","Dr Huw Hodder",,"2027-09-07","Tue","1ST","shift","1st on","1st on","long_day","2027-09-07 08:00","2027-09-07 18:00",10
+"C10","Dr Joss Jed",,"2027-09-07","Tue","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-09-07","Tue","24H","shift","2nd on into the night","2nd on","night","2027-09-07 08:00","2027-09-08 08:00",24
+"C08","Dr Huw Hodder",,"2027-09-08","Wed","1ST","shift","1st on","1st on","long_day","2027-09-08 08:00","2027-09-08 18:00",10
+"C10","Dr Joss Jed",,"2027-09-08","Wed","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-09-08","Wed","24H","shift","2nd on into the night","2nd on","night","2027-09-08 08:00","2027-09-09 08:00",24
+"C08","Dr Huw Hodder",,"2027-09-09","Thu","1ST","shift","1st on","1st on","long_day","2027-09-09 08:00","2027-09-09 18:00",10
+"C10","Dr Joss Jed",,"2027-09-09","Thu","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-09-09","Thu","24H","shift","2nd on into the night","2nd on","night","2027-09-09 08:00","2027-09-10 08:00",24
+"C08","Dr Huw Hodder",,"2027-09-10","Fri","1ST","shift","1st on","1st on","long_day","2027-09-10 08:00","2027-09-10 18:00",10
+"C10","Dr Joss Jed",,"2027-09-10","Fri","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-09-10","Fri","24H","shift","2nd on into the night","2nd on","night","2027-09-10 08:00","2027-09-11 08:00",24
+"C08","Dr Huw Hodder",,"2027-09-11","Sat","1ST","shift","1st on","1st on","long_day","2027-09-11 08:00","2027-09-11 18:00",10
+"C10","Dr Joss Jed",,"2027-09-11","Sat","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-09-11","Sat","24H","shift","2nd on into the night","2nd on","night","2027-09-11 08:00","2027-09-12 08:00",24
+"C08","Dr Huw Hodder",,"2027-09-12","Sun","1ST","shift","1st on","1st on","long_day","2027-09-12 08:00","2027-09-12 18:00",10
+"C10","Dr Joss Jed",,"2027-09-12","Sun","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-09-12","Sun","24H","shift","2nd on into the night","2nd on","night","2027-09-12 08:00","2027-09-13 08:00",24
+"C03","Dr Cleo Calder",,"2027-09-13","Mon","SL","leave","Study leave",,,,,
+"C04","Dr Dara Dee",,"2027-09-13","Mon","1ST","shift","1st on","1st on","long_day","2027-09-13 08:00","2027-09-13 18:00",10
+"C05","Dr Emyr Esk",,"2027-09-13","Mon","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-09-13","Mon","2ND","shift","2nd on","2nd on","long_day","2027-09-13 08:00","2027-09-13 18:00",10
+"C08","Dr Huw Hodder",,"2027-09-13","Mon","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-09-13","Mon","SL","leave","Study leave",,,,,
+"C13","Dr Mali Medway",,"2027-09-13","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-13 17:00","2027-09-14 08:00",15
+"C01","Dr Alys Avon",,"2027-09-14","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-14 17:00","2027-09-15 08:00",15
+"C03","Dr Cleo Calder",,"2027-09-14","Tue","SL","leave","Study leave",,,,,
+"C04","Dr Dara Dee",,"2027-09-14","Tue","1ST","shift","1st on","1st on","long_day","2027-09-14 08:00","2027-09-14 18:00",10
+"C05","Dr Emyr Esk",,"2027-09-14","Tue","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-09-14","Tue","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-09-14","Tue","SL","leave","Study leave",,,,,
+"C12","Dr Luca Lune",,"2027-09-14","Tue","2ND","shift","2nd on","2nd on","long_day","2027-09-14 08:00","2027-09-14 18:00",10
+"C04","Dr Dara Dee",,"2027-09-15","Wed","1ST","shift","1st on","1st on","long_day","2027-09-15 08:00","2027-09-15 18:00",10
+"C05","Dr Emyr Esk",,"2027-09-15","Wed","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-09-15","Wed","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-09-15","Wed","2ND","shift","2nd on","2nd on","long_day","2027-09-15 08:00","2027-09-15 18:00",10
+"C13","Dr Mali Medway",,"2027-09-15","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-15 17:00","2027-09-16 08:00",15
+"C01","Dr Alys Avon",,"2027-09-16","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-16 17:00","2027-09-17 08:00",15
+"C03","Dr Cleo Calder",,"2027-09-16","Thu","2ND","shift","2nd on","2nd on","long_day","2027-09-16 08:00","2027-09-16 18:00",10
+"C04","Dr Dara Dee",,"2027-09-16","Thu","1ST","shift","1st on","1st on","long_day","2027-09-16 08:00","2027-09-16 18:00",10
+"C05","Dr Emyr Esk",,"2027-09-16","Thu","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-09-16","Thu","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-09-17","Fri","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-09-17","Fri","1ST","shift","1st on","1st on","long_day","2027-09-17 08:00","2027-09-17 18:00",10
+"C08","Dr Huw Hodder",,"2027-09-17","Fri","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-09-17","Fri","2ND","shift","2nd on","2nd on","long_day","2027-09-17 08:00","2027-09-17 18:00",10
+"C13","Dr Mali Medway",,"2027-09-17","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-17 17:00","2027-09-18 08:00",15
+"C01","Dr Alys Avon",,"2027-09-18","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-18 17:00","2027-09-19 08:00",15
+"C05","Dr Emyr Esk",,"2027-09-18","Sat","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-09-18","Sat","1ST","shift","1st on","1st on","long_day","2027-09-18 08:00","2027-09-18 18:00",10
+"C08","Dr Huw Hodder",,"2027-09-18","Sat","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-09-18","Sat","2ND","shift","2nd on","2nd on","long_day","2027-09-18 08:00","2027-09-18 18:00",10
+"C05","Dr Emyr Esk",,"2027-09-19","Sun","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-09-19","Sun","1ST","shift","1st on","1st on","long_day","2027-09-19 08:00","2027-09-19 18:00",10
+"C08","Dr Huw Hodder",,"2027-09-19","Sun","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-09-19","Sun","2ND","shift","2nd on","2nd on","long_day","2027-09-19 08:00","2027-09-19 18:00",10
+"C13","Dr Mali Medway",,"2027-09-19","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-19 17:00","2027-09-20 08:00",15
+"C01","Dr Alys Avon",,"2027-09-20","Mon","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-09-20","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-20 17:00","2027-09-21 08:00",15
+"C04","Dr Dara Dee",,"2027-09-20","Mon","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-09-20","Mon","1ST","shift","1st on","1st on","long_day","2027-09-20 08:00","2027-09-20 18:00",10
+"C08","Dr Huw Hodder",,"2027-09-20","Mon","2ND","shift","2nd on","2nd on","long_day","2027-09-20 08:00","2027-09-20 18:00",10
+"C01","Dr Alys Avon",,"2027-09-21","Tue","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-09-21","Tue","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-09-21","Tue","1ST","shift","1st on","1st on","long_day","2027-09-21 08:00","2027-09-21 18:00",10
+"C10","Dr Joss Jed",,"2027-09-21","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-21 17:00","2027-09-22 08:00",15
+"C15","Dr Orla Ouse",,"2027-09-21","Tue","2ND","shift","2nd on","2nd on","long_day","2027-09-21 08:00","2027-09-21 18:00",10
+"C01","Dr Alys Avon",,"2027-09-22","Wed","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-09-22","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-22 17:00","2027-09-23 08:00",15
+"C04","Dr Dara Dee",,"2027-09-22","Wed","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-09-22","Wed","1ST","shift","1st on","1st on","long_day","2027-09-22 08:00","2027-09-22 18:00",10
+"C15","Dr Orla Ouse",,"2027-09-22","Wed","2ND","shift","2nd on","2nd on","long_day","2027-09-22 08:00","2027-09-22 18:00",10
+"C01","Dr Alys Avon",,"2027-09-23","Thu","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-09-23","Thu","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-09-23","Thu","1ST","shift","1st on","1st on","long_day","2027-09-23 08:00","2027-09-23 18:00",10
+"C10","Dr Joss Jed",,"2027-09-23","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-23 17:00","2027-09-24 08:00",15
+"C15","Dr Orla Ouse",,"2027-09-23","Thu","2ND","shift","2nd on","2nd on","long_day","2027-09-23 08:00","2027-09-23 18:00",10
+"C01","Dr Alys Avon",,"2027-09-24","Fri","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-09-24","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-24 17:00","2027-09-25 08:00",15
+"C04","Dr Dara Dee",,"2027-09-24","Fri","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-09-24","Fri","1ST","shift","1st on","1st on","long_day","2027-09-24 08:00","2027-09-24 18:00",10
+"C13","Dr Mali Medway",,"2027-09-24","Fri","2ND","shift","2nd on","2nd on","long_day","2027-09-24 08:00","2027-09-24 18:00",10
+"C01","Dr Alys Avon",,"2027-09-25","Sat","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-09-25","Sat","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-09-25","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-25 17:00","2027-09-26 08:00",15
+"C11","Dr Kezia Kennet",,"2027-09-25","Sat","1ST","shift","1st on","1st on","long_day","2027-09-25 08:00","2027-09-25 18:00",10
+"C13","Dr Mali Medway",,"2027-09-25","Sat","2ND","shift","2nd on","2nd on","long_day","2027-09-25 08:00","2027-09-25 18:00",10
+"C01","Dr Alys Avon",,"2027-09-26","Sun","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-09-26","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-09-26 17:00","2027-09-27 08:00",15
+"C04","Dr Dara Dee",,"2027-09-26","Sun","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-09-26","Sun","1ST","shift","1st on","1st on","long_day","2027-09-26 08:00","2027-09-26 18:00",10
+"C13","Dr Mali Medway",,"2027-09-26","Sun","2ND","shift","2nd on","2nd on","long_day","2027-09-26 08:00","2027-09-26 18:00",10
+"C02","Dr Bryn Bure",,"2027-09-27","Mon","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-09-27","Mon","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-09-27","Mon","1ST","shift","1st on","1st on","long_day","2027-09-27 08:00","2027-09-27 18:00",10
+"C14","Dr Nye Nidd",,"2027-09-27","Mon","24H","shift","2nd on into the night","2nd on","night","2027-09-27 08:00","2027-09-28 08:00",24
+"C02","Dr Bryn Bure",,"2027-09-28","Tue","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-09-28","Tue","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-09-28","Tue","24H","shift","2nd on into the night","2nd on","night","2027-09-28 08:00","2027-09-29 08:00",24
+"C10","Dr Joss Jed",,"2027-09-28","Tue","1ST","shift","1st on","1st on","long_day","2027-09-28 08:00","2027-09-28 18:00",10
+"C02","Dr Bryn Bure",,"2027-09-29","Wed","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-09-29","Wed","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-09-29","Wed","1ST","shift","1st on","1st on","long_day","2027-09-29 08:00","2027-09-29 18:00",10
+"C14","Dr Nye Nidd",,"2027-09-29","Wed","24H","shift","2nd on into the night","2nd on","night","2027-09-29 08:00","2027-09-30 08:00",24
+"C02","Dr Bryn Bure",,"2027-09-30","Thu","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-09-30","Thu","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-09-30","Thu","24H","shift","2nd on into the night","2nd on","night","2027-09-30 08:00","2027-10-01 08:00",24
+"C10","Dr Joss Jed",,"2027-09-30","Thu","1ST","shift","1st on","1st on","long_day","2027-09-30 08:00","2027-09-30 18:00",10
+"C02","Dr Bryn Bure",,"2027-10-01","Fri","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-10-01","Fri","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-10-01","Fri","1ST","shift","1st on","1st on","long_day","2027-10-01 08:00","2027-10-01 18:00",10
+"C14","Dr Nye Nidd",,"2027-10-01","Fri","24H","shift","2nd on into the night","2nd on","night","2027-10-01 08:00","2027-10-02 08:00",24
+"C02","Dr Bryn Bure",,"2027-10-02","Sat","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-10-02","Sat","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-10-02","Sat","24H","shift","2nd on into the night","2nd on","night","2027-10-02 08:00","2027-10-03 08:00",24
+"C09","Dr Isla Irwell",,"2027-10-02","Sat","1ST","shift","1st on","1st on","long_day","2027-10-02 08:00","2027-10-02 18:00",10
+"C02","Dr Bryn Bure",,"2027-10-03","Sun","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-10-03","Sun","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-10-03","Sun","1ST","shift","1st on","1st on","long_day","2027-10-03 08:00","2027-10-03 18:00",10
+"C14","Dr Nye Nidd",,"2027-10-03","Sun","24H","shift","2nd on into the night","2nd on","night","2027-10-03 08:00","2027-10-04 08:00",24
+"C03","Dr Cleo Calder",,"2027-10-04","Mon","1ST","shift","1st on","1st on","long_day","2027-10-04 08:00","2027-10-04 18:00",10
+"C04","Dr Dara Dee",,"2027-10-04","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-04 17:00","2027-10-05 08:00",15
+"C08","Dr Huw Hodder",,"2027-10-04","Mon","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-10-04","Mon","2ND","shift","2nd on","2nd on","long_day","2027-10-04 08:00","2027-10-04 18:00",10
+"C03","Dr Cleo Calder",,"2027-10-05","Tue","1ST","shift","1st on","1st on","long_day","2027-10-05 08:00","2027-10-05 18:00",10
+"C06","Dr Fion Fal",,"2027-10-05","Tue","2ND","shift","2nd on","2nd on","long_day","2027-10-05 08:00","2027-10-05 18:00",10
+"C08","Dr Huw Hodder",,"2027-10-05","Tue","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-10-05","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-05 17:00","2027-10-06 08:00",15
+"C03","Dr Cleo Calder",,"2027-10-06","Wed","1ST","shift","1st on","1st on","long_day","2027-10-06 08:00","2027-10-06 18:00",10
+"C04","Dr Dara Dee",,"2027-10-06","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-06 17:00","2027-10-07 08:00",15
+"C06","Dr Fion Fal",,"2027-10-06","Wed","2ND","shift","2nd on","2nd on","long_day","2027-10-06 08:00","2027-10-06 18:00",10
+"C08","Dr Huw Hodder",,"2027-10-06","Wed","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-10-06","Wed","SL","leave","Study leave",,,,,
+"C03","Dr Cleo Calder",,"2027-10-07","Thu","1ST","shift","1st on","1st on","long_day","2027-10-07 08:00","2027-10-07 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-10-07","Thu","2ND","shift","2nd on","2nd on","long_day","2027-10-07 08:00","2027-10-07 18:00",10
+"C08","Dr Huw Hodder",,"2027-10-07","Thu","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-10-07","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-07 17:00","2027-10-08 08:00",15
+"C12","Dr Luca Lune",,"2027-10-07","Thu","SL","leave","Study leave",,,,,
+"C01","Dr Alys Avon",,"2027-10-08","Fri","2ND","shift","2nd on","2nd on","long_day","2027-10-08 08:00","2027-10-08 18:00",10
+"C03","Dr Cleo Calder",,"2027-10-08","Fri","1ST","shift","1st on","1st on","long_day","2027-10-08 08:00","2027-10-08 18:00",10
+"C04","Dr Dara Dee",,"2027-10-08","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-08 17:00","2027-10-09 08:00",15
+"C08","Dr Huw Hodder",,"2027-10-08","Fri","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-10-09","Sat","1ST","shift","1st on","1st on","long_day","2027-10-09 08:00","2027-10-09 18:00",10
+"C08","Dr Huw Hodder",,"2027-10-09","Sat","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-10-09","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-09 17:00","2027-10-10 08:00",15
+"C15","Dr Orla Ouse",,"2027-10-09","Sat","2ND","shift","2nd on","2nd on","long_day","2027-10-09 08:00","2027-10-09 18:00",10
+"C03","Dr Cleo Calder",,"2027-10-10","Sun","1ST","shift","1st on","1st on","long_day","2027-10-10 08:00","2027-10-10 18:00",10
+"C04","Dr Dara Dee",,"2027-10-10","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-10 17:00","2027-10-11 08:00",15
+"C08","Dr Huw Hodder",,"2027-10-10","Sun","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-10-10","Sun","2ND","shift","2nd on","2nd on","long_day","2027-10-10 08:00","2027-10-10 18:00",10
+"C03","Dr Cleo Calder",,"2027-10-11","Mon","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-10-11","Mon","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-10-11","Mon","2ND","shift","2nd on","2nd on","long_day","2027-10-11 08:00","2027-10-11 18:00",10
+"C10","Dr Joss Jed",,"2027-10-11","Mon","1ST","shift","1st on","1st on","long_day","2027-10-11 08:00","2027-10-11 18:00",10
+"C15","Dr Orla Ouse",,"2027-10-11","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-11 17:00","2027-10-12 08:00",15
+"C01","Dr Alys Avon",,"2027-10-12","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-12 17:00","2027-10-13 08:00",15
+"C03","Dr Cleo Calder",,"2027-10-12","Tue","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-10-12","Tue","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-10-12","Tue","2ND","shift","2nd on","2nd on","long_day","2027-10-12 08:00","2027-10-12 18:00",10
+"C10","Dr Joss Jed",,"2027-10-12","Tue","1ST","shift","1st on","1st on","long_day","2027-10-12 08:00","2027-10-12 18:00",10
+"C03","Dr Cleo Calder",,"2027-10-13","Wed","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-10-13","Wed","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-10-13","Wed","2ND","shift","2nd on","2nd on","long_day","2027-10-13 08:00","2027-10-13 18:00",10
+"C10","Dr Joss Jed",,"2027-10-13","Wed","1ST","shift","1st on","1st on","long_day","2027-10-13 08:00","2027-10-13 18:00",10
+"C15","Dr Orla Ouse",,"2027-10-13","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-13 17:00","2027-10-14 08:00",15
+"C01","Dr Alys Avon",,"2027-10-14","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-14 17:00","2027-10-15 08:00",15
+"C03","Dr Cleo Calder",,"2027-10-14","Thu","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-10-14","Thu","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-10-14","Thu","2ND","shift","2nd on","2nd on","long_day","2027-10-14 08:00","2027-10-14 18:00",10
+"C10","Dr Joss Jed",,"2027-10-14","Thu","1ST","shift","1st on","1st on","long_day","2027-10-14 08:00","2027-10-14 18:00",10
+"C03","Dr Cleo Calder",,"2027-10-15","Fri","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-10-15","Fri","2ND","shift","2nd on","2nd on","long_day","2027-10-15 08:00","2027-10-15 18:00",10
+"C06","Dr Fion Fal",,"2027-10-15","Fri","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-10-15","Fri","1ST","shift","1st on","1st on","long_day","2027-10-15 08:00","2027-10-15 18:00",10
+"C15","Dr Orla Ouse",,"2027-10-15","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-15 17:00","2027-10-16 08:00",15
+"C01","Dr Alys Avon",,"2027-10-16","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-16 17:00","2027-10-17 08:00",15
+"C03","Dr Cleo Calder",,"2027-10-16","Sat","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-10-16","Sat","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-10-16","Sat","2ND","shift","2nd on","2nd on","long_day","2027-10-16 08:00","2027-10-16 18:00",10
+"C12","Dr Luca Lune",,"2027-10-16","Sat","1ST","shift","1st on","1st on","long_day","2027-10-16 08:00","2027-10-16 18:00",10
+"C03","Dr Cleo Calder",,"2027-10-17","Sun","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-10-17","Sun","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-10-17","Sun","2ND","shift","2nd on","2nd on","long_day","2027-10-17 08:00","2027-10-17 18:00",10
+"C12","Dr Luca Lune",,"2027-10-17","Sun","1ST","shift","1st on","1st on","long_day","2027-10-17 08:00","2027-10-17 18:00",10
+"C15","Dr Orla Ouse",,"2027-10-17","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-17 17:00","2027-10-18 08:00",15
+"C01","Dr Alys Avon",,"2027-10-18","Mon","1ST","shift","1st on","1st on","long_day","2027-10-18 08:00","2027-10-18 18:00",10
+"C02","Dr Bryn Bure",,"2027-10-18","Mon","24H","shift","2nd on into the night","2nd on","night","2027-10-18 08:00","2027-10-19 08:00",24
+"C04","Dr Dara Dee",,"2027-10-18","Mon","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-10-19","Tue","1ST","shift","1st on","1st on","long_day","2027-10-19 08:00","2027-10-19 18:00",10
+"C04","Dr Dara Dee",,"2027-10-19","Tue","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-10-19","Tue","2ND","shift","2nd on","2nd on","long_day","2027-10-19 08:00","2027-10-19 18:00",10
+"C13","Dr Mali Medway",,"2027-10-19","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-19 17:00","2027-10-20 08:00",15
+"C01","Dr Alys Avon",,"2027-10-20","Wed","1ST","shift","1st on","1st on","long_day","2027-10-20 08:00","2027-10-20 18:00",10
+"C02","Dr Bryn Bure",,"2027-10-20","Wed","24H","shift","2nd on into the night","2nd on","night","2027-10-20 08:00","2027-10-21 08:00",24
+"C04","Dr Dara Dee",,"2027-10-20","Wed","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-10-21","Thu","1ST","shift","1st on","1st on","long_day","2027-10-21 08:00","2027-10-21 18:00",10
+"C04","Dr Dara Dee",,"2027-10-21","Thu","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-10-21","Thu","2ND","shift","2nd on","2nd on","long_day","2027-10-21 08:00","2027-10-21 18:00",10
+"C13","Dr Mali Medway",,"2027-10-21","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-21 17:00","2027-10-22 08:00",15
+"C02","Dr Bryn Bure",,"2027-10-22","Fri","24H","shift","2nd on into the night","2nd on","night","2027-10-22 08:00","2027-10-23 08:00",24
+"C04","Dr Dara Dee",,"2027-10-22","Fri","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-10-22","Fri","1ST","shift","1st on","1st on","long_day","2027-10-22 08:00","2027-10-22 18:00",10
+"C01","Dr Alys Avon",,"2027-10-23","Sat","2ND","shift","2nd on","2nd on","long_day","2027-10-23 08:00","2027-10-23 18:00",10
+"C04","Dr Dara Dee",,"2027-10-23","Sat","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-10-23","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-23 17:00","2027-10-24 08:00",15
+"C14","Dr Nye Nidd",,"2027-10-23","Sat","1ST","shift","1st on","1st on","long_day","2027-10-23 08:00","2027-10-23 18:00",10
+"C02","Dr Bryn Bure",,"2027-10-24","Sun","24H","shift","2nd on into the night","2nd on","night","2027-10-24 08:00","2027-10-25 08:00",24
+"C04","Dr Dara Dee",,"2027-10-24","Sun","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2027-10-24","Sun","1ST","shift","1st on","1st on","long_day","2027-10-24 08:00","2027-10-24 18:00",10
+"C04","Dr Dara Dee",,"2027-10-25","Mon","2ND","shift","2nd on","2nd on","long_day","2027-10-25 08:00","2027-10-25 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-10-25","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-25 17:00","2027-10-26 08:00",15
+"C13","Dr Mali Medway",,"2027-10-25","Mon","1ST","shift","1st on","1st on","long_day","2027-10-25 08:00","2027-10-25 18:00",10
+"C01","Dr Alys Avon",,"2027-10-26","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-26 17:00","2027-10-27 08:00",15
+"C06","Dr Fion Fal",,"2027-10-26","Tue","2ND","shift","2nd on","2nd on","long_day","2027-10-26 08:00","2027-10-26 18:00",10
+"C13","Dr Mali Medway",,"2027-10-26","Tue","1ST","shift","1st on","1st on","long_day","2027-10-26 08:00","2027-10-26 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-10-27","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-27 17:00","2027-10-28 08:00",15
+"C12","Dr Luca Lune",,"2027-10-27","Wed","2ND","shift","2nd on","2nd on","long_day","2027-10-27 08:00","2027-10-27 18:00",10
+"C13","Dr Mali Medway",,"2027-10-27","Wed","1ST","shift","1st on","1st on","long_day","2027-10-27 08:00","2027-10-27 18:00",10
+"C01","Dr Alys Avon",,"2027-10-28","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-28 17:00","2027-10-29 08:00",15
+"C08","Dr Huw Hodder",,"2027-10-28","Thu","2ND","shift","2nd on","2nd on","long_day","2027-10-28 08:00","2027-10-28 18:00",10
+"C13","Dr Mali Medway",,"2027-10-28","Thu","1ST","shift","1st on","1st on","long_day","2027-10-28 08:00","2027-10-28 18:00",10
+"C02","Dr Bryn Bure",,"2027-10-29","Fri","1ST","shift","1st on","1st on","long_day","2027-10-29 08:00","2027-10-29 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-10-29","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-29 17:00","2027-10-30 08:00",15
+"C12","Dr Luca Lune",,"2027-10-29","Fri","2ND","shift","2nd on","2nd on","long_day","2027-10-29 08:00","2027-10-29 18:00",10
+"C01","Dr Alys Avon",,"2027-10-30","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-30 17:00","2027-10-31 08:00",15
+"C02","Dr Bryn Bure",,"2027-10-30","Sat","1ST","shift","1st on","1st on","long_day","2027-10-30 08:00","2027-10-30 18:00",10
+"C12","Dr Luca Lune",,"2027-10-30","Sat","2ND","shift","2nd on","2nd on","long_day","2027-10-30 08:00","2027-10-30 18:00",10
+"C02","Dr Bryn Bure",,"2027-10-31","Sun","1ST","shift","1st on","1st on","long_day","2027-10-31 08:00","2027-10-31 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-10-31","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-10-31 17:00","2027-11-01 08:00",15
+"C12","Dr Luca Lune",,"2027-10-31","Sun","2ND","shift","2nd on","2nd on","long_day","2027-10-31 08:00","2027-10-31 18:00",10
+"C03","Dr Cleo Calder",,"2027-11-01","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-01 17:00","2027-11-02 08:00",15
+"C04","Dr Dara Dee",,"2027-11-01","Mon","1ST","shift","1st on","1st on","long_day","2027-11-01 08:00","2027-11-01 18:00",10
+"C06","Dr Fion Fal",,"2027-11-01","Mon","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-11-01","Mon","2ND","shift","2nd on","2nd on","long_day","2027-11-01 08:00","2027-11-01 18:00",10
+"C04","Dr Dara Dee",,"2027-11-02","Tue","1ST","shift","1st on","1st on","long_day","2027-11-02 08:00","2027-11-02 18:00",10
+"C06","Dr Fion Fal",,"2027-11-02","Tue","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-11-02","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-02 17:00","2027-11-03 08:00",15
+"C13","Dr Mali Medway",,"2027-11-02","Tue","2ND","shift","2nd on","2nd on","long_day","2027-11-02 08:00","2027-11-02 18:00",10
+"C03","Dr Cleo Calder",,"2027-11-03","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-03 17:00","2027-11-04 08:00",15
+"C04","Dr Dara Dee",,"2027-11-03","Wed","1ST","shift","1st on","1st on","long_day","2027-11-03 08:00","2027-11-03 18:00",10
+"C06","Dr Fion Fal",,"2027-11-03","Wed","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-11-03","Wed","2ND","shift","2nd on","2nd on","long_day","2027-11-03 08:00","2027-11-03 18:00",10
+"C04","Dr Dara Dee",,"2027-11-04","Thu","1ST","shift","1st on","1st on","long_day","2027-11-04 08:00","2027-11-04 18:00",10
+"C06","Dr Fion Fal",,"2027-11-04","Thu","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-11-04","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-04 17:00","2027-11-05 08:00",15
+"C15","Dr Orla Ouse",,"2027-11-04","Thu","2ND","shift","2nd on","2nd on","long_day","2027-11-04 08:00","2027-11-04 18:00",10
+"C03","Dr Cleo Calder",,"2027-11-05","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-05 17:00","2027-11-06 08:00",15
+"C05","Dr Emyr Esk",,"2027-11-05","Fri","1ST","shift","1st on","1st on","long_day","2027-11-05 08:00","2027-11-05 18:00",10
+"C06","Dr Fion Fal",,"2027-11-05","Fri","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-11-05","Fri","2ND","shift","2nd on","2nd on","long_day","2027-11-05 08:00","2027-11-05 18:00",10
+"C05","Dr Emyr Esk",,"2027-11-06","Sat","1ST","shift","1st on","1st on","long_day","2027-11-06 08:00","2027-11-06 18:00",10
+"C06","Dr Fion Fal",,"2027-11-06","Sat","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-11-06","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-06 17:00","2027-11-07 08:00",15
+"C13","Dr Mali Medway",,"2027-11-06","Sat","2ND","shift","2nd on","2nd on","long_day","2027-11-06 08:00","2027-11-06 18:00",10
+"C03","Dr Cleo Calder",,"2027-11-07","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-07 17:00","2027-11-08 08:00",15
+"C05","Dr Emyr Esk",,"2027-11-07","Sun","1ST","shift","1st on","1st on","long_day","2027-11-07 08:00","2027-11-07 18:00",10
+"C06","Dr Fion Fal",,"2027-11-07","Sun","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-11-07","Sun","2ND","shift","2nd on","2nd on","long_day","2027-11-07 08:00","2027-11-07 18:00",10
+"C01","Dr Alys Avon",,"2027-11-08","Mon","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-11-08","Mon","2ND","shift","2nd on","2nd on","long_day","2027-11-08 08:00","2027-11-08 18:00",10
+"C09","Dr Isla Irwell",,"2027-11-08","Mon","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-11-08","Mon","1ST","shift","1st on","1st on","long_day","2027-11-08 08:00","2027-11-08 18:00",10
+"C12","Dr Luca Lune",,"2027-11-08","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-08 17:00","2027-11-09 08:00",15
+"C01","Dr Alys Avon",,"2027-11-09","Tue","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-11-09","Tue","2ND","shift","2nd on","2nd on","long_day","2027-11-09 08:00","2027-11-09 18:00",10
+"C09","Dr Isla Irwell",,"2027-11-09","Tue","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-11-09","Tue","1ST","shift","1st on","1st on","long_day","2027-11-09 08:00","2027-11-09 18:00",10
+"C13","Dr Mali Medway",,"2027-11-09","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-09 17:00","2027-11-10 08:00",15
+"C01","Dr Alys Avon",,"2027-11-10","Wed","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-11-10","Wed","2ND","shift","2nd on","2nd on","long_day","2027-11-10 08:00","2027-11-10 18:00",10
+"C09","Dr Isla Irwell",,"2027-11-10","Wed","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-11-10","Wed","1ST","shift","1st on","1st on","long_day","2027-11-10 08:00","2027-11-10 18:00",10
+"C12","Dr Luca Lune",,"2027-11-10","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-10 17:00","2027-11-11 08:00",15
+"C01","Dr Alys Avon",,"2027-11-11","Thu","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-11-11","Thu","2ND","shift","2nd on","2nd on","long_day","2027-11-11 08:00","2027-11-11 18:00",10
+"C09","Dr Isla Irwell",,"2027-11-11","Thu","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-11-11","Thu","1ST","shift","1st on","1st on","long_day","2027-11-11 08:00","2027-11-11 18:00",10
+"C13","Dr Mali Medway",,"2027-11-11","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-11 17:00","2027-11-12 08:00",15
+"C01","Dr Alys Avon",,"2027-11-12","Fri","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-11-12","Fri","2ND","shift","2nd on","2nd on","long_day","2027-11-12 08:00","2027-11-12 18:00",10
+"C09","Dr Isla Irwell",,"2027-11-12","Fri","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-11-12","Fri","1ST","shift","1st on","1st on","long_day","2027-11-12 08:00","2027-11-12 18:00",10
+"C12","Dr Luca Lune",,"2027-11-12","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-12 17:00","2027-11-13 08:00",15
+"C01","Dr Alys Avon",,"2027-11-13","Sat","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-11-13","Sat","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-11-13","Sat","1ST","shift","1st on","1st on","long_day","2027-11-13 08:00","2027-11-13 18:00",10
+"C13","Dr Mali Medway",,"2027-11-13","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-13 17:00","2027-11-14 08:00",15
+"C15","Dr Orla Ouse",,"2027-11-13","Sat","2ND","shift","2nd on","2nd on","long_day","2027-11-13 08:00","2027-11-13 18:00",10
+"C01","Dr Alys Avon",,"2027-11-14","Sun","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-11-14","Sun","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-11-14","Sun","1ST","shift","1st on","1st on","long_day","2027-11-14 08:00","2027-11-14 18:00",10
+"C12","Dr Luca Lune",,"2027-11-14","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-14 17:00","2027-11-15 08:00",15
+"C15","Dr Orla Ouse",,"2027-11-14","Sun","2ND","shift","2nd on","2nd on","long_day","2027-11-14 08:00","2027-11-14 18:00",10
+"C03","Dr Cleo Calder",,"2027-11-15","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-15 17:00","2027-11-16 08:00",15
+"C06","Dr Fion Fal",,"2027-11-15","Mon","1ST","shift","1st on","1st on","long_day","2027-11-15 08:00","2027-11-15 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-11-15","Mon","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-11-15","Mon","2ND","shift","2nd on","2nd on","long_day","2027-11-15 08:00","2027-11-15 18:00",10
+"C10","Dr Joss Jed",,"2027-11-15","Mon","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-11-16","Tue","2ND","shift","2nd on","2nd on","long_day","2027-11-16 08:00","2027-11-16 18:00",10
+"C04","Dr Dara Dee",,"2027-11-16","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-16 17:00","2027-11-17 08:00",15
+"C06","Dr Fion Fal",,"2027-11-16","Tue","1ST","shift","1st on","1st on","long_day","2027-11-16 08:00","2027-11-16 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-11-16","Tue","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-11-16","Tue","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-11-17","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-17 17:00","2027-11-18 08:00",15
+"C06","Dr Fion Fal",,"2027-11-17","Wed","1ST","shift","1st on","1st on","long_day","2027-11-17 08:00","2027-11-17 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-11-17","Wed","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-11-17","Wed","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-11-17","Wed","2ND","shift","2nd on","2nd on","long_day","2027-11-17 08:00","2027-11-17 18:00",10
+"C04","Dr Dara Dee",,"2027-11-18","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-18 17:00","2027-11-19 08:00",15
+"C06","Dr Fion Fal",,"2027-11-18","Thu","1ST","shift","1st on","1st on","long_day","2027-11-18 08:00","2027-11-18 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-11-18","Thu","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-11-18","Thu","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-11-18","Thu","2ND","shift","2nd on","2nd on","long_day","2027-11-18 08:00","2027-11-18 18:00",10
+"C03","Dr Cleo Calder",,"2027-11-19","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-19 17:00","2027-11-20 08:00",15
+"C06","Dr Fion Fal",,"2027-11-19","Fri","2ND","shift","2nd on","2nd on","long_day","2027-11-19 08:00","2027-11-19 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-11-19","Fri","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-11-19","Fri","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-11-19","Fri","1ST","shift","1st on","1st on","long_day","2027-11-19 08:00","2027-11-19 18:00",10
+"C04","Dr Dara Dee",,"2027-11-20","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-20 17:00","2027-11-21 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-11-20","Sat","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-11-20","Sat","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-11-20","Sat","1ST","shift","1st on","1st on","long_day","2027-11-20 08:00","2027-11-20 18:00",10
+"C15","Dr Orla Ouse",,"2027-11-20","Sat","2ND","shift","2nd on","2nd on","long_day","2027-11-20 08:00","2027-11-20 18:00",10
+"C03","Dr Cleo Calder",,"2027-11-21","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-21 17:00","2027-11-22 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-11-21","Sun","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-11-21","Sun","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-11-21","Sun","1ST","shift","1st on","1st on","long_day","2027-11-21 08:00","2027-11-21 18:00",10
+"C15","Dr Orla Ouse",,"2027-11-21","Sun","2ND","shift","2nd on","2nd on","long_day","2027-11-21 08:00","2027-11-21 18:00",10
+"C01","Dr Alys Avon",,"2027-11-22","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-22 17:00","2027-11-23 08:00",15
+"C04","Dr Dara Dee",,"2027-11-22","Mon","2ND","shift","2nd on","2nd on","long_day","2027-11-22 08:00","2027-11-22 18:00",10
+"C05","Dr Emyr Esk",,"2027-11-22","Mon","1ST","shift","1st on","1st on","long_day","2027-11-22 08:00","2027-11-22 18:00",10
+"C09","Dr Isla Irwell",,"2027-11-22","Mon","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-11-23","Tue","1ST","shift","1st on","1st on","long_day","2027-11-23 08:00","2027-11-23 18:00",10
+"C08","Dr Huw Hodder",,"2027-11-23","Tue","2ND","shift","2nd on","2nd on","long_day","2027-11-23 08:00","2027-11-23 18:00",10
+"C09","Dr Isla Irwell",,"2027-11-23","Tue","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-11-23","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-23 17:00","2027-11-24 08:00",15
+"C01","Dr Alys Avon",,"2027-11-24","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-24 17:00","2027-11-25 08:00",15
+"C05","Dr Emyr Esk",,"2027-11-24","Wed","1ST","shift","1st on","1st on","long_day","2027-11-24 08:00","2027-11-24 18:00",10
+"C09","Dr Isla Irwell",,"2027-11-24","Wed","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-11-24","Wed","2ND","shift","2nd on","2nd on","long_day","2027-11-24 08:00","2027-11-24 18:00",10
+"C05","Dr Emyr Esk",,"2027-11-25","Thu","1ST","shift","1st on","1st on","long_day","2027-11-25 08:00","2027-11-25 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-11-25","Thu","2ND","shift","2nd on","2nd on","long_day","2027-11-25 08:00","2027-11-25 18:00",10
+"C09","Dr Isla Irwell",,"2027-11-25","Thu","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-11-25","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-25 17:00","2027-11-26 08:00",15
+"C01","Dr Alys Avon",,"2027-11-26","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-26 17:00","2027-11-27 08:00",15
+"C04","Dr Dara Dee",,"2027-11-26","Fri","1ST","shift","1st on","1st on","long_day","2027-11-26 08:00","2027-11-26 18:00",10
+"C09","Dr Isla Irwell",,"2027-11-26","Fri","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-11-26","Fri","2ND","shift","2nd on","2nd on","long_day","2027-11-26 08:00","2027-11-26 18:00",10
+"C04","Dr Dara Dee",,"2027-11-27","Sat","1ST","shift","1st on","1st on","long_day","2027-11-27 08:00","2027-11-27 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-11-27","Sat","2ND","shift","2nd on","2nd on","long_day","2027-11-27 08:00","2027-11-27 18:00",10
+"C09","Dr Isla Irwell",,"2027-11-27","Sat","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-11-27","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-27 17:00","2027-11-28 08:00",15
+"C01","Dr Alys Avon",,"2027-11-28","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-11-28 17:00","2027-11-29 08:00",15
+"C04","Dr Dara Dee",,"2027-11-28","Sun","1ST","shift","1st on","1st on","long_day","2027-11-28 08:00","2027-11-28 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-11-28","Sun","2ND","shift","2nd on","2nd on","long_day","2027-11-28 08:00","2027-11-28 18:00",10
+"C09","Dr Isla Irwell",,"2027-11-28","Sun","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2027-11-29","Mon","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-11-29","Mon","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-11-29","Mon","24H","shift","2nd on into the night","2nd on","night","2027-11-29 08:00","2027-11-30 08:00",24
+"C07","Dr Gwen Glaslyn",,"2027-11-29","Mon","1ST","shift","1st on","1st on","long_day","2027-11-29 08:00","2027-11-29 18:00",10
+"C02","Dr Bryn Bure",,"2027-11-30","Tue","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-11-30","Tue","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-11-30","Tue","1ST","shift","1st on","1st on","long_day","2027-11-30 08:00","2027-11-30 18:00",10
+"C11","Dr Kezia Kennet",,"2027-11-30","Tue","24H","shift","2nd on into the night","2nd on","night","2027-11-30 08:00","2027-12-01 08:00",24
+"C02","Dr Bryn Bure",,"2027-12-01","Wed","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-12-01","Wed","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-12-01","Wed","24H","shift","2nd on into the night","2nd on","night","2027-12-01 08:00","2027-12-02 08:00",24
+"C07","Dr Gwen Glaslyn",,"2027-12-01","Wed","1ST","shift","1st on","1st on","long_day","2027-12-01 08:00","2027-12-01 18:00",10
+"C02","Dr Bryn Bure",,"2027-12-02","Thu","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-12-02","Thu","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-12-02","Thu","1ST","shift","1st on","1st on","long_day","2027-12-02 08:00","2027-12-02 18:00",10
+"C11","Dr Kezia Kennet",,"2027-12-02","Thu","24H","shift","2nd on into the night","2nd on","night","2027-12-02 08:00","2027-12-03 08:00",24
+"C02","Dr Bryn Bure",,"2027-12-03","Fri","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-12-03","Fri","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-12-03","Fri","24H","shift","2nd on into the night","2nd on","night","2027-12-03 08:00","2027-12-04 08:00",24
+"C12","Dr Luca Lune",,"2027-12-03","Fri","1ST","shift","1st on","1st on","long_day","2027-12-03 08:00","2027-12-03 18:00",10
+"C02","Dr Bryn Bure",,"2027-12-04","Sat","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-12-04","Sat","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2027-12-04","Sat","24H","shift","2nd on into the night","2nd on","night","2027-12-04 08:00","2027-12-05 08:00",24
+"C12","Dr Luca Lune",,"2027-12-04","Sat","1ST","shift","1st on","1st on","long_day","2027-12-04 08:00","2027-12-04 18:00",10
+"C02","Dr Bryn Bure",,"2027-12-05","Sun","AL","leave","Annual leave",,,,,
+"C04","Dr Dara Dee",,"2027-12-05","Sun","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2027-12-05","Sun","24H","shift","2nd on into the night","2nd on","night","2027-12-05 08:00","2027-12-06 08:00",24
+"C12","Dr Luca Lune",,"2027-12-05","Sun","1ST","shift","1st on","1st on","long_day","2027-12-05 08:00","2027-12-05 18:00",10
+"C04","Dr Dara Dee",,"2027-12-06","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-06 17:00","2027-12-07 08:00",15
+"C06","Dr Fion Fal",,"2027-12-06","Mon","2ND","shift","2nd on","2nd on","long_day","2027-12-06 08:00","2027-12-06 18:00",10
+"C09","Dr Isla Irwell",,"2027-12-06","Mon","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-12-06","Mon","1ST","shift","1st on","1st on","long_day","2027-12-06 08:00","2027-12-06 18:00",10
+"C01","Dr Alys Avon",,"2027-12-07","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-07 17:00","2027-12-08 08:00",15
+"C03","Dr Cleo Calder",,"2027-12-07","Tue","2ND","shift","2nd on","2nd on","long_day","2027-12-07 08:00","2027-12-07 18:00",10
+"C09","Dr Isla Irwell",,"2027-12-07","Tue","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-12-07","Tue","1ST","shift","1st on","1st on","long_day","2027-12-07 08:00","2027-12-07 18:00",10
+"C03","Dr Cleo Calder",,"2027-12-08","Wed","2ND","shift","2nd on","2nd on","long_day","2027-12-08 08:00","2027-12-08 18:00",10
+"C04","Dr Dara Dee",,"2027-12-08","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-08 17:00","2027-12-09 08:00",15
+"C09","Dr Isla Irwell",,"2027-12-08","Wed","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-12-08","Wed","1ST","shift","1st on","1st on","long_day","2027-12-08 08:00","2027-12-08 18:00",10
+"C01","Dr Alys Avon",,"2027-12-09","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-09 17:00","2027-12-10 08:00",15
+"C09","Dr Isla Irwell",,"2027-12-09","Thu","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2027-12-09","Thu","2ND","shift","2nd on","2nd on","long_day","2027-12-09 08:00","2027-12-09 18:00",10
+"C15","Dr Orla Ouse",,"2027-12-09","Thu","1ST","shift","1st on","1st on","long_day","2027-12-09 08:00","2027-12-09 18:00",10
+"C03","Dr Cleo Calder",,"2027-12-10","Fri","2ND","shift","2nd on","2nd on","long_day","2027-12-10 08:00","2027-12-10 18:00",10
+"C04","Dr Dara Dee",,"2027-12-10","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-10 17:00","2027-12-11 08:00",15
+"C09","Dr Isla Irwell",,"2027-12-10","Fri","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-12-10","Fri","1ST","shift","1st on","1st on","long_day","2027-12-10 08:00","2027-12-10 18:00",10
+"C01","Dr Alys Avon",,"2027-12-11","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-11 17:00","2027-12-12 08:00",15
+"C09","Dr Isla Irwell",,"2027-12-11","Sat","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-12-11","Sat","2ND","shift","2nd on","2nd on","long_day","2027-12-11 08:00","2027-12-11 18:00",10
+"C12","Dr Luca Lune",,"2027-12-11","Sat","1ST","shift","1st on","1st on","long_day","2027-12-11 08:00","2027-12-11 18:00",10
+"C04","Dr Dara Dee",,"2027-12-12","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-12 17:00","2027-12-13 08:00",15
+"C09","Dr Isla Irwell",,"2027-12-12","Sun","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2027-12-12","Sun","2ND","shift","2nd on","2nd on","long_day","2027-12-12 08:00","2027-12-12 18:00",10
+"C12","Dr Luca Lune",,"2027-12-12","Sun","1ST","shift","1st on","1st on","long_day","2027-12-12 08:00","2027-12-12 18:00",10
+"C01","Dr Alys Avon",,"2027-12-13","Mon","1ST","shift","1st on","1st on","long_day","2027-12-13 08:00","2027-12-13 18:00",10
+"C06","Dr Fion Fal",,"2027-12-13","Mon","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-12-13","Mon","2ND","shift","2nd on","2nd on","long_day","2027-12-13 08:00","2027-12-13 18:00",10
+"C13","Dr Mali Medway",,"2027-12-13","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-13 17:00","2027-12-14 08:00",15
+"C01","Dr Alys Avon",,"2027-12-14","Tue","1ST","shift","1st on","1st on","long_day","2027-12-14 08:00","2027-12-14 18:00",10
+"C06","Dr Fion Fal",,"2027-12-14","Tue","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-12-14","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-14 17:00","2027-12-15 08:00",15
+"C12","Dr Luca Lune",,"2027-12-14","Tue","2ND","shift","2nd on","2nd on","long_day","2027-12-14 08:00","2027-12-14 18:00",10
+"C01","Dr Alys Avon",,"2027-12-15","Wed","1ST","shift","1st on","1st on","long_day","2027-12-15 08:00","2027-12-15 18:00",10
+"C04","Dr Dara Dee",,"2027-12-15","Wed","2ND","shift","2nd on","2nd on","long_day","2027-12-15 08:00","2027-12-15 18:00",10
+"C06","Dr Fion Fal",,"2027-12-15","Wed","AL","leave","Annual leave",,,,,
+"C08","Dr Huw Hodder",,"2027-12-15","Wed","SL","leave","Study leave",,,,,
+"C13","Dr Mali Medway",,"2027-12-15","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-15 17:00","2027-12-16 08:00",15
+"C01","Dr Alys Avon",,"2027-12-16","Thu","1ST","shift","1st on","1st on","long_day","2027-12-16 08:00","2027-12-16 18:00",10
+"C06","Dr Fion Fal",,"2027-12-16","Thu","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-12-16","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-16 17:00","2027-12-17 08:00",15
+"C08","Dr Huw Hodder",,"2027-12-16","Thu","SL","leave","Study leave",,,,,
+"C10","Dr Joss Jed",,"2027-12-16","Thu","2ND","shift","2nd on","2nd on","long_day","2027-12-16 08:00","2027-12-16 18:00",10
+"C06","Dr Fion Fal",,"2027-12-17","Fri","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2027-12-17","Fri","2ND","shift","2nd on","2nd on","long_day","2027-12-17 08:00","2027-12-17 18:00",10
+"C12","Dr Luca Lune",,"2027-12-17","Fri","1ST","shift","1st on","1st on","long_day","2027-12-17 08:00","2027-12-17 18:00",10
+"C13","Dr Mali Medway",,"2027-12-17","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-17 17:00","2027-12-18 08:00",15
+"C03","Dr Cleo Calder",,"2027-12-18","Sat","2ND","shift","2nd on","2nd on","long_day","2027-12-18 08:00","2027-12-18 18:00",10
+"C06","Dr Fion Fal",,"2027-12-18","Sat","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2027-12-18","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-18 17:00","2027-12-19 08:00",15
+"C12","Dr Luca Lune",,"2027-12-18","Sat","1ST","shift","1st on","1st on","long_day","2027-12-18 08:00","2027-12-18 18:00",10
+"C03","Dr Cleo Calder",,"2027-12-19","Sun","2ND","shift","2nd on","2nd on","long_day","2027-12-19 08:00","2027-12-19 18:00",10
+"C06","Dr Fion Fal",,"2027-12-19","Sun","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2027-12-19","Sun","1ST","shift","1st on","1st on","long_day","2027-12-19 08:00","2027-12-19 18:00",10
+"C13","Dr Mali Medway",,"2027-12-19","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-19 17:00","2027-12-20 08:00",15
+"C01","Dr Alys Avon",,"2027-12-20","Mon","1ST","shift","1st on","1st on","long_day","2027-12-20 08:00","2027-12-20 18:00",10
+"C08","Dr Huw Hodder",,"2027-12-20","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-20 17:00","2027-12-21 08:00",15
+"C15","Dr Orla Ouse",,"2027-12-20","Mon","2ND","shift","2nd on","2nd on","long_day","2027-12-20 08:00","2027-12-20 18:00",10
+"C01","Dr Alys Avon",,"2027-12-21","Tue","1ST","shift","1st on","1st on","long_day","2027-12-21 08:00","2027-12-21 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-12-21","Tue","2ND","shift","2nd on","2nd on","long_day","2027-12-21 08:00","2027-12-21 18:00",10
+"C10","Dr Joss Jed",,"2027-12-21","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-21 17:00","2027-12-22 08:00",15
+"C01","Dr Alys Avon",,"2027-12-22","Wed","1ST","shift","1st on","1st on","long_day","2027-12-22 08:00","2027-12-22 18:00",10
+"C07","Dr Gwen Glaslyn",,"2027-12-22","Wed","2ND","shift","2nd on","2nd on","long_day","2027-12-22 08:00","2027-12-22 18:00",10
+"C08","Dr Huw Hodder",,"2027-12-22","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-22 17:00","2027-12-23 08:00",15
+"C01","Dr Alys Avon",,"2027-12-23","Thu","1ST","shift","1st on","1st on","long_day","2027-12-23 08:00","2027-12-23 18:00",10
+"C10","Dr Joss Jed",,"2027-12-23","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-23 17:00","2027-12-24 08:00",15
+"C13","Dr Mali Medway",,"2027-12-23","Thu","2ND","shift","2nd on","2nd on","long_day","2027-12-23 08:00","2027-12-23 18:00",10
+"C03","Dr Cleo Calder",,"2027-12-24","Fri","2ND","shift","2nd on","2nd on","long_day","2027-12-24 08:00","2027-12-24 18:00",10
+"C08","Dr Huw Hodder",,"2027-12-24","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-24 17:00","2027-12-25 08:00",15
+"C09","Dr Isla Irwell",,"2027-12-24","Fri","1ST","shift","1st on","1st on","long_day","2027-12-24 08:00","2027-12-24 18:00",10
+"C01","Dr Alys Avon",,"2027-12-25","Sat","2ND","shift","2nd on","2nd on","long_day","2027-12-25 08:00","2027-12-25 18:00",10
+"C09","Dr Isla Irwell",,"2027-12-25","Sat","1ST","shift","1st on","1st on","long_day","2027-12-25 08:00","2027-12-25 18:00",10
+"C10","Dr Joss Jed",,"2027-12-25","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-25 17:00","2027-12-26 08:00",15
+"C01","Dr Alys Avon",,"2027-12-26","Sun","2ND","shift","2nd on","2nd on","long_day","2027-12-26 08:00","2027-12-26 18:00",10
+"C08","Dr Huw Hodder",,"2027-12-26","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-26 17:00","2027-12-27 08:00",15
+"C09","Dr Isla Irwell",,"2027-12-26","Sun","1ST","shift","1st on","1st on","long_day","2027-12-26 08:00","2027-12-26 18:00",10
+"C04","Dr Dara Dee",,"2027-12-27","Mon","2ND","shift","2nd on","2nd on","long_day","2027-12-27 08:00","2027-12-27 18:00",10
+"C06","Dr Fion Fal",,"2027-12-27","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-27 17:00","2027-12-28 08:00",15
+"C10","Dr Joss Jed",,"2027-12-27","Mon","1ST","shift","1st on","1st on","long_day","2027-12-27 08:00","2027-12-27 18:00",10
+"C14","Dr Nye Nidd",,"2027-12-27","Mon","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-12-27","Mon","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-12-28","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-28 17:00","2027-12-29 08:00",15
+"C07","Dr Gwen Glaslyn",,"2027-12-28","Tue","2ND","shift","2nd on","2nd on","long_day","2027-12-28 08:00","2027-12-28 18:00",10
+"C10","Dr Joss Jed",,"2027-12-28","Tue","1ST","shift","1st on","1st on","long_day","2027-12-28 08:00","2027-12-28 18:00",10
+"C14","Dr Nye Nidd",,"2027-12-28","Tue","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-12-28","Tue","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2027-12-29","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-29 17:00","2027-12-30 08:00",15
+"C10","Dr Joss Jed",,"2027-12-29","Wed","1ST","shift","1st on","1st on","long_day","2027-12-29 08:00","2027-12-29 18:00",10
+"C13","Dr Mali Medway",,"2027-12-29","Wed","2ND","shift","2nd on","2nd on","long_day","2027-12-29 08:00","2027-12-29 18:00",10
+"C14","Dr Nye Nidd",,"2027-12-29","Wed","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-12-29","Wed","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2027-12-30","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-30 17:00","2027-12-31 08:00",15
+"C04","Dr Dara Dee",,"2027-12-30","Thu","2ND","shift","2nd on","2nd on","long_day","2027-12-30 08:00","2027-12-30 18:00",10
+"C10","Dr Joss Jed",,"2027-12-30","Thu","1ST","shift","1st on","1st on","long_day","2027-12-30 08:00","2027-12-30 18:00",10
+"C14","Dr Nye Nidd",,"2027-12-30","Thu","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-12-30","Thu","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2027-12-31","Fri","2ND","shift","2nd on","2nd on","long_day","2027-12-31 08:00","2027-12-31 18:00",10
+"C06","Dr Fion Fal",,"2027-12-31","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2027-12-31 17:00","2028-01-01 08:00",15
+"C09","Dr Isla Irwell",,"2027-12-31","Fri","1ST","shift","1st on","1st on","long_day","2027-12-31 08:00","2027-12-31 18:00",10
+"C14","Dr Nye Nidd",,"2027-12-31","Fri","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2027-12-31","Fri","AL","leave","Annual leave",,,,,
+"C03","Dr Cleo Calder",,"2028-01-01","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2028-01-01 17:00","2028-01-02 08:00",15
+"C07","Dr Gwen Glaslyn",,"2028-01-01","Sat","2ND","shift","2nd on","2nd on","long_day","2028-01-01 08:00","2028-01-01 18:00",10
+"C09","Dr Isla Irwell",,"2028-01-01","Sat","1ST","shift","1st on","1st on","long_day","2028-01-01 08:00","2028-01-01 18:00",10
+"C14","Dr Nye Nidd",,"2028-01-01","Sat","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2028-01-01","Sat","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2028-01-02","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2028-01-02 17:00","2028-01-03 08:00",15
+"C07","Dr Gwen Glaslyn",,"2028-01-02","Sun","2ND","shift","2nd on","2nd on","long_day","2028-01-02 08:00","2028-01-02 18:00",10
+"C09","Dr Isla Irwell",,"2028-01-02","Sun","1ST","shift","1st on","1st on","long_day","2028-01-02 08:00","2028-01-02 18:00",10
+"C14","Dr Nye Nidd",,"2028-01-02","Sun","AL","leave","Annual leave",,,,,
+"C15","Dr Orla Ouse",,"2028-01-02","Sun","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2028-01-03","Mon","1ST","shift","1st on","1st on","long_day","2028-01-03 08:00","2028-01-03 18:00",10
+"C08","Dr Huw Hodder",,"2028-01-03","Mon","2ND","shift","2nd on","2nd on","long_day","2028-01-03 08:00","2028-01-03 18:00",10
+"C13","Dr Mali Medway",,"2028-01-03","Mon","SL","leave","Study leave",,,,,
+"C15","Dr Orla Ouse",,"2028-01-03","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2028-01-03 17:00","2028-01-04 08:00",15
+"C06","Dr Fion Fal",,"2028-01-04","Tue","2ND","shift","2nd on","2nd on","long_day","2028-01-04 08:00","2028-01-04 18:00",10
+"C07","Dr Gwen Glaslyn",,"2028-01-04","Tue","1ST","shift","1st on","1st on","long_day","2028-01-04 08:00","2028-01-04 18:00",10
+"C12","Dr Luca Lune",,"2028-01-04","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2028-01-04 17:00","2028-01-05 08:00",15
+"C13","Dr Mali Medway",,"2028-01-04","Tue","SL","leave","Study leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2028-01-05","Wed","1ST","shift","1st on","1st on","long_day","2028-01-05 08:00","2028-01-05 18:00",10
+"C13","Dr Mali Medway",,"2028-01-05","Wed","2ND","shift","2nd on","2nd on","long_day","2028-01-05 08:00","2028-01-05 18:00",10
+"C15","Dr Orla Ouse",,"2028-01-05","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2028-01-05 17:00","2028-01-06 08:00",15
+"C07","Dr Gwen Glaslyn",,"2028-01-06","Thu","1ST","shift","1st on","1st on","long_day","2028-01-06 08:00","2028-01-06 18:00",10
+"C09","Dr Isla Irwell",,"2028-01-06","Thu","2ND","shift","2nd on","2nd on","long_day","2028-01-06 08:00","2028-01-06 18:00",10
+"C12","Dr Luca Lune",,"2028-01-06","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2028-01-06 17:00","2028-01-07 08:00",15
+"C04","Dr Dara Dee",,"2028-01-07","Fri","1ST","shift","1st on","1st on","long_day","2028-01-07 08:00","2028-01-07 18:00",10
+"C07","Dr Gwen Glaslyn",,"2028-01-07","Fri","2ND","shift","2nd on","2nd on","long_day","2028-01-07 08:00","2028-01-07 18:00",10
+"C15","Dr Orla Ouse",,"2028-01-07","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2028-01-07 17:00","2028-01-08 08:00",15
+"C04","Dr Dara Dee",,"2028-01-08","Sat","1ST","shift","1st on","1st on","long_day","2028-01-08 08:00","2028-01-08 18:00",10
+"C08","Dr Huw Hodder",,"2028-01-08","Sat","2ND","shift","2nd on","2nd on","long_day","2028-01-08 08:00","2028-01-08 18:00",10
+"C12","Dr Luca Lune",,"2028-01-08","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2028-01-08 17:00","2028-01-09 08:00",15
+"C04","Dr Dara Dee",,"2028-01-09","Sun","1ST","shift","1st on","1st on","long_day","2028-01-09 08:00","2028-01-09 18:00",10
+"C08","Dr Huw Hodder",,"2028-01-09","Sun","2ND","shift","2nd on","2nd on","long_day","2028-01-09 08:00","2028-01-09 18:00",10
+"C15","Dr Orla Ouse",,"2028-01-09","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2028-01-09 17:00","2028-01-10 08:00",15
+"C01","Dr Alys Avon",,"2028-01-10","Mon","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2028-01-10","Mon","24H","shift","2nd on into the night","2nd on","night","2028-01-10 08:00","2028-01-11 08:00",24
+"C05","Dr Emyr Esk",,"2028-01-10","Mon","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2028-01-10","Mon","1ST","shift","1st on","1st on","long_day","2028-01-10 08:00","2028-01-10 18:00",10
+"C01","Dr Alys Avon",,"2028-01-11","Tue","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2028-01-11","Tue","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2028-01-11","Tue","1ST","shift","1st on","1st on","long_day","2028-01-11 08:00","2028-01-11 18:00",10
+"C11","Dr Kezia Kennet",,"2028-01-11","Tue","24H","shift","2nd on into the night","2nd on","night","2028-01-11 08:00","2028-01-12 08:00",24
+"C01","Dr Alys Avon",,"2028-01-12","Wed","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2028-01-12","Wed","24H","shift","2nd on into the night","2nd on","night","2028-01-12 08:00","2028-01-13 08:00",24
+"C05","Dr Emyr Esk",,"2028-01-12","Wed","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2028-01-12","Wed","1ST","shift","1st on","1st on","long_day","2028-01-12 08:00","2028-01-12 18:00",10
+"C01","Dr Alys Avon",,"2028-01-13","Thu","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2028-01-13","Thu","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2028-01-13","Thu","1ST","shift","1st on","1st on","long_day","2028-01-13 08:00","2028-01-13 18:00",10
+"C11","Dr Kezia Kennet",,"2028-01-13","Thu","24H","shift","2nd on into the night","2nd on","night","2028-01-13 08:00","2028-01-14 08:00",24
+"C01","Dr Alys Avon",,"2028-01-14","Fri","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2028-01-14","Fri","24H","shift","2nd on into the night","2nd on","night","2028-01-14 08:00","2028-01-15 08:00",24
+"C05","Dr Emyr Esk",,"2028-01-14","Fri","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2028-01-14","Fri","1ST","shift","1st on","1st on","long_day","2028-01-14 08:00","2028-01-14 18:00",10
+"C01","Dr Alys Avon",,"2028-01-15","Sat","AL","leave","Annual leave",,,,,
+"C05","Dr Emyr Esk",,"2028-01-15","Sat","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2028-01-15","Sat","24H","shift","2nd on into the night","2nd on","night","2028-01-15 08:00","2028-01-16 08:00",24
+"C14","Dr Nye Nidd",,"2028-01-15","Sat","1ST","shift","1st on","1st on","long_day","2028-01-15 08:00","2028-01-15 18:00",10
+"C01","Dr Alys Avon",,"2028-01-16","Sun","AL","leave","Annual leave",,,,,
+"C02","Dr Bryn Bure",,"2028-01-16","Sun","24H","shift","2nd on into the night","2nd on","night","2028-01-16 08:00","2028-01-17 08:00",24
+"C05","Dr Emyr Esk",,"2028-01-16","Sun","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2028-01-16","Sun","1ST","shift","1st on","1st on","long_day","2028-01-16 08:00","2028-01-16 18:00",10
+"C04","Dr Dara Dee",,"2028-01-17","Mon","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2028-01-17","Mon","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2028-01-17","Mon","2ND","shift","2nd on","2nd on","long_day","2028-01-17 08:00","2028-01-17 18:00",10
+"C13","Dr Mali Medway",,"2028-01-17","Mon","1ST","shift","1st on","1st on","long_day","2028-01-17 08:00","2028-01-17 18:00",10
+"C15","Dr Orla Ouse",,"2028-01-17","Mon","NIGHT","shift","Night (on site to 22:00)","Nights","night","2028-01-17 17:00","2028-01-18 08:00",15
+"C01","Dr Alys Avon",,"2028-01-18","Tue","2ND","shift","2nd on","2nd on","long_day","2028-01-18 08:00","2028-01-18 18:00",10
+"C04","Dr Dara Dee",,"2028-01-18","Tue","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2028-01-18","Tue","AL","leave","Annual leave",,,,,
+"C12","Dr Luca Lune",,"2028-01-18","Tue","NIGHT","shift","Night (on site to 22:00)","Nights","night","2028-01-18 17:00","2028-01-19 08:00",15
+"C13","Dr Mali Medway",,"2028-01-18","Tue","1ST","shift","1st on","1st on","long_day","2028-01-18 08:00","2028-01-18 18:00",10
+"C04","Dr Dara Dee",,"2028-01-19","Wed","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2028-01-19","Wed","2ND","shift","2nd on","2nd on","long_day","2028-01-19 08:00","2028-01-19 18:00",10
+"C07","Dr Gwen Glaslyn",,"2028-01-19","Wed","AL","leave","Annual leave",,,,,
+"C13","Dr Mali Medway",,"2028-01-19","Wed","1ST","shift","1st on","1st on","long_day","2028-01-19 08:00","2028-01-19 18:00",10
+"C15","Dr Orla Ouse",,"2028-01-19","Wed","NIGHT","shift","Night (on site to 22:00)","Nights","night","2028-01-19 17:00","2028-01-20 08:00",15
+"C04","Dr Dara Dee",,"2028-01-20","Thu","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2028-01-20","Thu","AL","leave","Annual leave",,,,,
+"C09","Dr Isla Irwell",,"2028-01-20","Thu","2ND","shift","2nd on","2nd on","long_day","2028-01-20 08:00","2028-01-20 18:00",10
+"C12","Dr Luca Lune",,"2028-01-20","Thu","NIGHT","shift","Night (on site to 22:00)","Nights","night","2028-01-20 17:00","2028-01-21 08:00",15
+"C13","Dr Mali Medway",,"2028-01-20","Thu","1ST","shift","1st on","1st on","long_day","2028-01-20 08:00","2028-01-20 18:00",10
+"C02","Dr Bryn Bure",,"2028-01-21","Fri","1ST","shift","1st on","1st on","long_day","2028-01-21 08:00","2028-01-21 18:00",10
+"C04","Dr Dara Dee",,"2028-01-21","Fri","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2028-01-21","Fri","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2028-01-21","Fri","2ND","shift","2nd on","2nd on","long_day","2028-01-21 08:00","2028-01-21 18:00",10
+"C15","Dr Orla Ouse",,"2028-01-21","Fri","NIGHT","shift","Night (on site to 22:00)","Nights","night","2028-01-21 17:00","2028-01-22 08:00",15
+"C02","Dr Bryn Bure",,"2028-01-22","Sat","1ST","shift","1st on","1st on","long_day","2028-01-22 08:00","2028-01-22 18:00",10
+"C04","Dr Dara Dee",,"2028-01-22","Sat","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2028-01-22","Sat","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2028-01-22","Sat","2ND","shift","2nd on","2nd on","long_day","2028-01-22 08:00","2028-01-22 18:00",10
+"C12","Dr Luca Lune",,"2028-01-22","Sat","NIGHT","shift","Night (on site to 22:00)","Nights","night","2028-01-22 17:00","2028-01-23 08:00",15
+"C02","Dr Bryn Bure",,"2028-01-23","Sun","1ST","shift","1st on","1st on","long_day","2028-01-23 08:00","2028-01-23 18:00",10
+"C04","Dr Dara Dee",,"2028-01-23","Sun","AL","leave","Annual leave",,,,,
+"C07","Dr Gwen Glaslyn",,"2028-01-23","Sun","AL","leave","Annual leave",,,,,
+"C10","Dr Joss Jed",,"2028-01-23","Sun","2ND","shift","2nd on","2nd on","long_day","2028-01-23 08:00","2028-01-23 18:00",10
+"C15","Dr Orla Ouse",,"2028-01-23","Sun","NIGHT","shift","Night (on site to 22:00)","Nights","night","2028-01-23 17:00","2028-01-24 08:00",15
+"C01","Dr Alys Avon",,"2028-01-24","Mon","1ST","shift","1st on","1st on","long_day","2028-01-24 08:00","2028-01-24 18:00",10
+"C09","Dr Isla Irwell",,"2028-01-24","Mon","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2028-01-24","Mon","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2028-01-24","Mon","24H","shift","2nd on into the night","2nd on","night","2028-01-24 08:00","2028-01-25 08:00",24
+"C01","Dr Alys Avon",,"2028-01-25","Tue","1ST","shift","1st on","1st on","long_day","2028-01-25 08:00","2028-01-25 18:00",10
+"C05","Dr Emyr Esk",,"2028-01-25","Tue","24H","shift","2nd on into the night","2nd on","night","2028-01-25 08:00","2028-01-26 08:00",24
+"C09","Dr Isla Irwell",,"2028-01-25","Tue","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2028-01-25","Tue","AL","leave","Annual leave",,,,,
+"C01","Dr Alys Avon",,"2028-01-26","Wed","1ST","shift","1st on","1st on","long_day","2028-01-26 08:00","2028-01-26 18:00",10
+"C09","Dr Isla Irwell",,"2028-01-26","Wed","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2028-01-26","Wed","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2028-01-26","Wed","24H","shift","2nd on into the night","2nd on","night","2028-01-26 08:00","2028-01-27 08:00",24
+"C01","Dr Alys Avon",,"2028-01-27","Thu","1ST","shift","1st on","1st on","long_day","2028-01-27 08:00","2028-01-27 18:00",10
+"C05","Dr Emyr Esk",,"2028-01-27","Thu","24H","shift","2nd on into the night","2nd on","night","2028-01-27 08:00","2028-01-28 08:00",24
+"C09","Dr Isla Irwell",,"2028-01-27","Thu","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2028-01-27","Thu","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2028-01-28","Fri","1ST","shift","1st on","1st on","long_day","2028-01-28 08:00","2028-01-28 18:00",10
+"C09","Dr Isla Irwell",,"2028-01-28","Fri","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2028-01-28","Fri","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2028-01-28","Fri","24H","shift","2nd on into the night","2nd on","night","2028-01-28 08:00","2028-01-29 08:00",24
+"C05","Dr Emyr Esk",,"2028-01-29","Sat","24H","shift","2nd on into the night","2nd on","night","2028-01-29 08:00","2028-01-30 08:00",24
+"C06","Dr Fion Fal",,"2028-01-29","Sat","1ST","shift","1st on","1st on","long_day","2028-01-29 08:00","2028-01-29 18:00",10
+"C09","Dr Isla Irwell",,"2028-01-29","Sat","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2028-01-29","Sat","AL","leave","Annual leave",,,,,
+"C06","Dr Fion Fal",,"2028-01-30","Sun","1ST","shift","1st on","1st on","long_day","2028-01-30 08:00","2028-01-30 18:00",10
+"C09","Dr Isla Irwell",,"2028-01-30","Sun","AL","leave","Annual leave",,,,,
+"C11","Dr Kezia Kennet",,"2028-01-30","Sun","AL","leave","Annual leave",,,,,
+"C14","Dr Nye Nidd",,"2028-01-30","Sun","24H","shift","2nd on into the night","2nd on","night","2028-01-30 08:00","2028-01-31 08:00",24

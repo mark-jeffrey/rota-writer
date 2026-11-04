@@ -43,6 +43,8 @@ test_that("the results views and downloads work for a rota", {
       calendars <- zip::zip_list(output$calendars_zip)$filename
       expect_length(calendars, 43) # one per doctor, and one for everyone
       expect_true("All_doctors.ics" %in% calendars)
+      expect_equal(read.csv(output$rota_csv, fileEncoding = "UTF-8-BOM")$doctor_id[1], "D01")
+      expect_equal(nrow(read.csv(output$violations_csv, fileEncoding = "UTF-8-BOM")), nrow(violations()))
     }
   )
 })

@@ -34,11 +34,13 @@ Rscript -e 'roxygen2::roxygenise()'         # after changing roxygen comments
 Rscript data-raw/make_test_data.R           # regenerate the resident inputs and the test fixture rota
 Rscript data-raw/make_consultant_data.R     # regenerate the ICU consultant inputs
 Rscript data-raw/make_screenshots.R         # retake the README's app screenshots (needs Chromium)
+Rscript data-raw/update_bank_holidays.R     # refresh inst/extdata/uk-bank-holidays.csv from GOV.UK
 ```
 
 From R: `pkgload::load_all()`, then `read_rota_inputs()`, `validate_inputs()`, `solve_rota()`,
 `check_rota()`, `summarise_doctors()`, `summarise_patterns()`, `write_rota()`,
-`write_check_report()` and `write_calendars()`. Each has a help page.
+`write_check_report()`, `write_calendars()`, `write_rota_csv()`, `write_violations_csv()` and
+`uk_bank_holidays()`. Each has a help page.
 
 ## Layout
 
@@ -49,12 +51,13 @@ From R: `pkgload::load_all()`, then `read_rota_inputs()`, `validate_inputs()`, `
 | `R/model.R`, `R/soft.R`, `R/patterns.R`, `R/preferences.R`, `R/sequences.R` | The model: hard rules as constraints, soft rules as penalties |
 | `R/solve.R` | `solve_rota()`: first rota, then large neighbourhood search |
 | `R/check_rota.R`, `R/report.R` | The independent checker and its report |
-| `R/output.R`, `R/app*.R` | Rota workbook, calendars and the Shiny app |
-| `data-raw/template_parts.R` | Shared pieces for writing an inputs workbook: `rule_library`, `rule_rows()`, `england_bank_holidays()`, drop-down values, and `write_inputs_workbook()` with its sheet order, colours and header notes (`sheet_guide`, `column_notes`) |
+| `R/output.R`, `R/csv.R`, `R/app*.R` | Rota workbook, calendars, CSV exports and the Shiny app |
+| `R/bank_holidays.R`, `inst/extdata/uk-bank-holidays.csv` | UK bank holidays, a copy of GOV.UK's list refreshed by `data-raw/update_bank_holidays.R` |
+| `data-raw/template_parts.R` | Shared pieces for writing an inputs workbook: `rule_library`, `rule_rows()`, drop-down values, and `write_inputs_workbook()` with its sheet order, colours and header notes (`sheet_guide`, `column_notes`) |
 | `data-raw/make_*_data.R` | Scripts that write the example inputs workbooks |
 | `docs/contract-rules.md` | The contract rules, their parameters and sources |
 | `examples/<rota>/input/` | An example's inputs workbook; find it from R with `rota_example()` |
-| `examples/<rota>/output/` | Its solved rota, check report and calendars |
+| `examples/<rota>/output/` | Its solved rota, check report, CSV files and calendars |
 | `tests/testthat/fixtures/` | A naive rota with planted breaches, for the checker's tests |
 | `local/` | Gitignored: a department's real inputs, spec and solve output |
 

@@ -1,0 +1,231 @@
+﻿"rule_id","hard_soft","doctor_id","start_date","end_date","detail","penalty"
+"HOURS_TARGET","soft","D01","2027-02-01","2027-05-02","4.0 h short of contracted 45.0 h x 13.0 weeks (average 44.7 h/week)",20
+"HOURS_TARGET","soft","D02","2027-02-01","2027-05-02","2.5 h short of contracted 45.0 h x 13.0 weeks (average 44.8 h/week)",12.5
+"HOURS_TARGET","soft","D03","2027-02-01","2027-05-02","2.0 h short of contracted 36.0 h x 13.0 weeks (average 35.8 h/week)",10
+"HOURS_TARGET","soft","D04","2027-02-01","2027-05-02","4.0 h short of contracted 45.0 h x 13.0 weeks (average 44.7 h/week)",20
+"HOURS_TARGET","soft","D06","2027-02-01","2027-05-02","0.5 h short of contracted 45.0 h x 13.0 weeks (average 45.0 h/week)",2.5
+"HOURS_TARGET","soft","D07","2027-02-01","2027-05-02","1.5 h short of contracted 45.0 h x 13.0 weeks (average 44.9 h/week)",7.5
+"HOURS_TARGET","soft","D08","2027-02-01","2027-05-02","2.0 h short of contracted 36.0 h x 13.0 weeks (average 35.8 h/week)",10
+"HOURS_TARGET","soft","D09","2027-02-01","2027-05-02","16.5 h short of contracted 45.0 h x 13.0 weeks (average 43.7 h/week)",157.5
+"HOURS_TARGET","soft","D10","2027-02-01","2027-05-02","10.0 h short of contracted 45.0 h x 13.0 weeks (average 44.2 h/week)",60
+"HOURS_TARGET","soft","D11","2027-02-01","2027-05-02","0.5 h short of contracted 45.0 h x 13.0 weeks (average 45.0 h/week)",2.5
+"HOURS_TARGET","soft","D12","2027-02-01","2027-05-02","5.5 h short of contracted 45.0 h x 13.0 weeks (average 44.6 h/week)",27.5
+"HOURS_TARGET","soft","D13","2027-02-01","2027-05-02","15.0 h short of contracted 45.0 h x 13.0 weeks (average 43.8 h/week)",135
+"HOURS_TARGET","soft","D14","2027-02-01","2027-05-02","2.0 h short of contracted 36.0 h x 13.0 weeks (average 35.8 h/week)",10
+"HOURS_TARGET","soft","D15","2027-02-01","2027-05-02","4.0 h short of contracted 45.0 h x 13.0 weeks (average 44.7 h/week)",20
+"HOURS_TARGET","soft","D16","2027-02-01","2027-05-02","11.0 h short of contracted 45.0 h x 13.0 weeks (average 44.2 h/week)",75
+"HOURS_TARGET","soft","D17","2027-02-01","2027-05-02","0.5 h short of contracted 45.0 h x 13.0 weeks (average 45.0 h/week)",2.5
+"HOURS_TARGET","soft","D18","2027-02-01","2027-05-02","8.0 h short of contracted 45.0 h x 13.0 weeks (average 44.4 h/week)",40
+"HOURS_TARGET","soft","D19","2027-02-01","2027-05-02","7.5 h short of contracted 45.0 h x 13.0 weeks (average 44.4 h/week)",37.5
+"HOURS_TARGET","soft","D20","2027-02-01","2027-05-02","4.0 h short of contracted 45.0 h x 13.0 weeks (average 44.7 h/week)",20
+"HOURS_TARGET","soft","D21","2027-02-01","2027-05-02","8.0 h short of contracted 45.0 h x 13.0 weeks (average 44.4 h/week)",40
+"HOURS_TARGET","soft","D22","2027-02-01","2027-05-02","2.0 h short of contracted 36.0 h x 13.0 weeks (average 35.8 h/week)",10
+"HOURS_TARGET","soft","D23","2027-02-01","2027-05-02","0.5 h short of contracted 45.0 h x 13.0 weeks (average 45.0 h/week)",2.5
+"HOURS_TARGET","soft","D24","2027-02-01","2027-05-02","4.0 h short of contracted 45.0 h x 13.0 weeks (average 44.7 h/week)",20
+"HOURS_TARGET","soft","D25","2027-02-01","2027-05-02","6.0 h short of contracted 45.0 h x 13.0 weeks (average 44.5 h/week)",30
+"HOURS_TARGET","soft","D26","2027-02-01","2027-05-02","6.0 h short of contracted 45.0 h x 13.0 weeks (average 44.5 h/week)",30
+"HOURS_TARGET","soft","D27","2027-02-01","2027-05-02","5.5 h short of contracted 45.0 h x 13.0 weeks (average 44.6 h/week)",27.5
+"HOURS_TARGET","soft","D28","2027-02-01","2027-05-02","0.5 h short of contracted 45.0 h x 13.0 weeks (average 45.0 h/week)",2.5
+"HOURS_TARGET","soft","D29","2027-02-01","2027-05-02","2.0 h short of contracted 45.0 h x 13.0 weeks (average 44.8 h/week)",10
+"HOURS_TARGET","soft","D30","2027-02-01","2027-05-02","6.0 h short of contracted 45.0 h x 13.0 weeks (average 44.5 h/week)",30
+"HOURS_TARGET","soft","D31","2027-02-01","2027-05-02","4.0 h short of contracted 45.0 h x 13.0 weeks (average 44.7 h/week)",20
+"HOURS_TARGET","soft","D32","2027-02-01","2027-05-02","3.0 h short of contracted 27.0 h x 13.0 weeks (average 26.8 h/week)",15
+"HOURS_TARGET","soft","D33","2027-02-01","2027-03-02","4.4 h short of contracted 45.0 h x 4.3 weeks (average 44.0 h/week)",21.7857142857143
+"HOURS_TARGET","soft","D35","2027-02-01","2027-05-02","0.5 h short of contracted 45.0 h x 13.0 weeks (average 45.0 h/week)",2.5
+"HOURS_TARGET","soft","D36","2027-02-01","2027-05-02","0.5 h short of contracted 45.0 h x 13.0 weeks (average 45.0 h/week)",2.5
+"HOURS_TARGET","soft","D37","2027-02-01","2027-05-02","0.5 h short of contracted 45.0 h x 13.0 weeks (average 45.0 h/week)",2.5
+"HOURS_TARGET","soft","D38","2027-02-01","2027-05-02","6.0 h short of contracted 45.0 h x 13.0 weeks (average 44.5 h/week)",30
+"HOURS_TARGET","soft","D39","2027-02-01","2027-05-02","0.5 h short of contracted 45.0 h x 13.0 weeks (average 45.0 h/week)",2.5
+"HOURS_TARGET","soft","D41","2027-02-01","2027-05-02","0.5 h short of contracted 45.0 h x 13.0 weeks (average 45.0 h/week)",2.5
+"HOURS_TARGET","soft","D42","2027-02-01","2027-05-02","11.5 h short of contracted 45.0 h x 13.0 weeks (average 44.1 h/week)",82.5
+"HOURS_TARGET","soft","D34","2027-03-03","2027-05-02","8.1 h short of contracted 45.0 h x 8.7 weeks (average 44.1 h/week)",40.7142857142856
+"ICU_SHORT_RUN","soft","D39","2027-02-02","2027-02-03","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D40","2027-02-06","2027-02-06","1-day ICU run (target at least 3)",10
+"ICU_SHORT_RUN","soft","D35","2027-02-07","2027-02-07","1-day ICU run (target at least 3)",10
+"ICU_SHORT_RUN","soft","D36","2027-02-08","2027-02-09","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D37","2027-02-08","2027-02-09","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D38","2027-02-08","2027-02-09","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D40","2027-02-08","2027-02-09","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D40","2027-02-11","2027-02-12","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D35","2027-02-12","2027-02-12","1-day ICU run (target at least 3)",10
+"ICU_SHORT_RUN","soft","D01","2027-02-15","2027-02-16","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D40","2027-02-15","2027-02-15","1-day ICU run (target at least 3)",10
+"ICU_SHORT_RUN","soft","D04","2027-02-22","2027-02-23","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D40","2027-02-25","2027-02-26","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D04","2027-02-26","2027-02-27","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D16","2027-03-01","2027-03-02","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D33","2027-03-01","2027-03-02","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D37","2027-03-01","2027-03-02","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D40","2027-03-01","2027-03-02","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D09","2027-03-03","2027-03-04","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D39","2027-03-03","2027-03-04","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D04","2027-03-04","2027-03-05","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D40","2027-03-04","2027-03-05","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D42","2027-03-05","2027-03-05","1-day ICU run (target at least 3)",10
+"ICU_SHORT_RUN","soft","D38","2027-03-06","2027-03-07","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D04","2027-03-08","2027-03-09","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D40","2027-03-08","2027-03-09","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D40","2027-03-11","2027-03-12","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D41","2027-03-13","2027-03-14","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D20","2027-03-15","2027-03-16","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D35","2027-03-15","2027-03-15","1-day ICU run (target at least 3)",10
+"ICU_SHORT_RUN","soft","D39","2027-03-15","2027-03-16","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D40","2027-03-15","2027-03-16","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D41","2027-03-17","2027-03-18","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D12","2027-03-18","2027-03-18","1-day ICU run (target at least 3)",10
+"ICU_SHORT_RUN","soft","D39","2027-03-18","2027-03-19","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D04","2027-03-19","2027-03-19","1-day ICU run (target at least 3)",10
+"ICU_SHORT_RUN","soft","D27","2027-03-22","2027-03-22","1-day ICU run (target at least 3)",10
+"ICU_SHORT_RUN","soft","D42","2027-03-23","2027-03-24","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D04","2027-03-24","2027-03-25","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D41","2027-03-24","2027-03-25","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D40","2027-03-25","2027-03-26","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D29","2027-03-26","2027-03-26","1-day ICU run (target at least 3)",10
+"ICU_SHORT_RUN","soft","D12","2027-03-27","2027-03-28","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D36","2027-03-27","2027-03-28","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D16","2027-03-30","2027-03-30","1-day ICU run (target at least 3)",10
+"ICU_SHORT_RUN","soft","D37","2027-03-30","2027-03-31","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D36","2027-03-31","2027-03-31","1-day ICU run (target at least 3)",10
+"ICU_SHORT_RUN","soft","D38","2027-04-01","2027-04-02","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D42","2027-04-04","2027-04-05","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D09","2027-04-05","2027-04-05","1-day ICU run (target at least 3)",10
+"ICU_SHORT_RUN","soft","D40","2027-04-08","2027-04-09","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D12","2027-04-12","2027-04-13","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D42","2027-04-14","2027-04-15","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D12","2027-04-15","2027-04-15","1-day ICU run (target at least 3)",10
+"ICU_SHORT_RUN","soft","D37","2027-04-15","2027-04-16","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D41","2027-04-17","2027-04-18","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D04","2027-04-19","2027-04-20","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D36","2027-04-19","2027-04-20","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D40","2027-04-23","2027-04-23","1-day ICU run (target at least 3)",10
+"ICU_SHORT_RUN","soft","D01","2027-04-26","2027-04-27","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D40","2027-04-26","2027-04-27","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D39","2027-04-28","2027-04-29","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D12","2027-04-29","2027-04-30","2-day ICU run (target at least 3)",5
+"ICU_SHORT_RUN","soft","D40","2027-04-30","2027-04-30","1-day ICU run (target at least 3)",10
+"ISOLATED_DAY_OFF","soft","D12","2027-02-06","2027-02-06","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D40","2027-02-07","2027-02-07","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D40","2027-02-10","2027-02-10","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D37","2027-02-15","2027-02-15","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D04","2027-02-16","2027-02-16","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D39","2027-02-18","2027-02-18","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D10","2027-02-23","2027-02-23","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D21","2027-02-24","2027-02-24","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D39","2027-03-02","2027-03-02","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D40","2027-03-03","2027-03-03","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D40","2027-03-10","2027-03-10","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D13","2027-03-12","2027-03-12","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D40","2027-03-24","2027-03-24","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D07","2027-03-28","2027-03-28","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D12","2027-03-29","2027-03-29","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D18","2027-04-05","2027-04-05","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D28","2027-04-14","2027-04-14","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D18","2027-04-24","2027-04-24","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D02","2027-04-27","2027-04-27","Single day off between shifts",30
+"ISOLATED_DAY_OFF","soft","D29","2027-04-27","2027-04-27","Single day off between shifts",30
+"LEAVE_REQUESTED","soft","D18","2027-03-28","2027-03-28","OBS_LD - on requested annual leave",500
+"LONG_RUN","soft","D02","2027-03-20","2027-03-25","6 consecutive shifts (target 5)",150
+"NORMAL_DAY_SPREAD","soft",,"2027-02-02","2027-02-02","ICU_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-02-03","2027-02-03","ICU_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-02-04","2027-02-04","ICU_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-02-08","2027-02-08","ICU_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-02-09","2027-02-09","ICU_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-02-10","2027-02-10","ANA_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-02-10","2027-02-10","ICU_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-02-11","2027-02-11","ANA_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-02-11","2027-02-11","ICU_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-02-12","2027-02-12","ANA_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-02-12","2027-02-12","ICU_DAY: 11 rostered (typical 9)",20
+"NORMAL_DAY_SPREAD","soft",,"2027-02-15","2027-02-15","ANA_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-02-15","2027-02-15","ICU_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-02-16","2027-02-16","ANA_DAY: 7 rostered (typical 9)",20
+"NORMAL_DAY_SPREAD","soft",,"2027-02-17","2027-02-17","ICU_DAY: 12 rostered (typical 9)",30
+"NORMAL_DAY_SPREAD","soft",,"2027-02-19","2027-02-19","ANA_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-02-22","2027-02-22","ANA_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-02-22","2027-02-22","ICU_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-02-23","2027-02-23","ANA_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-02-24","2027-02-24","ICU_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-03-01","2027-03-01","ICU_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-03-02","2027-03-02","ICU_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-03-04","2027-03-04","ANA_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-03-04","2027-03-04","ICU_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-03-09","2027-03-09","ICU_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-03-11","2027-03-11","ANA_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-03-16","2027-03-16","ICU_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-03-17","2027-03-17","ICU_DAY: 7 rostered (typical 9)",20
+"NORMAL_DAY_SPREAD","soft",,"2027-03-18","2027-03-18","ICU_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-03-24","2027-03-24","ICU_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-03-25","2027-03-25","ANA_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-03-25","2027-03-25","ICU_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-03-31","2027-03-31","ANA_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-03-31","2027-03-31","ICU_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-04-01","2027-04-01","ANA_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-04-01","2027-04-01","ICU_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-04-02","2027-04-02","ANA_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-04-06","2027-04-06","ANA_DAY: 7 rostered (typical 9)",20
+"NORMAL_DAY_SPREAD","soft",,"2027-04-08","2027-04-08","ICU_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-04-09","2027-04-09","ANA_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-04-12","2027-04-12","ANA_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-04-12","2027-04-12","ICU_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-04-13","2027-04-13","ICU_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-04-14","2027-04-14","ICU_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-04-15","2027-04-15","ICU_DAY: 11 rostered (typical 9)",20
+"NORMAL_DAY_SPREAD","soft",,"2027-04-19","2027-04-19","ICU_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-04-20","2027-04-20","ANA_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-04-21","2027-04-21","ANA_DAY: 10 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-04-21","2027-04-21","ICU_DAY: 8 rostered (typical 9)",10
+"NORMAL_DAY_SPREAD","soft",,"2027-04-22","2027-04-22","ICU_DAY: 7 rostered (typical 9)",20
+"NORMAL_DAY_SPREAD","soft",,"2027-04-28","2027-04-28","ICU_DAY: 8 rostered (typical 9)",10
+"PLACEMENT_AVOID","soft","D13","2027-03-15","2027-03-15","OBS_N - OBS discouraged in GENERAL block",100
+"PLACEMENT_AVOID","soft","D17","2027-04-24","2027-04-24","OBS_LD - OBS discouraged in GENERAL block",100
+"PLACEMENT_AVOID","soft","D17","2027-04-30","2027-04-30","OBS_N - OBS discouraged in GENERAL block",100
+"PLACEMENT_AVOID","soft","D17","2027-05-01","2027-05-01","OBS_N - OBS discouraged in GENERAL block",100
+"PLACEMENT_AVOID","soft","D15","2027-05-02","2027-05-02","OBS_N - OBS discouraged in GENERAL block",100
+"REQUESTS","soft","D06","2027-02-16","2027-02-16","Request not met: prefer_oncall",5
+"REQUESTS","soft","D02","2027-02-25","2027-02-25","Request not met: no_night",5
+"REQUESTS","soft","D31","2027-03-05","2027-03-05","Request not met: prefer_oncall",2
+"REQUESTS","soft","D08","2027-03-27","2027-03-27","Request not met: no_night",2
+"REQUESTS","soft","D24","2027-03-31","2027-03-31","Request not met: no_oncall",1
+"REQUESTS","soft","D29","2027-04-06","2027-04-06","Request not met: no_oncall",3
+"REQUESTS","soft","D07","2027-04-29","2027-04-29","Request not met: prefer_oncall",3
+"SINGLE_NIGHT","soft","D32","2027-02-01","2027-02-01","Isolated single night",100
+"SINGLE_NIGHT","soft","D13","2027-02-02","2027-02-02","Isolated single night",100
+"SINGLE_NIGHT","soft","D03","2027-02-03","2027-02-03","Isolated single night",100
+"SINGLE_NIGHT","soft","D26","2027-02-03","2027-02-03","Isolated single night",100
+"SINGLE_NIGHT","soft","D05","2027-02-04","2027-02-04","Isolated single night",100
+"SINGLE_NIGHT","soft","D25","2027-02-04","2027-02-04","Isolated single night",100
+"SINGLE_NIGHT","soft","D39","2027-02-04","2027-02-04","Isolated single night",100
+"SINGLE_NIGHT","soft","D28","2027-02-05","2027-02-05","Isolated single night",100
+"SINGLE_NIGHT","soft","D37","2027-02-05","2027-02-05","Isolated single night",100
+"SINGLE_NIGHT","soft","D06","2027-05-02","2027-05-02","Isolated single night",100
+"SKILL_MIX","soft",,"2027-02-05","2027-02-05","SM2: Ideally one ST5+ across ICU1/ANA2/OBS at night (0 found)",100
+"SKILL_MIX","soft",,"2027-02-28","2027-02-28","SM4: Ideally one ST5+ across ICU1/ANA2/OBS on long days (0 found)",100
+"SKILL_MIX","soft",,"2027-03-23","2027-03-23","SM4: Ideally one ST5+ across ICU1/ANA2/OBS on long days (0 found)",100
+"SKILL_MIX","soft",,"2027-04-02","2027-04-02","SM2: Ideally one ST5+ across ICU1/ANA2/OBS at night (0 found)",100
+"SKILL_MIX","soft",,"2027-04-05","2027-04-05","SM2: Ideally one ST5+ across ICU1/ANA2/OBS at night (0 found)",100
+"SKILL_MIX","soft",,"2027-04-21","2027-04-21","SM2: Ideally one ST5+ across ICU1/ANA2/OBS at night (0 found)",100
+"SKILL_MIX","soft",,"2027-04-22","2027-04-22","SM2: Ideally one ST5+ across ICU1/ANA2/OBS at night (0 found)",100
+"SPLIT_WEEKEND","soft","D12","2027-02-06","2027-02-07","Works one day of the weekend",150
+"SPLIT_WEEKEND","soft","D28","2027-02-06","2027-02-07","Works one day of the weekend",150
+"SPLIT_WEEKEND","soft","D30","2027-02-06","2027-02-07","Works one day of the weekend",150
+"SPLIT_WEEKEND","soft","D35","2027-02-06","2027-02-07","Works one day of the weekend",150
+"SPLIT_WEEKEND","soft","D37","2027-02-06","2027-02-07","Works one day of the weekend",150
+"SPLIT_WEEKEND","soft","D40","2027-02-06","2027-02-07","Works one day of the weekend",150
+"SPLIT_WEEKEND","soft","D19","2027-02-27","2027-02-28","Works one day of the weekend",150
+"SPLIT_WEEKEND","soft","D07","2027-03-27","2027-03-28","Works one day of the weekend",150
+"SPLIT_WEEKEND","soft","D18","2027-03-27","2027-03-28","Works one day of the weekend",150
+"SPLIT_WEEKEND","soft","D42","2027-03-27","2027-03-28","Works one day of the weekend",150
+"SPLIT_WEEKEND","soft","D17","2027-04-03","2027-04-04","Works one day of the weekend",150
+"SPLIT_WEEKEND","soft","D21","2027-04-03","2027-04-04","Works one day of the weekend",150
+"SPLIT_WEEKEND","soft","D34","2027-04-03","2027-04-04","Works one day of the weekend",150
+"SPLIT_WEEKEND","soft","D42","2027-04-03","2027-04-04","Works one day of the weekend",150
+"SPLIT_WEEKEND","soft","D18","2027-04-24","2027-04-25","Works one day of the weekend",150
+"SPLIT_WEEKEND","soft","D03","2027-05-01","2027-05-02","Works one day of the weekend",150
+"WEEKEND_TARGET","soft","D04","2027-02-06","2027-05-02","Worked 5 of 13 weekends (1 more than 1 in 3)",50
+"WEEKEND_TARGET","soft","D07","2027-02-06","2027-05-02","Worked 6 of 13 weekends (2 more than 1 in 3)",100
+"WEEKEND_TARGET","soft","D12","2027-02-06","2027-05-02","Worked 5 of 13 weekends (1 more than 1 in 3)",50
+"WEEKEND_TARGET","soft","D16","2027-02-06","2027-05-02","Worked 5 of 13 weekends (1 more than 1 in 3)",50
+"WEEKEND_TARGET","soft","D36","2027-02-06","2027-05-02","Worked 5 of 13 weekends (1 more than 1 in 3)",50
+"WEEKEND_TARGET","soft","D40","2027-02-06","2027-05-02","Worked 5 of 13 weekends (1 more than 1 in 3)",50
+"WEEKEND_TARGET","soft","D41","2027-02-06","2027-05-02","Worked 5 of 13 weekends (1 more than 1 in 3)",50
+"WEEKEND_TARGET","soft","D42","2027-02-06","2027-05-02","Worked 6 of 13 weekends (2 more than 1 in 3)",100

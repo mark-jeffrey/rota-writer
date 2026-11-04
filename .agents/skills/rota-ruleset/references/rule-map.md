@@ -18,7 +18,7 @@ isn't here, check `rule_registry()` in `R/rules.R` before calling it a gap.
 | One shift fills two slots (e.g. 24 h = 2nd-on day + night) | `shifts$covers` = `2ND;NIGHT` | Counts once for each slot under `FAIR_SLOTS` |
 | Only volunteers work a shift | `shifts$open_to` = `preference`, plus a `prefer_shift` row in `preferences` | Hard (`PREFERENCE_ONLY`) |
 | How many on each shift | `cover`: per `shift_code` and `day_type` (`weekday`/`weekend`/`bank_holiday`), `n_min`/`n_max` | Exact for on-call (`n_min = n_max`); a minimum only for normal days. **Not** per date: one-off extra cover is a gap. |
-| Bank holidays | `bank_holidays` sheet; `england_bank_holidays()` for England and Wales | Other nations: type them in |
+| Bank holidays | `bank_holidays` sheet; `uk_bank_holidays()` for England and Wales, Scotland or Northern Ireland | Local or one-off holidays: add them by hand |
 | Normal days to top up hours | `normal_day` shifts with a cover minimum, plus `HOURS_TARGET` and `NORMAL_DAY_SPREAD` | Resident rotas. Consultant rotas usually leave the other sessions out of the rota and set WTE to the rota's share of the job. |
 
 ## Who can work what

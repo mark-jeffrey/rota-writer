@@ -26,7 +26,7 @@ early keeping the best rota so far
 broken, as \code{\link[=check_rota]{check_rota()}} reports them
 \item check a rota edited by hand
 \item download the rota workbook, the compliance report and per-doctor
-calendars
+calendars, and the rota and rules broken as plain CSV
 }
 }
 \details{

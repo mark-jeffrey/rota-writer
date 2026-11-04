@@ -204,7 +204,7 @@ anywhere.
 2. **Solve:** choose a time limit and press Solve. The penalty falls as the solver improves the rota.
    **Stop and keep best rota** finishes early with the best rota so far.
 3. **Results:** who is on each shift (by role), each doctor's rota (by doctor), fairness within
-   each staffing pool, patterns, and every rule broken. **Download** gives `rota.xlsx`, `report.xlsx` and `calendars.zip`.
+   each staffing pool, patterns, and every rule broken. **Download** gives `rota.xlsx`, `report.xlsx` and `calendars.zip`, and the plain CSV files `rota.csv` and `violations.csv`.
 4. **Check a rota:** upload a rota workbook, such as one edited by hand, to check it.
 
 ![The Solve tab: a progress bar and the best penalty so far, falling over a 3-minute solve](docs/images/app-solve.png)
@@ -227,6 +227,8 @@ problems and stops, or writes:
 |---|---|
 | `rota.xlsx` | `by_role`: dates down and shifts across, holding who is on each, with `UNFILLED` where cover is short. On-call shifts come first, then normal days, each grouped under a band naming its area (ICU, theatres, obstetrics...). `by_doctor`: dates down, doctors across, with shift and leave codes, ordered by grade under a band of grades, with each doctor's shifts, hours, nights, weekend days and leave days at the foot. `doctors`: hours, on-calls, nights and weekends against each doctor's fair share. `key`: what the codes mean. `long`: one row per shift worked (`doctor_id`, `date`, `code`), the format the checker reads. |
 | `report.xlsx` | The checker's report: violations by rule, one row per violation with its penalty, per-doctor hours and fair shares (shaded blue for fewer, red for more), and a `patterns` sheet of runs, single nights, split weekends and single days off. |
+| `rota.csv` | The rota as plain CSV, for other software (staffing systems, payroll checks, Power BI): one row per shift worked or day of approved leave, with the doctor, date, code, description, area, shift type, start and end clock times and hours. Nights that cross midnight end on the next day's date. |
+| `violations.csv` | The `violations` sheet of the report as plain CSV, one row per rule broken. |
 | `calendars/` | One `.ics` file per doctor, with their shifts and approved leave, and `All_doctors.ics` with everyone's shifts titled like "ICU1 night: Dr Ada Alder", for a department calendar. |
 
 Both rota sheets use the same colours: one per area, pale for normal days, mid for long days and dark
@@ -236,7 +238,7 @@ formulas that follow hand edits. A line under each Sunday marks the weeks. The `
 code in its colour. Both sheets print landscape, one page wide, with their headings on every page.
 
 To re-check a hand-edited rota, edit the `long` sheet of `rota.xlsx` (the `by_role` and
-`by_doctor` sheets are for reading only) and run `check_rota.R`. Both scripts exit with status 1 if a hard rule is broken
+`by_doctor` sheets are for reading only) and run `check_rota.R`. Given a report path, `check_rota.R` also writes `violations.csv` beside it. Both scripts exit with status 1 if a hard rule is broken
 (including unfilled slots), and the checker with 2 if the inputs fail validation.
 
 ### From R
@@ -251,6 +253,8 @@ summarise_doctors(solution$rota, inputs)    # counts against fair shares
 summarise_patterns(solution$rota, inputs)   # runs, single nights, split weekends
 write_rota(solution$rota, inputs, "rota.xlsx")
 write_calendars(solution$rota, inputs, "calendars")
+write_rota_csv(solution$rota, inputs, "rota.csv")   # plain CSV for other software
+uk_bank_holidays("2027-02-01", "2027-05-02", nation = "scotland")  # for the bank_holidays sheet
 ```
 
 Each function has a help page, e.g. `?solve_rota`, `?check_rota`, `?rotawriter`.
@@ -258,7 +262,7 @@ Each function has a help page, e.g. `?solve_rota`, `?check_rota`, `?rotawriter`.
 ## 🧩 Example rule sets
 
 Both examples use fictional staff. Each has a folder in [`examples/`](examples/): its inputs
-workbook in `input/`, and its solved rota, report and calendars in `output/`. From R,
+workbook in `input/`, and its solved rota, report, CSV files and calendars in `output/`. From R,
 `rota_example("residents")` gives the path to an example's inputs.
 
 ### Resident doctors: anaesthesia and ICU
@@ -340,7 +344,7 @@ name, so a workbook with sheets in another order, or without the `about` sheet, 
 | `cover` | Doctors needed per shift by day type (`weekday`/`weekend`/`bank_holiday`). Exact for on-call (`n_min = n_max`), a minimum for normal days. |
 | `placement_roles` | The roles each placement may work. Unlisted roles are forbidden; a `penalty` above 0 allows a role but discourages it. |
 | `skill_mix` | Seniority across groups of shifts: minimum grade, minimum count, weight |
-| `bank_holidays` | Bank holidays in the rota window |
+| `bank_holidays` | Bank holidays in the rota window. `uk_bank_holidays()` lists them for England and Wales, Scotland or Northern Ireland, from a copy of GOV.UK's list; add any local or one-off holidays by hand. |
 
 ### Rota types
 
@@ -452,18 +456,21 @@ Rscript -e 'pkgload::load_all(); testthat::test_dir("tests/testthat", load_packa
 Rscript -e 'roxygen2::roxygenise()'         # after changing roxygen comments
 Rscript data-raw/make_test_data.R           # regenerate the resident example workbooks
 Rscript data-raw/make_consultant_data.R     # regenerate the ICU consultant workbook
+Rscript data-raw/update_bank_holidays.R     # refresh the UK bank holidays from GOV.UK (needs internet)
 ```
 
 ### Roadmap
 
 **Done:** inputs workbook and validation; independent checker; solver with hard and soft rules;
-coordinator workbook, compliance report and calendars; staffing pools; the local app; rota types
-with block patterns, standing preferences, 24-hour shifts and shift sequences; agent skills for setup
-and new rule sets.
+coordinator workbook, compliance report and calendars, with plain CSV exports; UK bank holidays for
+all four nations; staffing pools; the local app; rota types with block patterns, standing
+preferences, 24-hour shifts and shift sequences; agent skills for setup and new rule sets.
 
 **Next:**
 1. Editing leave and requests in the app, and saving and reopening sessions.
 2. Re-solving mid-rota with existing shifts fixed, swaps, and non-resident on-call.
+3. Importing from e-rostering systems: filling the `leave` sheet (and perhaps `preferences`) from
+   their exports, and exporting rotas in their import formats, starting with CLWRota.
 
 ## 📚 Prior art
 

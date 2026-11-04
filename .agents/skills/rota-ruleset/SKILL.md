@@ -120,7 +120,8 @@ worth more than a complete spec.
 2. **Write the generator script** `local/<dept>/make_inputs.R`. It should
    `source("data-raw/template_parts.R")`, then build each sheet as a tibble:
    - rules from `rule_rows()`, with the changes in named arguments;
-   - bank holidays from `england_bank_holidays()`, after checking the nation and any one-off
+   - bank holidays from `uk_bank_holidays(start, end, nation)` (`"england-and-wales"`,
+     `"scotland"` or `"northern-ireland"`), after checking the nation and any one-off or local
      holidays;
    - the workbook with `write_inputs_workbook()`, which adds the front `about` sheet (give it a
      title and a sentence or two on the rota), puts the sheets in the standard order and colours,

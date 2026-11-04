@@ -1,0 +1,18 @@
+﻿"rule_id","hard_soft","doctor_id","start_date","end_date","detail","penalty"
+"PREFERENCES","soft","C09","2027-02-17","2027-02-17","1ST - prefers Wed off",5
+"PREFERENCES","soft","C12","2027-03-15","2027-03-15","1ST - prefers Mon off",5
+"PREFERENCES","soft","C09","2027-04-14","2027-04-14","NIGHT - prefers Wed off",5
+"PREFERENCES","soft","C12","2027-06-07","2027-06-07","1ST - prefers Mon off",5
+"PREFERENCES","soft","C09","2027-06-23","2027-06-23","1ST - prefers Wed off",5
+"PREFERENCES","soft","C06","2027-07-22","2027-07-22","1ST - prefers Thu off",5
+"PREFERENCES","soft","C12","2027-07-26","2027-07-26","1ST - prefers Mon off",5
+"PREFERENCES","soft","C04","2027-09-14","2027-09-14","1ST - prefers Tue off",5
+"PREFERENCES","soft","C04","2027-11-02","2027-11-02","1ST - prefers Tue off",5
+"PREFERENCES","soft","C12","2027-11-08","2027-11-08","NIGHT - prefers Mon off",5
+"PREFERENCES","soft","C04","2027-11-16","2027-11-16","NIGHT - prefers Tue off",5
+"PREFERENCES","soft","C06","2027-11-18","2027-11-18","1ST - prefers Thu off",5
+"REQUESTS","soft","C07","2027-10-25","2027-10-25","Request not met: no_oncall",2
+"SPLIT_WEEKEND","soft","C04","2027-03-06","2027-03-07","Works one day of the weekend",20
+"SPLIT_WEEKEND","soft","C07","2027-06-19","2027-06-20","Works one day of the weekend",20
+"SPLIT_WEEKEND","soft","C01","2027-06-26","2027-06-27","Works one day of the weekend",20
+"SPLIT_WEEKEND","soft","C01","2027-10-23","2027-10-24","Works one day of the weekend",20

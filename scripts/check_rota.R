@@ -3,7 +3,8 @@
 #   Rscript scripts/check_rota.R <inputs.xlsx> <rota.xlsx> [report.xlsx]
 #
 # Run from the project root. The rota workbook needs a "long" sheet with
-# doctor_id, date, code. Exits with status 1 if any hard rule is broken.
+# doctor_id, date, code. With a report path, also writes violations.csv next
+# to the report. Exits with status 1 if any hard rule is broken.
 
 pkgload::load_all(quiet = TRUE)
 
@@ -35,7 +36,9 @@ print(summary, n = Inf)
 
 if (length(args) >= 3) {
   write_check_report(violations, doctors, args[3], patterns = summarise_patterns(rota, inputs))
-  message("Report written to ", args[3])
+  csv <- file.path(dirname(args[3]), "violations.csv")
+  write_violations_csv(violations, csv)
+  message("Report written to ", args[3], " and ", csv)
 }
 
 quit(status = as.integer(n_hard > 0))

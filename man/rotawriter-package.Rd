@@ -24,6 +24,10 @@ workbook
 the soft-rule penalties
 \item \code{\link[=write_rota]{write_rota()}}: save a rota as a workbook for the coordinator
 \item \code{\link[=write_calendars]{write_calendars()}}: one \code{.ics} calendar per doctor
+\item \code{\link[=write_rota_csv]{write_rota_csv()}} and \code{\link[=write_violations_csv]{write_violations_csv()}}: the rota and the
+checker's results as plain CSV, for other software
+\item \code{\link[=uk_bank_holidays]{uk_bank_holidays()}}: bank holidays in England and Wales, Scotland or
+Northern Ireland, for the \code{bank_holidays} sheet
 }
 }
 \author{

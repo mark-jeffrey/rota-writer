@@ -16,7 +16,7 @@
 #'   broken, as [check_rota()] reports them
 #' * check a rota edited by hand
 #' * download the rota workbook, the compliance report and per-doctor
-#'   calendars
+#'   calendars, and the rota and rules broken as plain CSV
 #'
 #' Nothing is sent anywhere: the app and the solver run on this computer.
 #' Close the browser tab and press Esc (or Ctrl+C) in R to stop it.

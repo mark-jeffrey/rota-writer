@@ -65,7 +65,7 @@ cover <- crossing(shift_code = c("1ST", "2ND", "NIGHT"),
                   day_type = c("weekday", "weekend", "bank_holiday")) |>
   mutate(n_min = 1, n_max = 1)
 
-bank_holidays <- england_bank_holidays(rota_start, rota_end)
+bank_holidays <- uk_bank_holidays(rota_start, rota_end, nation = "england-and-wales")
 
 # Blocks: 1st on Mon-Thu and Fri-Sun, or the whole week for those who prefer
 # it; nights split between two consultants each week

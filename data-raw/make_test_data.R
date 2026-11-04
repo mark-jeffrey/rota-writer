@@ -109,7 +109,7 @@ cover <- bind_rows(
 ) |>
   arrange(match(shift_code, shifts$shift_code), day_type)
 
-bank_holidays <- england_bank_holidays(rota_start, rota_end)
+bank_holidays <- uk_bank_holidays(rota_start, rota_end, nation = "england-and-wales")
 
 # Staff -------------------------------------------------------------------
 # Two staffing pools, each with its own fair shares. The anaesthetics team

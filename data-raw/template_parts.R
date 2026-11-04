@@ -3,7 +3,7 @@
 #   source("data-raw/template_parts.R")
 #
 # Each make_*_data.R script sources this from the project root. A new rota
-# template starts from rule_rows(), england_bank_holidays() and add_sheet()
+# template starts from rule_rows(), uk_bank_holidays() and add_sheet()
 # rather than copying them from another script.
 
 suppressPackageStartupMessages({
@@ -11,6 +11,9 @@ suppressPackageStartupMessages({
   library(lubridate)
   library(openxlsx2)
 })
+
+# rota-writer's exported functions, for uk_bank_holidays()
+pkgload::load_all(quiet = TRUE, export_all = FALSE)
 
 # Rules -------------------------------------------------------------------
 # Every rule in rule_registry() (R/rules.R), with its usual description,
@@ -83,50 +86,6 @@ rule_rows <- function(ids, ...) {
     }
   }
   rows
-}
-
-# Bank holidays -----------------------------------------------------------
-# England and Wales, from gov.uk/bank-holidays. Scotland and Northern Ireland
-# have different ones, and one-off holidays are announced at short notice:
-# check the list for the rota's dates.
-
-england_bank_holidays <- function(start, end) {
-  tribble(
-    ~date,              ~name,
-    ymd("2026-01-01"),  "New Year's Day",
-    ymd("2026-04-03"),  "Good Friday",
-    ymd("2026-04-06"),  "Easter Monday",
-    ymd("2026-05-04"),  "Early May bank holiday",
-    ymd("2026-05-25"),  "Spring bank holiday",
-    ymd("2026-08-31"),  "Summer bank holiday",
-    ymd("2026-12-25"),  "Christmas Day",
-    ymd("2026-12-28"),  "Boxing Day (substitute)",
-    ymd("2027-01-01"),  "New Year's Day",
-    ymd("2027-03-26"),  "Good Friday",
-    ymd("2027-03-29"),  "Easter Monday",
-    ymd("2027-05-03"),  "Early May bank holiday",
-    ymd("2027-05-31"),  "Spring bank holiday",
-    ymd("2027-08-30"),  "Summer bank holiday",
-    ymd("2027-12-27"),  "Christmas Day (substitute)",
-    ymd("2027-12-28"),  "Boxing Day (substitute)",
-    ymd("2028-01-03"),  "New Year's Day (substitute)",
-    ymd("2028-04-14"),  "Good Friday",
-    ymd("2028-04-17"),  "Easter Monday",
-    ymd("2028-05-01"),  "Early May bank holiday",
-    ymd("2028-05-29"),  "Spring bank holiday",
-    ymd("2028-08-28"),  "Summer bank holiday",
-    ymd("2028-12-25"),  "Christmas Day",
-    ymd("2028-12-26"),  "Boxing Day",
-    ymd("2029-01-01"),  "New Year's Day",
-    ymd("2029-03-30"),  "Good Friday",
-    ymd("2029-04-02"),  "Easter Monday",
-    ymd("2029-05-07"),  "Early May bank holiday",
-    ymd("2029-05-28"),  "Spring bank holiday",
-    ymd("2029-08-27"),  "Summer bank holiday",
-    ymd("2029-12-25"),  "Christmas Day",
-    ymd("2029-12-26"),  "Boxing Day"
-  ) |>
-    filter(between(date, start, end))
 }
 
 # Drop-down values --------------------------------------------------------

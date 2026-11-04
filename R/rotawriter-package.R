@@ -16,6 +16,10 @@
 #'   the soft-rule penalties
 #' * [write_rota()]: save a rota as a workbook for the coordinator
 #' * [write_calendars()]: one `.ics` calendar per doctor
+#' * [write_rota_csv()] and [write_violations_csv()]: the rota and the
+#'   checker's results as plain CSV, for other software
+#' * [uk_bank_holidays()]: bank holidays in England and Wales, Scotland or
+#'   Northern Ireland, for the `bank_holidays` sheet
 #'
 #' @keywords internal
 #' @import dplyr purrr tidyr
