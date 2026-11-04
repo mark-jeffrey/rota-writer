@@ -419,6 +419,9 @@ code. The contract rules, their parameters and sources are in
 
 ## ⚙️ Technical methods
 
+Most of these methods come from the mixed-integer linear programming model in Abdullah et al.
+(2025); see [Prior art](#-prior-art).
+
 - **Model.** One binary variable per doctor, day and shift they could work. Variables a doctor could
   never use (competency, placement, leave, LTFT day, not in post) are left out, so the resident
   example has about 10k binaries rather than 37k. The model is built as tidy tables with dplyr and
@@ -474,6 +477,15 @@ preferences, 24-hour shifts and shift sequences; agent skills for setup and new 
 
 ## 📚 Prior art
 
+rota-writer's model builds on Abdullah, Ayob, Lam, Sabar, Kendall and Yong,
+[*Advancing Anaesthetist Rostering Quality: A Practical Approach Toward Fairness and
+Efficiency*](https://doi.org/10.1109/ACCESS.2025.3526842) (IEEE Access 13: 12692–12708, 2025;
+CC BY 4.0). That paper sets out a mixed-integer linear programming model for anaesthetist rostering,
+with hard constraints and weighted, fairness-balancing soft constraints, and most of the methods here
+come from it. rota-writer implements them in R with an open-source solver, adapts them to the NHS
+contracts, and adds an agent-led process that turns a non-technical coordinator's description of
+their rota into the rules and weights.
+
 There is no maintained open-source NHS rota **optimiser** that we know of. Related work:
 
 - [RudolfCardinal/rota](https://github.com/RudolfCardinal/rota): Python rota design and checking
@@ -481,8 +493,7 @@ There is no maintained open-source NHS rota **optimiser** that we know of. Relat
 - [BMA rota checker](https://bma.org.uk/pay-and-contracts/working-hours/work-schedule/bma-rota-checker):
   the reference compliance check for the 2016 contract.
 - Academic work: a [2017 rostering problem set based on the junior doctor contract](https://e-space.mmu.ac.uk/619524)
-  (simulated annealing); an [anaesthetist rota system using constraint satisfaction](https://aaai.org/?p=65521);
-  and a [MILP model for fair anaesthetist rostering](https://doi.org/10.1109/ACCESS.2025.3526842) (IEEE Access, 2025).
+  (simulated annealing); and an [anaesthetist rota system using constraint satisfaction](https://aaai.org/?p=65521).
 - Industry: [Hartree Centre / Alder Hey on-call optimisation](https://www.hartree.stfc.ac.uk/case-studies/2026/03/09/modernising-nhs-staffing-schedules-with-advanced-rota-optimisation/) (2026),
   and Lantum (built on the open-source [Timefold](https://timefold.ai) solver).
 - General tools: Google OR-Tools CP-SAT and Timefold. Nurse rostering is the closest
