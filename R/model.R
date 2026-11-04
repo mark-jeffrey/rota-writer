@@ -58,7 +58,7 @@
 #'
 #' @export
 #' @examples
-#' inputs <- read_rota_inputs(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"))
+#' inputs <- read_rota_inputs(rota_example())
 #' build_rota_model(inputs)
 build_rota_model <- function(inputs) {
   inputs <- as_rota_inputs(inputs)

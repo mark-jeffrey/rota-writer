@@ -61,7 +61,7 @@
 #' @export
 #' @examples
 #' \dontrun{
-#' inputs <- read_rota_inputs(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"))
+#' inputs <- read_rota_inputs(rota_example())
 #' solution <- solve_rota(inputs, time_limit = 120)
 #' check_rota(solution$rota, inputs)
 #' }

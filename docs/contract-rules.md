@@ -3,7 +3,7 @@
 Rota safety rules from the **2016 Terms and Conditions of Service (TCS) for
 resident doctors in England, Schedule 3**, as amended by the 2018/2019 contract
 refresh. Each rule has a `rule_id` that matches the `rules` sheet in
-`inst/extdata/rota_inputs.xlsx`. Users can change the parameters there, and the
+`examples/residents/input/inputs.xlsx`. Users can change the parameters there, and the
 model reads them from that sheet, so nothing is hard-coded.
 
 **Hard** rules must be satisfied, otherwise the model is infeasible. **Soft**

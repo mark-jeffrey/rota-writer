@@ -53,6 +53,6 @@ further they are from it, so the solver spreads work evenly.
 Most users want \code{\link[=solve_rota]{solve_rota()}}, which calls this.
 }
 \examples{
-inputs <- read_rota_inputs(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"))
+inputs <- read_rota_inputs(rota_example())
 build_rota_model(inputs)
 }

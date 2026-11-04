@@ -251,8 +251,8 @@ colour_codes <- function(wb, sheet, x, cols, shifts = NULL) {
 #' @returns The paths of the files written, invisibly.
 #' @export
 #' @examples
-#' inputs <- read_rota_inputs(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"))
-#' rota <- read_rota(system.file("extdata", "example_rota_output.xlsx", package = "rotawriter"))
+#' inputs <- read_rota_inputs(rota_example())
+#' rota <- read_rota(rota_example("residents", "output/rota.xlsx"))
 #' write_calendars(rota, inputs, tempfile("calendars"), doctors = "D01")
 write_calendars <- function(rota, inputs, dir, doctors = NULL) {
   inputs <- as_rota_inputs(inputs)

@@ -1,5 +1,5 @@
 test_that("test workbook reads and validates cleanly", {
-  inputs <- read_rota_inputs(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"))
+  inputs <- read_rota_inputs(rota_example())
 
   expect_equal(inputs$period$start, as.Date("2027-02-01"))
   expect_equal(inputs$period$end, as.Date("2027-05-02"))
@@ -43,10 +43,8 @@ test_that("the rota type sets which rules are on when the rules sheet leaves the
 
 test_that("sheets a rota type does not need are read as empty", {
   path <- withr::local_tempfile(fileext = ".xlsx")
-  sheets <- map(set_names(readxl::excel_sheets(system.file("extdata", "rota_inputs.xlsx",
-                                                          package = "rotawriter"))),
-                \(s) readxl::read_excel(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"),
-                                        sheet = s))
+  sheets <- map(set_names(setdiff(readxl::excel_sheets(rota_example()), "about")),
+                \(s) readxl::read_excel(rota_example(), sheet = s))
   sheets$settings <- tibble::add_row(sheets$settings, key = "rota_type", value = "consultant")
   sheets[c("grades", "placements", "placement_roles", "requests", "skill_mix")] <- NULL
   openxlsx2::write_xlsx(sheets, path)
@@ -59,4 +57,16 @@ test_that("sheets a rota type does not need are read as empty", {
   sheets$settings$value[sheets$settings$key == "rota_type"] <- "resident"
   openxlsx2::write_xlsx(sheets, path)
   expect_error(read_rota_inputs(path), "Missing sheets.*grades")
+})
+
+test_that("the about sheet is skipped and sheets may be in any order", {
+  expect_equal(readxl::excel_sheets(rota_example())[1], "about")
+  inputs <- read_rota_inputs(rota_example())
+  expect_false("about" %in% names(inputs))
+
+  path <- withr::local_tempfile(fileext = ".xlsx")
+  sheets <- map(set_names(rev(setdiff(readxl::excel_sheets(rota_example()), "about"))),
+                \(s) readxl::read_excel(rota_example(), sheet = s))
+  openxlsx2::write_xlsx(sheets, path)
+  expect_equal(unclass(read_rota_inputs(path))[names(inputs)], unclass(inputs))
 })

@@ -1,5 +1,5 @@
 example_rota <- function() {
-  read_rota(system.file("extdata", "example_rota_output.xlsx", package = "rotawriter"))
+  read_rota(test_path("fixtures", "example_rota_output.xlsx"))
 }
 
 test_that("write_rota round-trips through read_rota and has every sheet", {
@@ -38,7 +38,7 @@ test_that("by_shift shows who is on and flags unfilled slots", {
 })
 
 test_that("calendars are valid iCalendar with shifts and approved leave", {
-  inputs <- read_rota_inputs(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"))
+  inputs <- read_rota_inputs(rota_example())
   rota <- rota_of("D02", c("2027-02-01", "2027-02-02"), c("ANA1_N", "ANA_DAY"))
   dir <- withr::local_tempdir()
   paths <- write_calendars(rota, inputs, dir, doctors = "D02")

@@ -1,6 +1,6 @@
 test_that("every planted violation in the example rota is detected", {
-  path <- system.file("extdata", "example_rota_output.xlsx", package = "rotawriter")
-  inputs <- read_rota_inputs(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"))
+  path <- test_path("fixtures", "example_rota_output.xlsx")
+  inputs <- read_rota_inputs(rota_example())
   v <- check_rota(read_rota(path), inputs)
   known <- readxl::read_excel(path, "known_violations")
 

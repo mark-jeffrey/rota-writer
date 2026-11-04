@@ -161,7 +161,7 @@ inputs_server <- function(id) {
 
     shiny::observeEvent(input$file, load(input$file$datapath, input$file$name))
     shiny::observeEvent(input$example, {
-      load(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"), "Example data")
+      load(rota_example(), "Example data")
     })
 
     output$summary <- shiny::renderUI({

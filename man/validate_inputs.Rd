@@ -31,6 +31,6 @@ shifts sheet's \code{covers} column and the \code{patterns}, \code{preferences},
 }
 }
 \examples{
-inputs <- read_rota_inputs(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"))
+inputs <- read_rota_inputs(rota_example())
 validate_inputs(inputs)
 }

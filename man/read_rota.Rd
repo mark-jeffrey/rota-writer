@@ -8,7 +8,7 @@ read_rota(path, sheet = "long")
 }
 \arguments{
 \item{path}{Path to a rota workbook, such as
-\code{inst/extdata/example_rota_output.xlsx}.}
+\code{rota_example("residents", "output/rota.xlsx")}.}
 
 \item{sheet}{Name of the sheet holding the long-format rota, with
 columns \code{doctor_id}, \code{date} and \code{code}. Other columns are dropped.}
@@ -25,5 +25,5 @@ the format \code{\link[=check_rota]{check_rota()}} uses. A rota workbook also ha
 here.
 }
 \examples{
-read_rota(system.file("extdata", "example_rota_output.xlsx", package = "rotawriter"))
+read_rota(rota_example("residents", "output/rota.xlsx"))
 }

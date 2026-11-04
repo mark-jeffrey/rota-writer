@@ -2,14 +2,14 @@
 #
 #   Rscript data-raw/make_consultant_data.R
 #
-# Writes inst/extdata/icu_consultant_inputs.xlsx: a year (52 weeks) of 1st-on,
+# Writes examples/icu-consultants/input/inputs.xlsx: a year (52 weeks) of 1st-on,
 # 2nd-on and night cover for 15 consultants. Deterministic: fixed seed and
 # fixed workbook timestamp. All names are fictional.
 
 source("data-raw/template_parts.R")
 
 set.seed(20270201)
-out_dir <- "inst/extdata"
+inputs_path <- "examples/icu-consultants/input/inputs.xlsx"
 
 rota_start <- ymd("2027-02-01") # Monday
 rota_weeks <- 52
@@ -184,28 +184,14 @@ requests <- staff |>
 
 fixed_time <- as.POSIXct("2026-11-02 12:00:00", tz = "UTC")
 
-inputs_wb <- wb_workbook(creator = "rota-writer", datetime_created = fixed_time) |>
-  add_sheet("settings", settings) |>
-  add_sheet("rules", rules, list(hard_soft = c("hard", "soft"), enabled = yes_no)) |>
-  add_sheet("shifts", shifts, list(
-    shift_type = c("normal_day", "long_day", "night"), is_on_call = yes_no, is_night = yes_no,
-    is_long = yes_no, is_late = yes_no, open_to = c("all", "preference")
-  )) |>
-  add_sheet("cover", cover, list(day_type = c("weekday", "weekend", "bank_holiday"))) |>
-  add_sheet("bank_holidays", bank_holidays) |>
-  add_sheet("staff", staff) |>
-  add_sheet("leave", leave, list(
-    leave_type = c("annual", "study", "exam", "parental"),
-    status = c("approved", "requested")
-  )) |>
-  add_sheet("requests", requests, list(request = request_types)) |>
-  add_sheet("patterns", patterns, list(open_to = c("all", "preference"))) |>
-  add_sheet("preferences", preferences, list(
-    preference = c("prefer_shift", "avoid_shift", "day_off", "prefer_pattern", "avoid_pattern")
-  )) |>
-  add_sheet("sequences", sequences) |>
-  add_sheet("pattern_sequences", pattern_sequences) |>
-  add_sheet("block_rest", block_rest)
-
-wb_save(inputs_wb, file.path(out_dir, "icu_consultant_inputs.xlsx"), overwrite = TRUE)
-message("Wrote ", file.path(out_dir, "icu_consultant_inputs.xlsx"))
+write_inputs_workbook(
+  inputs_path,
+  list(settings = settings, rules = rules, shifts = shifts, cover = cover, bank_holidays = bank_holidays,
+       staff = staff, leave = leave, requests = requests, patterns = patterns, preferences = preferences,
+       sequences = sequences, pattern_sequences = pattern_sequences, block_rest = block_rest),
+  title = "ICU consultants (example)",
+  description = paste("An example rota for 15 fictional ICU consultants covering 1st on, 2nd on and nights",
+                      "for a year from 1 February 2027 (rota_type consultant: only the rules listed apply)."),
+  created = fixed_time
+)
+message("Wrote ", inputs_path)

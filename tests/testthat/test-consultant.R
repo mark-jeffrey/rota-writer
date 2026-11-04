@@ -5,7 +5,7 @@
 penalty_of <- function(v, rule) sum(v$penalty[v$rule_id == rule])
 
 test_that("the consultant template reads and validates cleanly", {
-  inputs <- read_rota_inputs(system.file("extdata", "icu_consultant_inputs.xlsx", package = "rotawriter"))
+  inputs <- read_rota_inputs(rota_example("icu-consultants"))
 
   expect_equal(rota_type(inputs$settings), "consultant")
   expect_equal(as.numeric(inputs$period$end - inputs$period$start + 1), 364)

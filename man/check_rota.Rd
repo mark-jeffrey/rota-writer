@@ -44,16 +44,16 @@ The checker is independent of the optimiser, so use it on any rota:
 solved, built by hand, or edited after solving.
 }
 \examples{
-inputs <- read_rota_inputs(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"))
-rota <- read_rota(system.file("extdata", "example_rota_output.xlsx", package = "rotawriter"))
+inputs <- read_rota_inputs(rota_example())
+rota <- read_rota(rota_example("residents", "output/rota.xlsx"))
 
 violations <- check_rota(rota, inputs)
 dplyr::count(violations, hard_soft, rule_id)
 
 # File paths work too
 check_rota(
-  system.file("extdata", "example_rota_output.xlsx", package = "rotawriter"),
-  system.file("extdata", "rota_inputs.xlsx", package = "rotawriter")
+  rota_example("residents", "output/rota.xlsx"),
+  rota_example()
 )
 }
 \seealso{

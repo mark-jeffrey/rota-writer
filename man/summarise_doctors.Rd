@@ -51,7 +51,7 @@ on the same rota. Use it to judge how even a rota is.
 }
 \examples{
 summarise_doctors(
-  system.file("extdata", "example_rota_output.xlsx", package = "rotawriter"),
-  system.file("extdata", "rota_inputs.xlsx", package = "rotawriter")
+  rota_example("residents", "output/rota.xlsx"),
+  rota_example()
 )
 }

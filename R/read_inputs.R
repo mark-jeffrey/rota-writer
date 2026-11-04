@@ -19,13 +19,15 @@ yn_columns <- c("is_on_call", "is_night", "is_long", "is_late",
 #'   * `resident` (the default): `settings`, `rules`, `grades`, `shifts`,
 #'     `cover`, `bank_holidays`, `staff`, `placements`, `placement_roles`,
 #'     `leave`, `requests` and `skill_mix`. See
-#'     `inst/extdata/rota_inputs.xlsx`.
+#'     `rota_example("residents")`.
 #'   * `consultant`: `settings`, `rules`, `shifts`, `cover`, `bank_holidays`,
-#'     `staff` and `leave`. See `inst/extdata/icu_consultant_inputs.xlsx`.
+#'     `staff` and `leave`. See
+#'     `rota_example("icu-consultants")`.
 #'
 #'   Either may add `patterns`, `preferences`, `sequences`,
 #'   `pattern_sequences` and `block_rest` sheets. Sheets left out are read as
-#'   empty.
+#'   empty. A front sheet named `about`, describing the workbook for people,
+#'   is skipped. Sheets may be in any order.
 #'
 #' @returns A `rota_inputs` object: a named list with one tibble per sheet
 #'   (e.g. `inputs$staff`), plus `period`, a list holding the rota's `start`
@@ -33,12 +35,12 @@ yn_columns <- c("is_on_call", "is_night", "is_long", "is_late",
 #'
 #' @export
 #' @examples
-#' inputs <- read_rota_inputs(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"))
+#' inputs <- read_rota_inputs(rota_example())
 #' inputs
 #' inputs$staff
 read_rota_inputs <- function(path) {
   check_file(path, "inputs workbook")
-  sheets <- readxl::excel_sheets(path)
+  sheets <- setdiff(readxl::excel_sheets(path), "about")
   if (!"settings" %in% sheets) {
     stop("Missing sheets in ", path, ": settings", call. = FALSE)
   }
@@ -142,6 +144,33 @@ as_hhmm <- function(x) {
   if (inherits(x, "POSIXt")) format(x, "%H:%M", tz = "UTC") else as.character(x)
 }
 
+#' Find an example workbook
+#'
+#' Returns the path to a file in one of the example rotas in `examples/`.
+#' Each example has an `input` folder holding its inputs workbook and an
+#' `output` folder holding a solved rota, its check report and calendars.
+#' The examples come with the source folder, so load rota-writer with
+#' `pkgload::load_all()` from there.
+#'
+#' @param name The example: `"residents"` (resident doctors in anaesthesia
+#'   and ICU) or `"icu-consultants"`.
+#' @param file The file within it, e.g. `"output/rota.xlsx"`.
+#'
+#' @returns The file's path.
+#'
+#' @export
+#' @examples
+#' rota_example()
+#' rota_example("icu-consultants", "output/rota.xlsx")
+rota_example <- function(name = "residents", file = "input/inputs.xlsx") {
+  path <- system.file("examples", name, file, package = "rotawriter")
+  if (path == "") {
+    stop("Can't find examples/", name, "/", file, ". Load rota-writer from its source folder ",
+         "with pkgload::load_all().", call. = FALSE)
+  }
+  path
+}
+
 #' Read a rota
 #'
 #' Reads a rota in long format: one row per doctor per working day. This is
@@ -150,7 +179,7 @@ as_hhmm <- function(x) {
 #' here.
 #'
 #' @param path Path to a rota workbook, such as
-#'   `inst/extdata/example_rota_output.xlsx`.
+#'   `rota_example("residents", "output/rota.xlsx")`.
 #' @param sheet Name of the sheet holding the long-format rota, with
 #'   columns `doctor_id`, `date` and `code`. Other columns are dropped.
 #'
@@ -160,7 +189,7 @@ as_hhmm <- function(x) {
 #'
 #' @export
 #' @examples
-#' read_rota(system.file("extdata", "example_rota_output.xlsx", package = "rotawriter"))
+#' read_rota(rota_example("residents", "output/rota.xlsx"))
 read_rota <- function(path, sheet = "long") {
   check_file(path, "rota workbook")
   rota <- readxl::read_excel(path, sheet = sheet)
@@ -193,7 +222,7 @@ read_rota <- function(path, sheet = "long") {
 #'
 #' @export
 #' @examples
-#' inputs <- read_rota_inputs(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"))
+#' inputs <- read_rota_inputs(rota_example())
 #' validate_inputs(inputs)
 validate_inputs <- function(inputs) {
   inputs <- as_rota_inputs(inputs)

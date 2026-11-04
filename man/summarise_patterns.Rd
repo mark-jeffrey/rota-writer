@@ -40,7 +40,7 @@ it has one.
 }
 \examples{
 summarise_patterns(
-  system.file("extdata", "example_rota_output.xlsx", package = "rotawriter"),
-  system.file("extdata", "rota_inputs.xlsx", package = "rotawriter")
+  rota_example("residents", "output/rota.xlsx"),
+  rota_example()
 )
 }

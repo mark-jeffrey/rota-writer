@@ -13,14 +13,16 @@ the \code{rota_type} setting:
 \item \code{resident} (the default): \code{settings}, \code{rules}, \code{grades}, \code{shifts},
 \code{cover}, \code{bank_holidays}, \code{staff}, \code{placements}, \code{placement_roles},
 \code{leave}, \code{requests} and \code{skill_mix}. See
-\code{inst/extdata/rota_inputs.xlsx}.
+\code{rota_example("residents")}.
 \item \code{consultant}: \code{settings}, \code{rules}, \code{shifts}, \code{cover}, \code{bank_holidays},
-\code{staff} and \code{leave}. See \code{inst/extdata/icu_consultant_inputs.xlsx}.
+\code{staff} and \code{leave}. See
+\code{rota_example("icu-consultants")}.
 }
 
 Either may add \code{patterns}, \code{preferences}, \code{sequences},
 \code{pattern_sequences} and \code{block_rest} sheets. Sheets left out are read as
-empty.}
+empty. A front sheet named \code{about}, describing the workbook for people,
+is skipped. Sheets may be in any order.}
 }
 \value{
 A \code{rota_inputs} object: a named list with one tibble per sheet
@@ -39,7 +41,7 @@ Run \code{\link[=validate_inputs]{validate_inputs()}} afterwards to catch incons
 leave for a doctor who is not in the staff list.
 }
 \examples{
-inputs <- read_rota_inputs(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"))
+inputs <- read_rota_inputs(rota_example())
 inputs
 inputs$staff
 }

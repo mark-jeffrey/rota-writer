@@ -2,14 +2,16 @@
 #
 #   Rscript data-raw/make_test_data.R
 #
-# Writes inst/extdata/rota_inputs.xlsx and inst/extdata/example_rota_output.xlsx.
+# Writes examples/residents/input/inputs.xlsx, and
+# tests/testthat/fixtures/example_rota_output.xlsx: a naive rota with contract
+# breaches planted, for the checker's tests.
 # Deterministic: fixed seed and fixed workbook timestamps.
 
 source("data-raw/template_parts.R")
 
 set.seed(20270201)
-out_dir <- "inst/extdata"
-dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+inputs_path <- "examples/residents/input/inputs.xlsx"
+output_path <- "tests/testthat/fixtures/example_rota_output.xlsx"
 
 rota_start <- ymd("2027-02-01") # Monday
 rota_weeks <- 13
@@ -546,32 +548,17 @@ message(sprintf("Example rota: %d on-call slots, %d unfilled by round-robin", nr
 
 fixed_time <- as.POSIXct("2026-10-31 12:00:00", tz = "UTC")
 
-yn_cols <- c("nights_exempt", "opted_out_wtr", paste0("can_", c("ICU1", "ICU2", "ANA1", "ANA2", "OBS")))
-
-inputs_wb <- wb_workbook(creator = "rota-writer", datetime_created = fixed_time) |>
-  add_sheet("settings", settings) |>
-  add_sheet("rules", rules, list(hard_soft = c("hard", "soft"), enabled = c("Y", "N"))) |>
-  add_sheet("grades", grades) |>
-  add_sheet("shifts", shifts, list(
-    shift_type = c("normal_day", "long_day", "night"),
-    is_on_call = c("Y", "N"), is_night = c("Y", "N"), is_long = c("Y", "N"), is_late = c("Y", "N")
-  )) |>
-  add_sheet("cover", cover, list(day_type = c("weekday", "weekend", "bank_holiday"))) |>
-  add_sheet("bank_holidays", bank_holidays) |>
-  add_sheet("staff", staff, c(
-    list(grade = grades$grade, ltft_fixed_day_off = c("Mon", "Tue", "Wed", "Thu", "Fri")),
-    set_names(rep(list(c("Y", "N")), length(yn_cols)), yn_cols)
-  )) |>
-  add_sheet("placements", placements, list(placement = c("ICU", "ICU_TIER2", "OBS", "GENERAL"))) |>
-  add_sheet("placement_roles", placement_roles) |>
-  add_sheet("leave", leave, list(
-    leave_type = c("annual", "study", "exam", "parental"),
-    status = c("approved", "requested")
-  )) |>
-  add_sheet("requests", requests, list(request = request_types)) |>
-  add_sheet("skill_mix", skill_mix, list(min_grade = grades$grade))
-
-wb_save(inputs_wb, file.path(out_dir, "rota_inputs.xlsx"), overwrite = TRUE)
+write_inputs_workbook(
+  inputs_path,
+  list(settings = settings, rules = rules, grades = grades, shifts = shifts, cover = cover,
+       bank_holidays = bank_holidays, staff = staff, placements = placements,
+       placement_roles = placement_roles, leave = leave, requests = requests, skill_mix = skill_mix),
+  title = "Resident doctors: anaesthesia and ICU (example)",
+  description = paste("An example rota for 42 fictional resident doctors in two staffing pools, 13 weeks",
+                      "from 1 February 2027, on the 2016 Terms and Conditions of Service (rota_type resident)."),
+  dropdowns = list(placements = list(placement = c("ICU", "ICU_TIER2", "OBS", "GENERAL"))),
+  created = fixed_time
+)
 
 grid_dims <- wb_dims(rows = 2:(nrow(rota_grid) + 1), cols = 3:ncol(rota_grid))
 
@@ -590,6 +577,6 @@ output_wb <- wb_workbook(creator = "rota-writer", datetime_created = fixed_time)
   add_sheet("long", rota_long) |>
   add_sheet("known_violations", known_violations)
 
-wb_save(output_wb, file.path(out_dir, "example_rota_output.xlsx"), overwrite = TRUE)
+wb_save(output_wb, output_path, overwrite = TRUE)
 
-message("Wrote ", file.path(out_dir, c("rota_inputs.xlsx", "example_rota_output.xlsx")) |> paste(collapse = ", "))
+message("Wrote ", inputs_path, ", ", output_path)

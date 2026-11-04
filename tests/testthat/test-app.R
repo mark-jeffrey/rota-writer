@@ -4,7 +4,7 @@ skip_if_not_installed("reactable")
 skip_if_not_installed("callr")
 skip_if_not_installed("zip")
 
-example_inputs_path <- function() system.file("extdata", "rota_inputs.xlsx", package = "rotawriter")
+example_inputs_path <- function() rota_example()
 
 test_that("the app builds", {
   expect_s3_class(rota_app(), "shiny.appobj")
@@ -29,7 +29,7 @@ test_that("the inputs tab loads a workbook and reports its problems", {
 
 test_that("the results views and downloads work for a rota", {
   inputs <- read_rota_inputs(example_inputs_path())
-  rota <- read_rota(system.file("extdata", "example_rota_output.xlsx", package = "rotawriter"))
+  rota <- read_rota(test_path("fixtures", "example_rota_output.xlsx"))
   shiny::testServer(
     results_server,
     args = list(inputs = shiny::reactive(inputs), rota = shiny::reactive(rota),

@@ -36,8 +36,8 @@ single days off, with department totals
 }
 }
 \examples{
-inputs <- read_rota_inputs(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"))
-rota <- read_rota(system.file("extdata", "example_rota_output.xlsx", package = "rotawriter"))
+inputs <- read_rota_inputs(rota_example())
+rota <- read_rota(rota_example("residents", "output/rota.xlsx"))
 
 write_check_report(
   check_rota(rota, inputs),

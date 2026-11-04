@@ -43,16 +43,16 @@
 #'   [write_check_report()] to save the results as a workbook.
 #' @export
 #' @examples
-#' inputs <- read_rota_inputs(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"))
-#' rota <- read_rota(system.file("extdata", "example_rota_output.xlsx", package = "rotawriter"))
+#' inputs <- read_rota_inputs(rota_example())
+#' rota <- read_rota(rota_example("residents", "output/rota.xlsx"))
 #'
 #' violations <- check_rota(rota, inputs)
 #' dplyr::count(violations, hard_soft, rule_id)
 #'
 #' # File paths work too
 #' check_rota(
-#'   system.file("extdata", "example_rota_output.xlsx", package = "rotawriter"),
-#'   system.file("extdata", "rota_inputs.xlsx", package = "rotawriter")
+#'   rota_example("residents", "output/rota.xlsx"),
+#'   rota_example()
 #' )
 check_rota <- function(rota, inputs) {
   if (missing(inputs)) {
@@ -740,8 +740,8 @@ check_requests <- function(si, inputs) {
 #' @export
 #' @examples
 #' summarise_doctors(
-#'   system.file("extdata", "example_rota_output.xlsx", package = "rotawriter"),
-#'   system.file("extdata", "rota_inputs.xlsx", package = "rotawriter")
+#'   rota_example("residents", "output/rota.xlsx"),
+#'   rota_example()
 #' )
 summarise_doctors <- function(rota, inputs) {
   inputs <- as_rota_inputs(inputs)
@@ -775,8 +775,8 @@ summarise_doctors <- function(rota, inputs) {
 #' @export
 #' @examples
 #' summarise_patterns(
-#'   system.file("extdata", "example_rota_output.xlsx", package = "rotawriter"),
-#'   system.file("extdata", "rota_inputs.xlsx", package = "rotawriter")
+#'   rota_example("residents", "output/rota.xlsx"),
+#'   rota_example()
 #' )
 summarise_patterns <- function(rota, inputs) {
   inputs <- as_rota_inputs(inputs)

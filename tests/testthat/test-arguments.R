@@ -1,5 +1,5 @@
-inputs_path <- function() system.file("extdata", "rota_inputs.xlsx", package = "rotawriter")
-rota_path <- function() system.file("extdata", "example_rota_output.xlsx", package = "rotawriter")
+inputs_path <- function() rota_example()
+rota_path <- function() test_path("fixtures", "example_rota_output.xlsx")
 
 test_that("check_rota accepts objects or file paths", {
   from_objects <- check_rota(read_rota(rota_path()), read_rota_inputs(inputs_path()))

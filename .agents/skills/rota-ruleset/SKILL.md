@@ -122,7 +122,10 @@ worth more than a complete spec.
    - rules from `rule_rows()`, with the changes in named arguments;
    - bank holidays from `england_bank_holidays()`, after checking the nation and any one-off
      holidays;
-   - the workbook with `add_sheet()` and the drop-down vectors.
+   - the workbook with `write_inputs_workbook()`, which adds the front `about` sheet (give it a
+     title and a sentence or two on the rota), puts the sheets in the standard order and colours,
+     and adds the header notes and drop-downs. Pass extra drop-downs only for the department's own
+     values, such as placement names.
 
    Copy the shape of `data-raw/make_consultant_data.R` (short, optional sheets) or
    `data-raw/make_test_data.R` (resident, with grades, placements and skill mix). Staff, leave
@@ -205,5 +208,5 @@ over the year or leave clusters.
   - how to re-check hand edits (`scripts/check_rota.R`, or the app's Check tab);
   - that the rota coordinator must still review the rota before it's issued (README disclaimer).
 - Optional, if the user wants to share their template: write a fictional version as
-  `data-raw/make_<dept>_data.R` → `inst/extdata/<dept>_inputs.xlsx`, add it to the README's "Example
+  `data-raw/make_<dept>_data.R` → `examples/<dept>/input/inputs.xlsx`, add it to the README's "Example
   rule sets" section, and add a test that it validates. Commit only when asked.

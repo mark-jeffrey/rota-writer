@@ -3,7 +3,7 @@ test_inputs <- local({
   cache <- NULL
   function() {
     if (is.null(cache)) {
-      inputs <- read_rota_inputs(system.file("extdata", "rota_inputs.xlsx", package = "rotawriter"))
+      inputs <- read_rota_inputs(rota_example())
       inputs$leave <- inputs$leave[0, ]
       inputs$requests <- inputs$requests[0, ]
       cache <<- inputs
@@ -25,8 +25,7 @@ hits <- function(rota, inputs = test_inputs()) {
 days_from <- function(start, n) as.Date(start) + seq_len(n) - 1
 
 # The first two weeks of the rota
-two_weeks <- function(inputs = read_rota_inputs(system.file("extdata", "rota_inputs.xlsx",
-                                                            package = "rotawriter"))) {
+two_weeks <- function(inputs = read_rota_inputs(rota_example())) {
   inputs$period$end <- inputs$period$start + 13
   inputs
 }
@@ -49,7 +48,7 @@ model_penalties <- function(rota, inputs) {
 # The ICU consultant inputs, without leave or requests, cut to `weeks` weeks.
 # WEEKEND_MAX (1 in 3) is off: over two weeks it allows nobody a weekend.
 consultant_inputs <- function(weeks = 2) {
-  inputs <- read_rota_inputs(system.file("extdata", "icu_consultant_inputs.xlsx", package = "rotawriter"))
+  inputs <- read_rota_inputs(rota_example("icu-consultants"))
   inputs$leave <- inputs$leave[0, ]
   inputs$requests <- inputs$requests[0, ]
   inputs$period$end <- inputs$period$start + 7 * weeks - 1

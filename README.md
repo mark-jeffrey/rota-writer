@@ -162,11 +162,11 @@ anonymised description of the difference back to the agent. Keep real workbooks 
 
 ### Setting up a rota by hand
 
-1. **Start from the closest example.** Copy [`inst/extdata/rota_inputs.xlsx`](inst/extdata/rota_inputs.xlsx)
-   (resident doctors) or [`inst/extdata/icu_consultant_inputs.xlsx`](inst/extdata/icu_consultant_inputs.xlsx)
+1. **Start from the closest example.** Copy [`examples/residents/input/inputs.xlsx`](examples/residents/input/inputs.xlsx)
+   (resident doctors) or [`examples/icu-consultants/input/inputs.xlsx`](examples/icu-consultants/input/inputs.xlsx)
    (consultants); see [Example rule sets](#example-rule-sets).
-2. **Replace the example data with yours:** rota dates in `settings`, your shifts and cover, staff,
-   placements, leave and requests. Each sheet is described in [The inputs workbook](#the-inputs-workbook).
+2. **Replace the example data with yours:** the green sheets (rota dates in `settings`, staff,
+   placements, leave and requests), then your shifts and cover in the grey ones. Each sheet is described in [The inputs workbook](#the-inputs-workbook).
    Leave the rules and weights as they are to begin with.
 3. **Solve** a short trial (see below), look at the report, and adjust the weights in the `rules`
    sheet until the trade-offs go the way you would choose.
@@ -216,7 +216,7 @@ reading only) and run `check_rota.R`. Both scripts exit with status 1 if a hard 
 
 ```r
 pkgload::load_all()
-inputs <- read_rota_inputs("inst/extdata/rota_inputs.xlsx")
+inputs <- read_rota_inputs("examples/residents/input/inputs.xlsx")
 validate_inputs(inputs)                     # zero rows means the inputs are consistent
 solution <- solve_rota(inputs)              # $rota, $unfilled, $penalties, $history
 check_rota(solution$rota, inputs)           # every rule broken, with its penalty
@@ -230,12 +230,13 @@ Each function has a help page, e.g. `?solve_rota`, `?check_rota`, `?rotawriter`.
 
 ## Example rule sets
 
-Both examples use fictional staff. Their solved rotas, reports and calendars are in
-[`examples/`](examples/).
+Both examples use fictional staff. Each has a folder in [`examples/`](examples/): its inputs
+workbook in `input/`, and its solved rota, report and calendars in `output/`. From R,
+`rota_example("residents")` gives the path to an example's inputs.
 
 ### Resident doctors: anaesthesia and ICU
 
-[`inst/extdata/rota_inputs.xlsx`](inst/extdata/rota_inputs.xlsx) (`rota_type` `resident`): 42 doctors in
+[`examples/residents/input/inputs.xlsx`](examples/residents/input/inputs.xlsx) (`rota_type` `resident`): 42 doctors in
 two staffing pools, 13 weeks from 1 February 2027, on the 2016 Terms and Conditions of Service for
 resident doctors in England.
 
@@ -255,7 +256,7 @@ pool, because ICU tier 2 is busier out of hours. Placements (ICU and obstetric b
 roles a doctor works, and at least one ST3+ (ideally ST5+) is on across ICU1, ANA2 and OBS at all
 times.
 
-**Result** ([`examples/test-data/`](examples/test-data/)): a 30-minute solve fills every slot with no
+**Result** ([`examples/residents/output/`](examples/residents/output/)): a 30-minute solve fills every slot with no
 hard violations. Every long day and night has an ST3+ across ICU1/ANA2/OBS, and all but 7 have an
 ST5+. One requested leave day is refused. Every doctor is within 1.3 h a week of their contracted
 hours. One run is 6 shifts long, 10 nights are single and 16 weekends are split, out of about 600
@@ -263,8 +264,8 @@ runs and 170 night runs.
 
 ### ICU consultants
 
-[`inst/extdata/icu_consultant_inputs.xlsx`](inst/extdata/icu_consultant_inputs.xlsx) (`rota_type`
-`consultant`): 15 consultants for a whole year from 1 February 2027. Most are 0.75 WTE, giving a
+[`examples/icu-consultants/input/inputs.xlsx`](examples/icu-consultants/input/inputs.xlsx)
+(`rota_type` `consultant`): 15 consultants for a whole year from 1 February 2027. Most are 0.75 WTE, giving a
 quarter of their time to emergency medicine, anaesthesia or respiratory medicine. They cover 1st on
 and 2nd on (08:00–18:00) and nights (17:00–08:00, on site to 22:00).
 
@@ -275,7 +276,7 @@ and 2nd on (08:00–18:00) and nights (17:00–08:00, on site to 22:00).
   1 weekend in 3.
 - Only the rules listed in its `rules` sheet apply: the resident contract limits do not.
 
-**Result** ([`examples/icu-consultants/`](examples/icu-consultants/)): a 30-minute solve of the whole
+**Result** ([`examples/icu-consultants/output/`](examples/icu-consultants/output/)): a 30-minute solve of the whole
 year fills every slot with no hard violations, and every 1st-on day and night is in a block. Only the
 two consultants who prefer them work 7-day 1st-on weeks. Each consultant is within 2 of their fair
 share of 1st-on days, and within 1 of their 2nd-on days, nights and weekends. 16 shifts fall on a
@@ -283,23 +284,36 @@ preferred day off and 7 weekends are split.
 
 ## The inputs workbook
 
-One workbook with one sheet per table. Dates are real Excel dates and times are `"HH:MM"` text.
-Yes/No columns use `Y`/`N` drop-downs.
+One workbook with one sheet per table. It opens on an `about` sheet describing the workbook and
+its sheets, which the solver ignores. The other sheets are grouped and coloured by who changes them
+and when:
+
+| Colour | Group | Sheets |
+|---|---|---|
+| Green | **Edit each rota**: change for each rota period | `settings`, `staff`, `placements`, `leave`, `requests`, `preferences` |
+| Orange | **Rules and weights**: tune with care; the shaded `value`, `weight` and `enabled` columns are the ones to change | `rules` |
+| Grey | **Set up once**, with the rule set | `grades`, `shifts`, `cover`, `placement_roles`, `skill_mix`, `patterns`, `sequences`, `pattern_sequences`, `block_rest`, `bank_holidays` |
+
+Hover over a column heading for a note on what goes in it. Drop-downs list the allowed values:
+`Y`/`N`, leave types and so on, and the doctor IDs, grades, shifts and patterns from their own
+sheets, so a new doctor can be picked in `leave` as soon as they are added to `staff`. Dates are
+real Excel dates shown as dd/mm/yyyy, and times are `"HH:MM"` text. The solver reads sheets by
+name, so a workbook with sheets in another order, or without the `about` sheet, works too.
 
 | Sheet | Contents |
 |---|---|
 | `settings` | `rota_type`, rota start and end dates, reference period, solver time limit, and optionally the search's `neighbourhood_days` and `neighbourhood_doctors` |
+| `staff` | One row per doctor: grade, staffing `pool`, WTE, contracted hours, LTFT fixed day off, start and end in post, nights-exempt, WTR opt-out, competencies (`can_*`) |
+| `placements` | Training placement blocks, with dates |
+| `leave` | Leave periods: type (`annual`, `study`, `parental`, `exam`) and status (`approved` is hard, `requested` is soft) |
+| `requests` | One-off preferences on a date (`no_oncall`, `no_night`, `no_weekend`, `prefer_oncall`), with a weight each |
 | `rules` | Every rule: `rule_id`, description, parameter value, `hard`/`soft`, weight, enabled |
 | `grades` | Grade → seniority `rank`, for skill-mix rules |
 | `shifts` | Shift code, role, type (`normal_day`/`long_day`/`night`), start, end, hours, and flags (`is_on_call`, `is_night`, `is_long`, `is_late`) |
 | `cover` | Doctors needed per shift by day type (`weekday`/`weekend`/`bank_holiday`). Exact for on-call (`n_min = n_max`), a minimum for normal days. |
-| `bank_holidays` | Bank holidays in the rota window |
-| `staff` | One row per doctor: grade, staffing `pool`, WTE, contracted hours, LTFT fixed day off, start and end in post, nights-exempt, WTR opt-out, competencies (`can_*`) |
-| `placements` | Training placement blocks, with dates |
 | `placement_roles` | The roles each placement may work. Unlisted roles are forbidden; a `penalty` above 0 allows a role but discourages it. |
-| `leave` | Leave periods: type (`annual`, `study`, `parental`, `exam`) and status (`approved` is hard, `requested` is soft) |
-| `requests` | One-off preferences on a date (`no_oncall`, `no_night`, `no_weekend`, `prefer_oncall`), with a weight each |
 | `skill_mix` | Seniority across groups of shifts: minimum grade, minimum count, weight |
+| `bank_holidays` | Bank holidays in the rota window |
 
 ### Rota types
 
@@ -396,7 +410,7 @@ code. The contract rules, their parameters and sources are in
   rule directly. It deliberately shares nothing with the model's formulation, so each can catch the
   other's mistakes, and it checks hand-edited rotas too. For each soft rule except fairness, the
   solver's penalty equals the checker's, and the tests confirm it.
-- **Tests.** `inst/extdata/example_rota_output.xlsx` is a naive rota with contract breaches planted
+- **Tests.** `tests/testthat/fixtures/example_rota_output.xlsx` is a naive rota with contract breaches planted
   in it; the tests check that the checker finds every one.
 
 ## Development

@@ -75,7 +75,7 @@ if ("--no-check" %in% args) {
 
 say("\nChecking that rota-writer works (about a minute)...")
 pkgload::load_all(quiet = TRUE)
-inputs <- read_rota_inputs("inst/extdata/rota_inputs.xlsx")
+inputs <- read_rota_inputs(rota_example())
 problems <- validate_inputs(inputs)
 if (nrow(problems) > 0) {
   print(problems)
