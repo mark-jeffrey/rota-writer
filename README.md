@@ -76,7 +76,6 @@ penalty, and the method is called *mixed-integer linear programming* (MILP). Thi
 - **Trade-offs are yours, and visible.** Softer wishes (fair shares, requested leave, no single
   nights, whole weekends off) each have a penalty weight in the workbook. The solver balances them
   by those weights, and the report shows exactly which were broken, and what each cost.
-- **Same inputs, same rota.** The search is seeded, so results can be reproduced and audited.
 - **Checked twice.** An independent checker, written a different way, re-checks every rota,
   including ones edited by hand.
 
@@ -446,7 +445,10 @@ Most of these methods come from the mixed-integer linear programming model in Ab
   once is too slow, so `solve_rota()` then improves it by *large neighbourhood search*: it repeatedly
   frees a block of days or a group of doctors, fixes the rest, and re-solves that part, until the
   time limit. Every step solves the full model, so hard rules always hold and fairness is judged over
-  the whole rota. The search is seeded, so the same inputs give the same rota.
+  the whole rota. The search is seeded, but each step is limited by time, so a faster computer
+  may get further and give a different rota from the same inputs. The checker, not the solver, is
+  what to rely on for compliance. With no time limit in the settings sheet, the search stops after
+  10 minutes.
 - **Independent checker.** `check_rota()` turns each shift into a clock-time interval and tests every
   rule directly. It deliberately shares nothing with the model's formulation, so each can catch the
   other's mistakes, and it checks hand-edited rotas too. For each soft rule except fairness, the

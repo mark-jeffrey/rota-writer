@@ -21,7 +21,9 @@
 #' with the right competencies, or everyone on leave), the rota leaves them
 #' empty rather than break a contract rule, and `unfilled` lists them.
 #'
-#' Phase 2 runs until the time limit or until the penalty is 0. Each step
+#' Phase 2 runs until the time limit or until the penalty is 0. The whole
+#' solve may run a little over the limit while it finishes a step and works
+#' out the final penalties. Each step
 #' gets 5 s to start with, doubling (up to 20 s) after every 10 steps in a
 #' row that fail to improve the rota, so harder neighbourhoods get longer.
 #' It does not prove the rota is the best possible, but in practice gets
@@ -30,8 +32,12 @@
 #'
 #' @inheritParams check_rota
 #' @param time_limit Seconds to spend in total. Defaults to
-#'   `solver_time_limit_s` in the `settings` sheet.
-#' @param seed Random seed for phase 2, so the same inputs give the same rota.
+#'   `solver_time_limit_s` in the `settings` sheet, or 10 minutes if that is
+#'   blank.
+#' @param seed Random seed for phase 2. It fixes which parts of the rota are
+#'   re-solved in turn, but each step is limited by time, so a faster or
+#'   less busy computer may get further and give a different (often better)
+#'   rota from the same inputs. Use [check_rota()] to check any rota.
 #' @param verbose If `TRUE`, report each improvement as it is found.
 #' @param progress Optional function called as `progress(seconds, objective)`
 #'   with the time so far and the best penalty: once the first rota is found,
@@ -68,9 +74,13 @@
 solve_rota <- function(inputs, time_limit = NULL, seed = 1, verbose = FALSE, progress = NULL) {
   inputs <- as_rota_inputs(inputs)
   setting <- set_names(inputs$settings$value, inputs$settings$key)
-  time_limit <- time_limit %||% as.numeric(setting["solver_time_limit_s"])
+  time_limit <- time_limit %||% suppressWarnings(as.numeric(setting["solver_time_limit_s"]))
   if (is.na(time_limit)) {
-    time_limit <- Inf
+    # The search rarely reaches a penalty of 0, so without a limit it would
+    # never stop
+    time_limit <- default_time_limit
+    message("No solver_time_limit_s in the settings sheet: stopping after ",
+            default_time_limit / 60, " minutes")
   }
   if (!is.na(setting["solver"]) && tolower(setting[["solver"]]) != "highs") {
     warning("Only the HiGHS solver is supported so far; using it instead of ",
@@ -95,7 +105,7 @@ solve_rota <- function(inputs, time_limit = NULL, seed = 1, verbose = FALSE, pro
   if (search$first_by_week) {
     best <- week_by_week(solve, model, deadline = \() time_limit - elapsed())
   } else if (is_feasible(first)) {
-    best <- polish(solve, model, first$primal_solution)
+    best <- polish(solve, model, first$primal_solution, time_limit - elapsed())
   } else {
     if (verbose) {
       message(sprintf("%5.0f s  cannot fill every slot (%s); filling as many as possible",
@@ -134,7 +144,7 @@ solve_rota <- function(inputs, time_limit = NULL, seed = 1, verbose = FALSE, pro
 
   # A step stopped by its time limit can leave helper variables above their
   # minimum; re-solve them with the rota fixed so the penalties are exact
-  best <- polish(solve, model, best$primal_solution)
+  best <- polish(solve, model, best$primal_solution, time_limit - elapsed())
   rota_solution(model, inputs, best, NULL, started, history)
 }
 
@@ -178,6 +188,9 @@ highs_solver <- function(model) {
   }
 }
 
+# Seconds to search when neither the call nor the settings sheet gives a limit
+default_time_limit <- 600
+
 # A feasible point can also come back when the solver stops at the time limit
 is_feasible <- function(result) {
   identical(result$info$primal_solution_status, "Feasible")
@@ -198,15 +211,25 @@ week_by_week <- function(solve, model, deadline) {
       current <- tried$primal_solution
     }
   }
-  polish(solve, model, current)
+  polish(solve, model, current, deadline())
 }
 
-# Fix every shift and solve for the cheapest helper variables
-polish <- function(solve, model, current) {
-  polished <- solve(cost = model$vars$cost, time_limit = 60, fix = rep(TRUE, nrow(model$vars)),
-                    current = current)
-  stopifnot(is_feasible(polished))
-  polished
+# Fix every shift and solve for the cheapest helper variables. This is
+# usually quick, so it gets whatever time is left but at least 10 s (and at
+# most 60). If it fails, keep the rota as it is rather than lose the search:
+# its hard rules hold, but its penalty may be a little high.
+polish <- function(solve, model, current, time_left = 60) {
+  polished <- solve(cost = model$vars$cost, time_limit = min(max(time_left, 10), 60),
+                    fix = rep(TRUE, nrow(model$vars)), current = current)
+  if (is_feasible(polished)) {
+    return(polished)
+  }
+  warning("Could not work out the rota's exact penalty (", polished$status_message,
+          "), so the penalty shown may be a little high. The rota itself is unchanged.",
+          call. = FALSE)
+  list(primal_solution = current,
+       objective_value = sum(model$vars$cost * current) + sum(model$offset$value),
+       info = list(primal_solution_status = "Feasible"))
 }
 
 # How much phase 2 frees at a time: the rota type's defaults, unless the

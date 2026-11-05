@@ -150,3 +150,22 @@ test_that("requests and requested leave are honoured when the hard rules allow",
   expect_equal(nrow(check_rota(solution$rota, inputs)), 0)
   expect_equal(solution$objective, 0)
 })
+
+test_that("a failed final tidy-up keeps the rota found and prices it from its costs", {
+  model <- list(vars = tibble::tibble(cost = c(2, 3, 0)), offset = tibble::tibble(value = 10))
+  failing <- function(...) list(status_message = "Time limit reached",
+                                info = list(primal_solution_status = "None"))
+  current <- c(1, 1, 0)
+
+  expect_warning(kept <- polish(failing, model, current), "rota itself is unchanged")
+  expect_equal(kept$primal_solution, current)
+  expect_equal(kept$objective_value, 15)
+  expect_true(is_feasible(kept))
+})
+
+test_that("with no time limit anywhere, the solve stops after the default", {
+  inputs <- hard_only(two_weeks())
+  inputs$settings <- inputs$settings[inputs$settings$key != "solver_time_limit_s", ]
+  expect_message(solution <- solve_rota(inputs), "stopping after 10 minutes")
+  expect_equal(solution$status, "Feasible")
+})

@@ -17,9 +17,13 @@ solve_rota(
 path to an inputs workbook.}
 
 \item{time_limit}{Seconds to spend in total. Defaults to
-\code{solver_time_limit_s} in the \code{settings} sheet.}
+\code{solver_time_limit_s} in the \code{settings} sheet, or 10 minutes if that is
+blank.}
 
-\item{seed}{Random seed for phase 2, so the same inputs give the same rota.}
+\item{seed}{Random seed for phase 2. It fixes which parts of the rota are
+re-solved in turn, but each step is limited by time, so a faster or
+less busy computer may get further and give a different (often better)
+rota from the same inputs. Use \code{\link[=check_rota]{check_rota()}} to check any rota.}
 
 \item{verbose}{If \code{TRUE}, report each improvement as it is found.}
 
@@ -71,7 +75,9 @@ If the inputs make some slots impossible to fill (e.g. too few doctors
 with the right competencies, or everyone on leave), the rota leaves them
 empty rather than break a contract rule, and \code{unfilled} lists them.
 
-Phase 2 runs until the time limit or until the penalty is 0. Each step
+Phase 2 runs until the time limit or until the penalty is 0. The whole
+solve may run a little over the limit while it finishes a step and works
+out the final penalties. Each step
 gets 5 s to start with, doubling (up to 20 s) after every 10 steps in a
 row that fail to improve the rota, so harder neighbourhoods get longer.
 It does not prove the rota is the best possible, but in practice gets
