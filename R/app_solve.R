@@ -1,10 +1,13 @@
 # Solve tab: runs solve_rota() in a background R process so the app stays
 # responsive. The process and the app share a folder holding:
-#   inputs.rds    the inputs, written by the app
+#   inputs.rds    the inputs, written by the app and deleted by the process
+#                 once read, as they hold staff personal data
 #   progress.csv  seconds,objective lines from solve_rota()'s progress callback
 #   stop          created by the app to stop early and keep the best rota
 #   solution.rds  the rota_solution (without its model), written at the end
 #   stderr.txt    the process's messages and errors
+# The app deletes the folder once it has read the result, or when the solve
+# is cancelled or the app closes.
 
 solve_ui <- function(id) {
   ns <- shiny::NS(id)
@@ -20,7 +23,7 @@ solve_ui <- function(id) {
         bslib::accordion_panel(
           "Advanced",
           shiny::numericInput(ns("seed"), "Random seed", value = 1, min = 1, step = 1),
-          shiny::helpText("The same inputs and seed give the same rota.")
+          shiny::helpText("Change it to try a different rota from the same inputs.")
         )
       ),
       shiny::uiOutput(ns("buttons"))
@@ -66,7 +69,8 @@ solve_server <- function(id, loaded) {
 
     shiny::observeEvent(input$solve, {
       x <- loaded()
-      shiny::req(x$ok, input$minutes > 0, state() != "running")
+      shiny::req(x$ok, input$minutes > 0, !state() %in% c("running", "stopping"))
+      end_background_solve(job())
       job(start_background_solve(x$inputs, time_limit = input$minutes * 60,
                                  seed = input$seed %||% 1))
       history(NULL)
@@ -80,7 +84,7 @@ solve_server <- function(id, loaded) {
     })
 
     shiny::observeEvent(input$cancel, {
-      job()$process$kill()
+      end_background_solve(job())
       state("cancelled")
     })
 
@@ -101,11 +105,11 @@ solve_server <- function(id, loaded) {
         error(read_text(file.path(j$dir, "stderr.txt")))
         state("failed")
       }
+      end_background_solve(j)
     })
 
     session$onSessionEnded(function() {
-      j <- shiny::isolate(job())
-      if (!is.null(j) && j$process$is_alive()) j$process$kill()
+      end_background_solve(shiny::isolate(job()))
     })
 
     output$status <- shiny::renderUI({
@@ -175,6 +179,18 @@ start_background_solve <- function(inputs, time_limit, seed) {
   list(process = process, dir = dir, started = Sys.time(), time_limit = time_limit)
 }
 
+# Stop a background solve if it is still running, and delete its folder
+end_background_solve <- function(job) {
+  if (is.null(job)) {
+    return(invisible())
+  }
+  if (job$process$is_alive()) {
+    job$process$kill()
+  }
+  unlink(job$dir, recursive = TRUE)
+  invisible()
+}
+
 # Runs in the background process, so it is self-contained: callr runs a copy
 # of it without this package's namespace
 background_solve <- function(dir, time_limit, seed, dev_path) {
@@ -185,8 +201,11 @@ background_solve <- function(dir, time_limit, seed, dev_path) {
   }
   progress_file <- file.path(dir, "progress.csv")
   stop_file <- file.path(dir, "stop")
+  inputs_file <- file.path(dir, "inputs.rds")
+  inputs <- readRDS(inputs_file)
+  unlink(inputs_file)
   solution <- rotawriter::solve_rota(
-    readRDS(file.path(dir, "inputs.rds")), time_limit = time_limit, seed = seed,
+    inputs, time_limit = time_limit, seed = seed,
     progress = function(seconds, objective) {
       cat(sprintf("%.1f,%.10g\n", seconds, objective), file = progress_file, append = TRUE)
       file.exists(stop_file)

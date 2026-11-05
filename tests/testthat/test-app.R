@@ -63,6 +63,7 @@ test_that("a solve runs in the background, reports progress and returns a compli
       session$elapse(1000)
     }
     expect_equal(state(), "done")
+    expect_false(dir.exists(job()$dir))
     expect_gt(nrow(history()), 0)
     expect_null(solution()$model)
     v <- check_rota(solution()$rota, inputs)
@@ -88,4 +89,32 @@ test_that("the app opens a browser even when R has none set", {
                         .package = "base")
   expect_equal(browser_command(""), "xdg-open")
   expect_equal(browser_command(NULL), "xdg-open")
+})
+
+test_that("a solve's folder, which holds staff data, is deleted when it ends or is cancelled", {
+  skip_on_cran()
+  inputs <- two_weeks(read_rota_inputs(example_inputs_path()))
+  loaded <- shiny::reactiveVal(list(inputs = inputs, problems = validate_inputs(inputs), ok = TRUE))
+  shiny::testServer(solve_server, args = list(loaded = loaded), {
+    session$setInputs(minutes = 10, seed = 1, solve = 1)
+    first <- job()
+    # The background process deletes its copy of the inputs once read
+    waited <- 0
+    while (file.exists(file.path(first$dir, "inputs.rds")) && waited < 60) {
+      Sys.sleep(0.5)
+      waited <- waited + 0.5
+    }
+    expect_false(file.exists(file.path(first$dir, "inputs.rds")))
+
+    # Solve is ignored while stopping, so the first process is not orphaned
+    session$setInputs(stop = 1)
+    expect_equal(state(), "stopping")
+    session$setInputs(solve = 2)
+    expect_identical(job()$dir, first$dir)
+
+    session$setInputs(cancel = 1)
+    expect_equal(state(), "cancelled")
+    expect_false(first$process$is_alive())
+    expect_false(dir.exists(first$dir))
+  })
 })

@@ -61,3 +61,14 @@ test_that("write_violations_csv has one row per rule broken", {
   expect_equal(names(x), names(violations))
   expect_equal(x$start_date, format(violations$start_date))
 })
+
+test_that("text that Excel would run as a formula is written as plain text", {
+  expect_equal(not_formula(c("=HYPERLINK(\"x\")", "+1", "-2", "@SUM(A1)", "\tx", "Ada Alder", "a=b", NA)),
+               c("'=HYPERLINK(\"x\")", "'+1", "'-2", "'@SUM(A1)", "'\tx", "Ada Alder", "a=b", NA))
+
+  path <- withr::local_tempfile(fileext = ".csv")
+  write_csv_utf8(tibble::tibble(name = "=1+1", hours = -3), path)
+  x <- read_csv_bom(path)
+  expect_equal(x$name, "'=1+1")
+  expect_equal(x$hours, "-3") # numbers are left alone
+})

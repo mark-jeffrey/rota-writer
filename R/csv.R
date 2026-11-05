@@ -20,7 +20,9 @@
 #' * `hours`: the shift's hours; blank for leave
 #'
 #' The file is UTF-8 with a byte order mark, so Excel shows accented names
-#' correctly, and rows are in date then doctor order.
+#' correctly, and rows are in date then doctor order. Text starting with
+#' `=`, `+`, `-` or `@` gets a leading `'`, so Excel does not run it as a
+#' formula.
 #'
 #' @inheritParams write_rota
 #' @param path Path of the `.csv` file to write. An existing file is
@@ -96,6 +98,14 @@ write_csv_utf8 <- function(x, path) {
   con <- file(path, open = "wb", encoding = "UTF-8")
   on.exit(close(con))
   writeBin(as.raw(c(0xef, 0xbb, 0xbf)), con)
-  utils::write.csv(x, con, row.names = FALSE, na = "")
+  utils::write.csv(mutate(x, across(where(is.character), not_formula)), con, row.names = FALSE,
+                   na = "")
   invisible(path)
+}
+
+# Excel runs a cell starting with = + - @ (or a tab or carriage return) as a
+# formula, so a name or note typed like that could run when the CSV is
+# opened. A leading ' makes it plain text.
+not_formula <- function(x) {
+  if_else(grepl("^[=+@\t\r-]", x), paste0("'", x), x)
 }

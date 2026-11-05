@@ -39,7 +39,9 @@ Columns:
 }
 
 The file is UTF-8 with a byte order mark, so Excel shows accented names
-correctly, and rows are in date then doctor order.
+correctly, and rows are in date then doctor order. Text starting with
+\code{=}, \code{+}, \code{-} or \code{@} gets a leading \verb{'}, so Excel does not run it as a
+formula.
 }
 \examples{
 inputs <- read_rota_inputs(rota_example())
