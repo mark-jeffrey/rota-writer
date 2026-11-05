@@ -86,10 +86,6 @@ violations <- function(rule_id, doctor_id = NA_character_, start_date, end_date 
   tibble::tibble(rule_id, doctor_id, start_date, end_date, detail, weight)
 }
 
-rule_value <- function(inputs, id) {
-  inputs$rules$value[inputs$rules$rule_id == id]
-}
-
 finalise_violations <- function(v, inputs) {
   rules <- inputs$rules |>
     select(rule_id, hard_soft, rule_weight = weight)

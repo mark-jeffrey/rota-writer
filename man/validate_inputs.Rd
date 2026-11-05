@@ -18,10 +18,19 @@ A tibble with one row per problem: \code{sheet} (where to fix it) and
 Checks that the inputs workbook is consistent before any rota is checked
 or solved. It reports:
 \itemize{
+\item cells that could not be read: text in a number column (such as
+\code{"48 h"}), or a \code{Y}/\code{N} column holding something else
 \item doctor IDs in \code{placements}, \code{leave} or \code{requests} that are not in \code{staff}
-\item duplicate doctor IDs, unknown grades, and WTE outside 0.1-1
-\item leave that ends before it starts
-\item shifts whose \code{hours} do not match their start and end times
+\item duplicate or blank doctor IDs, unknown grades, and WTE blank or outside
+0.1-1
+\item leave that ends before it starts or has no dates, a leave status other
+than \code{approved} or \code{requested}, an unknown leave type, and unknown
+request types
+\item rules listed twice, unknown rule IDs, and rules that are on but have no
+value (a blank value would otherwise switch a hard rule off without a
+word)
+\item shift times that are not times, and shifts whose \code{hours} do not match
+their start and end times
 \item unknown shift codes, roles or grades in \code{cover}, \code{placement_roles} and
 \code{skill_mix}
 \item in-post days with no placement

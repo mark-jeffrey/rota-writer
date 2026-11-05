@@ -94,6 +94,37 @@ rule_on <- function(inputs, id) {
   !isFALSE(inputs$rules$enabled[listed])
 }
 
+# Rules that need a number in the rules sheet's value column when they are
+# on. AVG_HOURS_OPTOUT (a value for AVG_HOURS) and HOURS_TARGET (a default
+# where contracted_hours is blank) are needed only sometimes; see
+# validate_rules().
+value_rules <- c("AVG_HOURS", "MAX_7DAY", "MAX_SHIFT", "MIN_REST", "MAX_CONSEC_SHIFTS",
+                 "MAX_CONSEC_LONG", "MAX_CONSEC_LATE", "REST_AFTER_RUN", "MAX_CONSEC_NIGHTS",
+                 "REST_AFTER_NIGHTS", "WEEKEND_MAX", "WEEKEND_TARGET", "LONG_RUN",
+                 "LONG_NIGHT_RUN", "ICU_SHORT_RUN")
+
+# A rule's value from the rules sheet, or NA if it has none. A rule that is
+# on but has no value would otherwise drop out of the model and the checker
+# without a word, so that is an error; validate_inputs() reports it first.
+rule_value <- function(inputs, id) {
+  value <- inputs$rules$value[inputs$rules$rule_id %in% id]
+  if (length(value) > 1) {
+    stop("The rules sheet lists ", id, " more than once. Run validate_inputs() for details.",
+         call. = FALSE)
+  }
+  value <- if (length(value) == 0) NA_real_ else suppressWarnings(as.numeric(value))
+  if (is.na(value) && id %in% value_rules && rule_on(inputs, id)) {
+    stop(id, " is on but has no value in the rules sheet. Run validate_inputs() for details.",
+         call. = FALSE)
+  }
+  value
+}
+
+# Every rule ID the rules sheet may use
+known_rule_ids <- function() {
+  c(unique(unlist(map(rule_registry(), "rules"))), "AVG_HOURS_OPTOUT")
+}
+
 # Registry -----------------------------------------------------------------
 
 # A registry entry: the rule ids it implements (none for structural parts

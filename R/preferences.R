@@ -10,6 +10,9 @@
 
 preference_types <- c("prefer_shift", "avoid_shift", "day_off", "prefer_pattern", "avoid_pattern")
 
+# One-off requests in the requests sheet (requests_part(), check_requests())
+request_types <- c("no_oncall", "no_night", "no_weekend", "prefer_oncall")
+
 # Shift-level preference costs (before the rule weight): doctor_id, then
 # either shift_code or weekday, weight and what the preference is
 shift_preference_costs <- function(inputs) {

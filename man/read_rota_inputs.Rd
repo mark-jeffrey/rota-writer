@@ -34,7 +34,10 @@ Reads every sheet of the inputs workbook (staff, shifts, cover, rules,
 leave, requests, ...) into a list of tibbles, ready for \code{\link[=check_rota]{check_rota()}}
 and, later, the solver. Dates become \code{Date}, \code{Y}/\code{N} columns become
 logical, and times become \code{"HH:MM"} text even if Excel has turned them
-into time values.
+into time values or they were typed as \code{8:00}. Codes such as a leave
+status are read whatever their case or spacing (\code{"Approved "} is
+\code{approved}). Cells that cannot be read become \code{NA}, and
+\code{\link[=validate_inputs]{validate_inputs()}} lists them.
 }
 \details{
 Run \code{\link[=validate_inputs]{validate_inputs()}} afterwards to catch inconsistent data, such as

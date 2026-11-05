@@ -138,11 +138,19 @@ print.rota_model <- function(x, ...) {
   invisible(x)
 }
 
+# Hours after midnight of an "HH:MM" time; NA if it is not one
 hhmm_hours <- function(x) {
+  x[!is_hhmm(x)] <- NA
   as.numeric(substr(x, 1, 2)) + as.numeric(substr(x, 4, 5)) / 60
 }
 
 shift_times <- function(shifts) {
+  # A shift without a start time or hours would drop out of the rest rules
+  bad <- shifts$shift_code[!is_hhmm(shifts$start) | is.na(shifts$hours)]
+  if (length(bad) > 0) {
+    stop("Shifts without a valid start time or hours: ", paste(bad, collapse = ", "),
+         ". Run validate_inputs() for details.", call. = FALSE)
+  }
   mutate(shifts, start_h = hhmm_hours(start), end_h = start_h + hours)
 }
 

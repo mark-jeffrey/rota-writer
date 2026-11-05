@@ -331,6 +331,12 @@ sheets, so a new doctor can be picked in `leave` as soon as they are added to `s
 real Excel dates shown as dd/mm/yyyy, and times are `"HH:MM"` text. The solver reads sheets by
 name, so a workbook with sheets in another order, or without the `about` sheet, works too.
 
+Codes such as `Approved` or `No_Night` are read whatever their case or spacing. Anything the
+solver can't read is listed by `validate_inputs()` (and in the app) before a rota is solved: an
+unknown leave status, leave type or request, text in a number column such as `48 h`, a time it
+can't read, and a rule that is on but has no value. A blank value would otherwise switch a hard
+rule off, so set `enabled` to `N` to switch a rule off.
+
 | Sheet | Contents |
 |---|---|
 | `settings` | `rota_type`, rota start and end dates, reference period, solver time limit, and optionally the search's `neighbourhood_days` and `neighbourhood_doctors` |
