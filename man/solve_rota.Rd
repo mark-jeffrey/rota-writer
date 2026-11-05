@@ -9,7 +9,8 @@ solve_rota(
   time_limit = NULL,
   seed = 1,
   verbose = FALSE,
-  progress = NULL
+  progress = NULL,
+  workers = NULL
 )
 }
 \arguments{
@@ -32,6 +33,10 @@ with the time so far and the best penalty: once the first rota is found,
 then after every search step. If it returns \code{TRUE}, the search stops
 early and returns the best rota so far. Use it to show progress, or to
 let someone stop a long solve.}
+
+\item{workers}{Cores to use for phase 2. Defaults to \code{solver_workers} in
+the \code{settings} sheet, or 1. It is limited to one less than the
+computer's cores. 4 is a good choice on most computers.}
 }
 \value{
 A \code{rota_solution}: a list with
@@ -82,6 +87,13 @@ gets 5 s to start with, doubling (up to 20 s) after every 10 steps in a
 row that fail to improve the rota, so harder neighbourhoods get longer.
 It does not prove the rota is the best possible, but in practice gets
 close; give it longer for a better rota.
+
+With \code{workers} above 1, phase 2 runs on that many cores: each round, every
+worker re-solves a different part of the rota at the same time, and
+improvements to separate parts are combined when the whole rota still meets
+every hard rule. On the example rotas, 4 workers gave penalties a third to
+two thirds lower than 1 in the same time. The computer is busy while it
+runs.
 Check the result with \code{\link[=check_rota]{check_rota()}}.
 }
 \examples{

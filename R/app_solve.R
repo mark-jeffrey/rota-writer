@@ -23,7 +23,11 @@ solve_ui <- function(id) {
         bslib::accordion_panel(
           "Advanced",
           shiny::numericInput(ns("seed"), "Random seed", value = 1, min = 1, step = 1),
-          shiny::helpText("Change it to try a different rota from the same inputs.")
+          shiny::helpText("Change it to try a different rota from the same inputs."),
+          shiny::numericInput(ns("workers"), "Cores to use", value = 1, min = 1, step = 1),
+          shiny::helpText("More cores give a better rota in the same time (4 suits most",
+                          "computers), but the computer is busy while it solves. The",
+                          "settings sheet's solver_workers sets the starting value.")
         )
       ),
       shiny::uiOutput(ns("buttons"))
@@ -45,6 +49,8 @@ solve_server <- function(id, loaded) {
     shiny::observeEvent(loaded(), {
       limit <- setting_value(loaded()$inputs, "solver_time_limit_s")
       if (!is.na(limit)) shiny::updateNumericInput(session, "minutes", value = round(limit / 60, 1))
+      shiny::updateNumericInput(session, "workers",
+                                value = solver_setting(loaded()$inputs, "solver_workers"))
     })
 
     output$buttons <- shiny::renderUI({
@@ -72,7 +78,7 @@ solve_server <- function(id, loaded) {
       shiny::req(x$ok, input$minutes > 0, !state() %in% c("running", "stopping"))
       end_background_solve(job())
       job(start_background_solve(x$inputs, time_limit = input$minutes * 60,
-                                 seed = input$seed %||% 1))
+                                 seed = input$seed %||% 1, workers = input$workers %||% 1))
       history(NULL)
       error(NULL)
       state("running")
@@ -165,13 +171,14 @@ solve_server <- function(id, loaded) {
 }
 
 # Start solve_rota() in a background R process
-start_background_solve <- function(inputs, time_limit, seed) {
+start_background_solve <- function(inputs, time_limit, seed, workers = 1) {
   dir <- tempfile("rota-solve-")
   dir.create(dir)
   saveRDS(inputs, file.path(dir, "inputs.rds"))
   process <- callr::r_bg(
     background_solve,
-    args = list(dir = dir, time_limit = time_limit, seed = seed, dev_path = dev_package_path()),
+    args = list(dir = dir, time_limit = time_limit, seed = seed, workers = workers,
+                dev_path = dev_package_path()),
     stdout = file.path(dir, "stdout.txt"),
     stderr = file.path(dir, "stderr.txt"),
     supervise = TRUE
@@ -193,7 +200,7 @@ end_background_solve <- function(job) {
 
 # Runs in the background process, so it is self-contained: callr runs a copy
 # of it without this package's namespace
-background_solve <- function(dir, time_limit, seed, dev_path) {
+background_solve <- function(dir, time_limit, seed, workers, dev_path) {
   if (is.null(dev_path)) {
     loadNamespace("rotawriter")
   } else {
@@ -205,7 +212,7 @@ background_solve <- function(dir, time_limit, seed, dev_path) {
   inputs <- readRDS(inputs_file)
   unlink(inputs_file)
   solution <- rotawriter::solve_rota(
-    inputs, time_limit = time_limit, seed = seed,
+    inputs, time_limit = time_limit, seed = seed, workers = max(workers, 1, na.rm = TRUE),
     progress = function(seconds, objective) {
       cat(sprintf("%.1f,%.10g\n", seconds, objective), file = progress_file, append = TRUE)
       file.exists(stop_file)

@@ -15,6 +15,7 @@ Imports:
     lubridate,
     Matrix,
     openxlsx2,
+    parallel,
     purrr,
     readxl,
     rlang,

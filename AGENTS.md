@@ -29,7 +29,7 @@ Run everything from the project root.
 ```sh
 Rscript scripts/setup.R                     # install missing packages, then a 60 s check solve
 Rscript scripts/run_app.R                   # the point-and-click app
-Rscript scripts/solve_rota.R inputs.xlsx out/ [time_limit_s]
+Rscript scripts/solve_rota.R inputs.xlsx out/ [time_limit_s] [workers]
 Rscript scripts/check_rota.R inputs.xlsx out/rota.xlsx out/report.xlsx
 Rscript -e 'pkgload::load_all(); testthat::test_dir("tests/testthat", load_package = "none")'
 Rscript -e 'roxygen2::roxygenise()'         # after changing roxygen comments
@@ -51,7 +51,7 @@ From R: `pkgload::load_all()`, then `read_rota_inputs()`, `validate_inputs()`, `
 | `R/read_inputs.R` | Reading and validating the inputs workbook |
 | `R/rules.R` | Rota types (`rota_types`), optional sheets and columns, and the rule registry |
 | `R/model.R`, `R/soft.R`, `R/patterns.R`, `R/preferences.R`, `R/sequences.R` | The model: hard rules as constraints, soft rules as penalties |
-| `R/solve.R` | `solve_rota()`: first rota, then large neighbourhood search |
+| `R/solve.R`, `R/parallel.R` | `solve_rota()`: first rota, then large neighbourhood search, on several cores with `workers` |
 | `R/check_rota.R`, `R/report.R` | The independent checker and its report |
 | `R/output.R`, `R/csv.R`, `R/app*.R` | Rota workbook, calendars, CSV exports and the Shiny app |
 | `R/bank_holidays.R`, `inst/extdata/uk-bank-holidays.csv` | UK bank holidays, a copy of GOV.UK's list refreshed by `data-raw/update_bank_holidays.R` |

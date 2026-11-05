@@ -169,3 +169,63 @@ test_that("with no time limit anywhere, the solve stops after the default", {
   expect_message(solution <- solve_rota(inputs), "stopping after 10 minutes")
   expect_equal(solution$status, "Feasible")
 })
+
+test_that("solver_workers defaults to 1 and ignores what it cannot read", {
+  inputs <- two_weeks()
+  expect_equal(solver_setting(inputs, "solver_workers"), 1)
+  inputs$settings <- tibble::add_row(inputs$settings, key = c("solver_workers", "solver_other"),
+                                     value = c("4", "zero"))
+  expect_equal(solver_setting(inputs, "solver_workers"), 4)
+  expect_equal(solver_setting(inputs, "solver_other"), 1)
+})
+
+test_that("a round's neighbourhoods free no shift in common", {
+  model <- list(vars = tidyr::crossing(doctor_id = sprintf("D%02d", 1:12), t = 1:56) |>
+                  dplyr::mutate(kind = "x", date = as.Date("2027-02-01") + t - 1))
+  search <- list(days = 7, doctors = 5, whole_weeks = FALSE)
+  set.seed(1)
+  for (round in 1:2) {
+    frees <- round_neighbourhoods(model, round, search, k = 4)
+    expect_true(length(frees) >= 2)
+    expect_true(all(Reduce(`+`, frees) <= 1))
+  }
+  # Only two groups of 5 fit in 12 doctors
+  expect_length(round_neighbourhoods(model, 2, search, k = 4), 2)
+})
+
+test_that("improvements to different parts are combined only if the rota stays valid", {
+  model <- list(vars = tibble::tibble(kind = "x", cost = c(2, 0, 1, 0)))
+  best <- list(primal_solution = c(0, 0, 0, 0), objective_value = 10,
+               info = list(primal_solution_status = "Feasible"))
+  found <- \(x, obj) list(primal_solution = x, objective_value = obj,
+                          info = list(primal_solution_status = "Feasible"))
+  tried <- list(found(c(1, 0, 0, 0), 8), found(c(0, 0, 1, 0), 9))
+  frees <- list(c(TRUE, TRUE, FALSE, FALSE), c(FALSE, FALSE, TRUE, TRUE))
+  # A stand-in for the fixed-rota check: penalty 10 less 2 per x1 and 1 per x3,
+  # and a "hard rule" allowing at most `cap` shifts in all
+  checker <- \(cap) function(cost, time_limit, fix, current) {
+    if (sum(current) > cap) list(info = list(primal_solution_status = "Infeasible"))
+    else found(current, 10 - 2 * current[1] - current[3])
+  }
+
+  both <- combine_improvements(checker(2), model, best, tried, frees)
+  expect_equal(both$primal_solution, c(1, 0, 1, 0))
+  expect_equal(both$objective_value, 7)
+
+  # Together they break the hard rule, so only the better one is kept
+  one <- combine_improvements(checker(1), model, best, tried, frees)
+  expect_equal(one$primal_solution, c(1, 0, 0, 0))
+
+  # Overlapping parts are never combined
+  overlap <- combine_improvements(checker(2), model, best, tried, list(frees[[1]], c(TRUE, FALSE, TRUE, TRUE)))
+  expect_equal(overlap$objective_value, 8)
+})
+
+test_that("a solve on several cores is compliant", {
+  skip_on_cran()
+  inputs <- two_weeks()
+  solution <- solve_rota(inputs, time_limit = 30, workers = 2)
+  expect_equal(solution$status, "Feasible")
+  v <- check_rota(solution$rota, inputs)
+  expect_equal(sum(v$hard_soft == "hard"), 0)
+})

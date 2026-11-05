@@ -1,6 +1,9 @@
 # Write a rota, check it, and save everything the coordinator needs.
 #
-#   Rscript scripts/solve_rota.R <inputs.xlsx> <output_folder> [time_limit_s]
+#   Rscript scripts/solve_rota.R <inputs.xlsx> <output_folder> [time_limit_s] [workers]
+#
+# workers: cores to use for the search (default: solver_workers in the
+# settings sheet, or 1). 4 is a good choice on most computers.
 #
 # Run from the project root. Writes to the output folder:
 #   rota.xlsx      the rota (by_role, by_doctor, doctors, key and long sheets)
@@ -15,7 +18,7 @@ pkgload::load_all(quiet = TRUE)
 
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) < 2) {
-  stop("Usage: Rscript scripts/solve_rota.R <inputs.xlsx> <output_folder> [time_limit_s]",
+  stop("Usage: Rscript scripts/solve_rota.R <inputs.xlsx> <output_folder> [time_limit_s] [workers]",
        call. = FALSE)
 }
 
@@ -27,8 +30,9 @@ if (nrow(problems) > 0) {
   quit(status = 2)
 }
 
-time_limit <- if (length(args) >= 3) as.numeric(args[3])
-solution <- solve_rota(inputs, time_limit = time_limit)
+time_limit <- if (length(args) >= 3 && args[3] != "") as.numeric(args[3])
+workers <- if (length(args) >= 4) as.numeric(args[4])
+solution <- solve_rota(inputs, time_limit = time_limit, workers = workers)
 print(solution)
 if (is.null(solution$rota)) {
   quit(status = 1)

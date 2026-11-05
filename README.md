@@ -202,7 +202,9 @@ anywhere.
 1. **Inputs:** upload your inputs workbook, or use the example data. Any problems are listed, and
    solving waits until they are fixed in Excel.
 2. **Solve:** choose a time limit and press Solve. The penalty falls as the solver improves the rota.
-   **Stop and keep best rota** finishes early with the best rota so far.
+   **Stop and keep best rota** finishes early with the best rota so far. Under **Advanced**,
+   **Cores to use** runs the search on several cores at once: 4 gives a much better rota in the
+   same time on most computers, but the computer is busy while it solves.
 3. **Results:** who is on each shift (by role), each doctor's rota (by doctor), fairness within
    each staffing pool, patterns, and every rule broken. **Download** gives `rota.xlsx`, `report.xlsx` and `calendars.zip`, and the plain CSV files `rota.csv` and `violations.csv`.
 4. **Check a rota:** upload a rota workbook, such as one edited by hand, to check it.
@@ -216,11 +218,12 @@ anywhere.
 ### Solving and checking: the command line
 
 ```sh
-Rscript scripts/solve_rota.R inputs.xlsx out/ [time_limit_s]
+Rscript scripts/solve_rota.R inputs.xlsx out/ [time_limit_s] [workers]
 Rscript scripts/check_rota.R inputs.xlsx out/rota.xlsx out/report.xlsx
 ```
 
-The solver runs for the time limit in `settings` unless you give one in seconds. It prints any input
+The solver runs for the time limit in `settings` unless you give one in seconds, on one core unless
+you give a number of `workers` (or set `solver_workers` in `settings`); 4 suits most computers. It prints any input
 problems and stops, or writes:
 
 | File | Contents |
@@ -339,7 +342,7 @@ rule off, so set `enabled` to `N` to switch a rule off.
 
 | Sheet | Contents |
 |---|---|
-| `settings` | `rota_type`, rota start and end dates, reference period, solver time limit, and optionally the search's `neighbourhood_days` and `neighbourhood_doctors` |
+| `settings` | `rota_type`, rota start and end dates, reference period, solver time limit, and optionally the search's `neighbourhood_days`, `neighbourhood_doctors` and `solver_workers` (cores to use) |
 | `staff` | One row per doctor: grade, staffing `pool`, WTE, contracted hours, LTFT fixed day off, start and end in post, nights-exempt, WTR opt-out, competencies (`can_*`) |
 | `placements` | Training placement blocks, with dates |
 | `leave` | Leave periods: type (`annual`, `study`, `parental`, `exam`) and status (`approved` is hard, `requested` is soft) |
@@ -446,7 +449,9 @@ Most of these methods come from the mixed-integer linear programming model in Ab
   once is too slow, so `solve_rota()` then improves it by *large neighbourhood search*: it repeatedly
   frees a block of days or a group of doctors, fixes the rest, and re-solves that part, until the
   time limit. Every step solves the full model, so hard rules always hold and fairness is judged over
-  the whole rota. The search is seeded, but each step is limited by time, so a faster computer
+  the whole rota. With several workers, each round re-solves a different part on each core at once,
+  and combines the improvements when the combined rota still meets every hard rule; on the example
+  rotas, 4 workers gave penalties a third to two thirds lower in the same time. The search is seeded, but each step is limited by time, so a faster computer
   may get further and give a different rota from the same inputs. The checker, not the solver, is
   what to rely on for compliance. With no time limit in the settings sheet, the search stops after
   10 minutes.
