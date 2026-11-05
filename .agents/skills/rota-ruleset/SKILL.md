@@ -208,6 +208,6 @@ over the year or leave clusters.
   - how to update leave, requests and staff for the next rota period (the same way);
   - how to re-check hand edits (`scripts/check_rota.R`, or the app's Check tab);
   - that the rota coordinator must still review the rota before it's issued (README disclaimer).
-- Optional, if the user wants to share their template: write a fictional version as
-  `data-raw/make_<dept>_data.R` → `examples/<dept>/input/inputs.xlsx`, add it to the README's "Example
-  rule sets" section, and add a test that it validates. Commit only when asked.
+- Optional: mention in one line that they can share the rule set with other departments, with
+  fictional staff, if they'd like to. If they want to, follow the `rota-share` skill. Don't push
+  for it.

@@ -12,13 +12,15 @@ files outside this folder.
 
 ## Skills
 
-Two step-by-step workflows live in `.agents/skills/`. Follow the matching one when a user asks for
+Three step-by-step workflows live in `.agents/skills/`. Follow the matching one when a user asks for
 it:
 
 - **`rota-setup`**: install R and the packages, check the install works, and start the app, on
   Windows, macOS or Linux.
 - **`rota-ruleset`**: set up a rota for a new department or staff group: interview the user, write
   a spec, build their inputs workbook, solve a trial rota and tune the penalty weights with them.
+- **`rota-share`**: only when the user asks to share: turn their rule set (or an interoperability
+  tool) into a fictional example, check that no real data is in it, and open a pull request.
 
 ## Commands
 
