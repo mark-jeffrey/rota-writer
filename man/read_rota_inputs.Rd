@@ -20,7 +20,7 @@ the \code{rota_type} setting:
 }
 
 Either may add \code{patterns}, \code{preferences}, \code{sequences},
-\code{pattern_sequences} and \code{block_rest} sheets. Sheets left out are read as
+\code{pattern_sequences}, \code{block_rest} and \code{fair_shares} sheets. Sheets left out are read as
 empty. A front sheet named \code{about}, describing the workbook for people,
 is skipped. Sheets may be in any order.}
 }

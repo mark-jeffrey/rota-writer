@@ -5,12 +5,13 @@ yn_columns <- c("is_on_call", "is_night", "is_long", "is_late",
 
 # Columns holding codes, matched whatever their case or spacing ("Approved ")
 code_columns <- list(leave = c("leave_type", "status"), requests = "request",
-                     preferences = "preference")
+                     preferences = "preference", fair_shares = "measure")
 
 # Columns that must be numbers. One text cell ("48 h") makes Excel's whole
 # column text, which would compare alphabetically.
-numeric_columns <- list(rules = c("value", "weight"), staff = c("wte", "contracted_hours"),
-                        shifts = "hours", requests = "weight")
+numeric_columns <- list(rules = c("value", "weight"),
+                        staff = c("wte", "contracted_hours", "weekend_one_in"),
+                        shifts = "hours", requests = "weight", cover = "pa", fair_shares = "weight")
 
 leave_statuses <- c("approved", "requested")
 
@@ -39,7 +40,7 @@ leave_statuses <- c("approved", "requested")
 #'     `rota_example("icu-consultants")`.
 #'
 #'   Either may add `patterns`, `preferences`, `sequences`,
-#'   `pattern_sequences` and `block_rest` sheets. Sheets left out are read as
+#'   `pattern_sequences`, `block_rest` and `fair_shares` sheets. Sheets left out are read as
 #'   empty. A front sheet named `about`, describing the workbook for people,
 #'   is skipped. Sheets may be in any order.
 #'
@@ -298,6 +299,10 @@ read_rota <- function(path, sheet = "long") {
 #' * unknown shift codes, patterns, weekdays or preference types in the
 #'   shifts sheet's `covers` column and the `patterns`, `preferences`,
 #'   `sequences`, `pattern_sequences` and `block_rest` sheets
+#' * a `weekend_one_in` below 1 in the staff sheet
+#' * in the `fair_shares` sheet: blank or repeated IDs, IDs that clash with
+#'   a column of [summarise_doctors()], unknown shift codes, day types or
+#'   measures, and PA shares counting a cover row with no `pa` value
 #'
 #' @inheritParams check_rota
 #'
@@ -371,7 +376,10 @@ validate_inputs <- function(inputs) {
             paste("Unknown grade:", inputs$skill_mix$min_grade)),
     if (rule_on(inputs, "PLACEMENT")) missing_placements(inputs),
     unknown_ids("preferences"),
-    validate_slots_and_patterns(inputs)
+    problem("staff", which(inputs$staff$weekend_one_in < 1),
+            paste0("weekend_one_in for ", ids, " should be 1 or more (1: no weekend limit)")),
+    validate_slots_and_patterns(inputs),
+    validate_fair_shares(inputs)
   ) |>
     list_rbind()
 }
@@ -444,6 +452,44 @@ validate_slots_and_patterns <- function(inputs) {
         lubridate::wday(inputs$period$start, week_start = 1) != 1) {
       problem("settings", 1, "rota_start should be a Monday, so blocks fill whole weeks")
     }
+  )
+}
+
+# The fair_shares sheet. Each row's ID names two summarise_doctors()
+# columns, so it must be unique and not clash with the others.
+validate_fair_shares <- function(inputs) {
+  shares <- inputs$fair_shares
+  if (nrow(shares) == 0) {
+    return(NULL)
+  }
+  problem <- function(bad, msg) tibble::tibble(sheet = rep("fair_shares", length(bad)), problem = msg)
+  split <- \(x) stringr::str_trim(unlist(stringr::str_split(na.omit(as.character(x)), ";")))
+  ids <- shares$share_id
+  taken <- c("doctor_id", "grade", "pool", "wte", "contracted_hours", "opted_out_wtr", "from", "to",
+             "weeks_in_post", "hours", "leave_hours", "avg_weekly_hours", "on_calls", "nights",
+             "weekends", inputs$shifts$shift_code)
+  dupes <- unique(ids[duplicated(ids) & !is.na(ids)])
+  # Excel table headers ignore case, so NIGHTS clashes with nights
+  clash <- ids[!is.na(ids) & tolower(ids) %in% tolower(taken)]
+  bad_slots <- setdiff(split(shares$shifts), shift_covers(inputs$shifts)$slot)
+  bad_days <- setdiff(split(shares$day_types), c("weekday", "weekend", "bank_holiday"))
+  bad_measures <- setdiff(shares$measure, c("count", "pa", NA))
+  no_pa <- tibble::tibble(slot = character(), day_type = character())
+  if (length(c(bad_slots, bad_days, bad_measures)) == 0) {
+    no_pa <- fair_share_slots(inputs) |>
+      filter(measure == "pa", is.na(size)) |>
+      distinct(slot, day_type)
+  }
+
+  bind_rows(
+    problem(which(is.na(ids)), "A row has no share_id"),
+    problem(dupes, paste(dupes, "is listed more than once")),
+    problem(clash, paste0(clash, ": pick another share_id (it is already a column of the doctors summary)")),
+    problem(bad_slots, paste("Unknown shift_code:", bad_slots)),
+    problem(bad_days, paste0("Unknown day type: ", bad_days, ". Use weekday, weekend or bank_holiday")),
+    problem(bad_measures, paste0("Unknown measure: ", bad_measures, ". Use count or pa")),
+    problem(no_pa$slot, paste0("The cover sheet has no pa value for ", no_pa$slot, " on a ",
+                               no_pa$day_type, ", which a share by PAs counts"))
   )
 }
 

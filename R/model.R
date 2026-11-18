@@ -546,6 +546,12 @@ night_terms <- function(x, shifts, inputs, n_days) {
   bind_rows(max_nights, rest_after)
 }
 
+# Each doctor's weekend limit, 1 in N: the staff sheet's weekend_one_in, or
+# else the rule's value. 1 means every weekend, so no limit.
+weekend_one_in <- function(inputs, rule) {
+  coalesce(inputs$staff$weekend_one_in, rule_value(inputs, rule))
+}
+
 # weekend[d, sat] is 1 exactly when the doctor works a shift touching the
 # weekend: at least each day's shifts, at most all of them. At most 1 in
 # `WEEKEND_MAX` counted weekends worked.
@@ -569,9 +575,9 @@ weekend_terms <- function(x, weekend, touches, inputs) {
     return(bind_rows(at_least, at_most))
   }
 
-  one_in <- rule_value(inputs, "WEEKEND_MAX")
   frequency <- counted_weekends(inputs) |>
     count(doctor_id, name = "total") |>
+    mutate(one_in = weekend_one_in(inputs, "WEEKEND_MAX")[match(doctor_id, inputs$staff$doctor_id)]) |>
     inner_join(filter(weekend, counted), by = "doctor_id") |>
     transmute(con = doctor_id, j, coef = 1, hi = floor(total / one_in)) |>
     constraint("WEEKEND_MAX")

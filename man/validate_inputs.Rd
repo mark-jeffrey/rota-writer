@@ -37,6 +37,10 @@ their start and end times
 \item unknown shift codes, patterns, weekdays or preference types in the
 shifts sheet's \code{covers} column and the \code{patterns}, \code{preferences},
 \code{sequences}, \code{pattern_sequences} and \code{block_rest} sheets
+\item a \code{weekend_one_in} below 1 in the staff sheet
+\item in the \code{fair_shares} sheet: blank or repeated IDs, IDs that clash with
+a column of \code{\link[=summarise_doctors]{summarise_doctors()}}, unknown shift codes, day types or
+measures, and PA shares counting a cover row with no \code{pa} value
 }
 }
 \examples{

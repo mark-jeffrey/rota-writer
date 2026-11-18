@@ -325,7 +325,7 @@ and when:
 | Colour | Group | Sheets |
 |---|---|---|
 | Green | **Edit each rota**: change for each rota period | `settings`, `staff`, `placements`, `leave`, `requests`, `preferences` |
-| Orange | **Rules and weights**: tune with care; the shaded `value`, `weight` and `enabled` columns are the ones to change | `rules` |
+| Orange | **Rules and weights**: tune with care; the shaded `value`, `weight` and `enabled` columns are the ones to change | `rules`, `fair_shares` |
 | Grey | **Set up once**, with the rule set | `grades`, `shifts`, `cover`, `placement_roles`, `skill_mix`, `patterns`, `sequences`, `pattern_sequences`, `block_rest`, `bank_holidays` |
 
 Hover over a column heading for a note on what goes in it. Drop-downs list the allowed values:
@@ -378,6 +378,9 @@ Either type can use these optional pieces:
 | `sequences` sheet | `to_shift` worked `days_after` days after `from_shift`, e.g. no 1st on the day before a night. A blank weight makes the row hard. | `SEQUENCE`, `SEQUENCE_SOFT` |
 | `pattern_sequences` sheet | `to_pattern` worked in full the week after `from_pattern`, e.g. 1st on Fri–Sun then Mon–Thu (7 days running across the weekend), with a weight per row | `PATTERN_SEQUENCE` |
 | `block_rest` sheet | Hours off before and after a big block: a `pattern_id` worked on every one of its days with the listed `shifts` (blank: any shift filling its slot), e.g. 48 h either side of a 7-day 1st-on week or a night block all as 24-hour shifts (`rest_before_h`, `rest_after_h`) | `BLOCK_REST` |
+| `fair_shares` sheet | Kinds of work each shared out in proportion to WTE × weeks in post, with a weight each: the cover slots counted (`shifts`, blank for every on-call slot), the `day_types` (blank for all), and the `measure`, `count` (shifts) or `pa` (programmed activities from `cover$pa`). E.g. 1st on, weekend days, weekend nights, bank holidays and total PAs. A 24-hour shift counts for each slot it fills. `summarise_doctors()` adds each row's total and fair share. | `FAIR_SHARES` |
+| `cover$pa` | Programmed activities one shift is worth on that day type, for `fair_shares` rows measured in `pa` | `FAIR_SHARES` |
+| `staff$weekend_one_in` | A doctor's own weekend limit, 1 in N, in place of the `WEEKEND_MAX` and `WEEKEND_TARGET` values; 1 means no limit. For a doctor happy to work more weekends. | `WEEKEND_MAX`, `WEEKEND_TARGET` |
 
 ## 📋 Rule catalogue
 
@@ -412,6 +415,7 @@ code. The contract rules, their parameters and sources are in
 |---|---|
 | `SKILL_MIX` | Each shift short of the seniority in a `skill_mix` row |
 | `FAIR_ONCALL`, `FAIR_NIGHTS`, `FAIR_WEEKENDS`, `FAIR_SLOTS` | Distance from each doctor's WTE-weighted share of their pool's on-calls, nights, weekends or each slot. The *k*-th shift away costs (2*k* − 1) × weight, so two doctors one off cost less than one doctor two off. |
+| `FAIR_SHARES` | The same, for each row of the `fair_shares` sheet, × the row's weight: the *k*-th shift (or PA, for a row measured in PAs) away costs (2*k* − 1) × weight |
 | `LEAVE_REQUESTED`, `REQUESTS`, `PREFERENCES` | Each requested leave day refused; each one-off request or standing preference not met |
 | `PLACEMENT_AVOID` | Each shift in a discouraged placement role |
 | `HOURS_TARGET` | Each hour a week short of contracted hours (rising for each further day short); each hour over at 10× |

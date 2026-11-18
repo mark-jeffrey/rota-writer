@@ -46,13 +46,17 @@ optional_sheets <- list(
   pattern_sequences = tibble::tibble(from_pattern = character(), to_pattern = character(),
                                      weight = numeric()),
   block_rest = tibble::tibble(pattern_id = character(), shifts = character(),
-                              rest_before_h = numeric(), rest_after_h = numeric())
+                              rest_before_h = numeric(), rest_after_h = numeric()),
+  fair_shares = tibble::tibble(share_id = character(), shifts = character(), day_types = character(),
+                               measure = character(), weight = numeric())
 )
 
 # Columns a sheet may leave out, and their values when it does
 optional_columns <- list(
   staff = list(grade = NA_character_, pool = NA_character_, contracted_hours = NA_real_,
-               ltft_fixed_day_off = NA_character_, nights_exempt = FALSE, opted_out_wtr = FALSE),
+               ltft_fixed_day_off = NA_character_, nights_exempt = FALSE, opted_out_wtr = FALSE,
+               weekend_one_in = NA_real_),
+  cover = list(pa = NA_real_),
   shifts = list(is_long = FALSE, is_late = FALSE, covers = NA_character_, open_to = "all",
                 label = NA_character_, area = NA_character_)
 )
@@ -199,6 +203,7 @@ rule_registry <- function() {
     rule_entry("FAIR_NIGHTS", \(ctx) fair_part(filter(ctx$x, is_night), ctx$inputs, "FAIR_NIGHTS")),
     rule_entry("FAIR_WEEKENDS", \(ctx) fair_part(ctx$weekend, ctx$inputs, "FAIR_WEEKENDS")),
     rule_entry("FAIR_SLOTS", \(ctx) fair_part(slot_items(ctx$x, ctx$inputs), ctx$inputs, "FAIR_SLOTS")),
+    rule_entry("FAIR_SHARES", \(ctx) fair_shares_part(ctx$x, ctx$inputs)),
     rule_entry("HOURS_TARGET", \(ctx) hours_target_part(ctx$x, ctx$inputs), check_hours_target),
     rule_entry("NORMAL_DAY_SPREAD", \(ctx) normal_day_spread_part(ctx$x, ctx$inputs),
                check_normal_day_spread)
@@ -218,4 +223,24 @@ slot_items <- function(x, inputs) {
     inner_join(shift_covers(inputs$shifts), by = "shift_code", relationship = "many-to-many") |>
     filter(slot %in% on_call_slots(inputs)) |>
     mutate(group = slot)
+}
+
+# The fair_shares sheet, one row per share, cover slot and day type it
+# counts. Blank shifts means every on-call slot; blank day_types every day
+# type. `size` is what one slot filled counts for: 1, or its PA value from
+# the cover sheet's pa column.
+fair_share_slots <- function(inputs) {
+  split <- \(x) stringr::str_trim(unlist(stringr::str_split(x, ";")))
+  inputs$fair_shares |>
+    filter(!is.na(share_id)) |>
+    transmute(
+      share_id, measure = coalesce(measure, "count"), weight = coalesce(weight, 1),
+      slot = map(shifts, \(s) if (is_blank(s)) on_call_slots(inputs) else split(s)),
+      day_type = map(day_types, \(d) if (is_blank(d)) c("weekday", "weekend", "bank_holiday") else split(d))
+    ) |>
+    unnest(slot) |>
+    unnest(day_type) |>
+    left_join(select(inputs$cover, slot = shift_code, day_type, pa), by = c("slot", "day_type")) |>
+    mutate(size = if_else(measure == "pa", pa, 1)) |>
+    select(-pa)
 }

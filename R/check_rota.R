@@ -639,8 +639,9 @@ floor_saturday <- function(date) {
 }
 
 check_weekends <- function(si, inputs) {
-  hard_n <- rule_value(inputs, "WEEKEND_MAX")
-  target_n <- rule_value(inputs, "WEEKEND_TARGET")
+  # A doctor's own weekend_one_in replaces both limits; 1 is no limit
+  own <- set_names(inputs$staff$weekend_one_in, inputs$staff$doctor_id)
+  limit_for <- \(id, rule) coalesce(unname(own[id]), rule_value(inputs, rule))
 
   saturdays <- rota_dates(inputs)
   saturdays <- saturdays[lubridate::wday(saturdays, week_start = 1) == 6 &
@@ -658,16 +659,17 @@ check_weekends <- function(si, inputs) {
   bind_rows(
     if (rule_on(inputs, "WEEKEND_MAX")) {
       freq |>
-        filter(worked > total / hard_n) |>
+        mutate(one_in = limit_for(doctor_id, "WEEKEND_MAX")) |>
+        filter(worked > total / one_in) |>
         with(violations("WEEKEND_MAX", doctor_id, from, to,
-                        detail = paste0(detail, " (more than 1 in ", hard_n, ")")))
+                        detail = paste0(detail, " (more than 1 in ", one_in, ")")))
     },
     if (rule_on(inputs, "WEEKEND_TARGET")) {
       freq |>
-        mutate(excess = worked - floor(total / target_n)) |>
+        mutate(one_in = limit_for(doctor_id, "WEEKEND_TARGET"), excess = worked - floor(total / one_in)) |>
         filter(excess > 0) |>
         with(violations("WEEKEND_TARGET", doctor_id, from, to,
-                        detail = paste0(detail, " (", excess, " more than 1 in ", target_n, ")"),
+                        detail = paste0(detail, " (", excess, " more than 1 in ", one_in, ")"),
                         weight = excess))
     }
   )
@@ -731,6 +733,11 @@ check_requests <- function(si, inputs) {
 #'       when the `FAIR_SLOTS` rule is on: how many times each doctor filled
 #'       the slot (a 24-hour shift counts towards both slots it fills), and
 #'       their fair share among doctors who can work it.}
+#'     \item{one column per row of the `fair_shares` sheet, named by its
+#'       `share_id`, and `fair_<share_id>`}{Only when the `FAIR_SHARES` rule
+#'       is on: each doctor's shifts (or PAs, for a row measured in `pa`) of
+#'       the kinds the row counts, and their fair share among doctors who can
+#'       work any of its slots.}
 #'   }
 #'
 #' @export
@@ -839,7 +846,51 @@ doctor_summary <- function(si, inputs) {
       .by = pool
     ) |>
     select(-share, -night_share, -nights_exempt) |>
-    left_join(slot_summary(si, inputs), by = "doctor_id")
+    left_join(slot_summary(si, inputs), by = "doctor_id") |>
+    left_join(fair_share_summary(si, inputs), by = "doctor_id")
+}
+
+# With FAIR_SHARES on: for each row of the fair_shares sheet, each doctor's
+# total (shifts, or PAs from the cover sheet) and their fair share, split by
+# WTE x weeks in post within the pool among doctors who can work any of the
+# row's slots. Worked out from the rota's own dates and slots, not the model.
+fair_share_summary <- function(si, inputs) {
+  if (!rule_on(inputs, "FAIR_SHARES") || nrow(inputs$fair_shares) == 0) {
+    return(select(inputs$staff, doctor_id))
+  }
+  rows <- fair_share_slots(inputs)
+  totals <- rota_slots(si, inputs) |>
+    mutate(day_type = day_type(date, inputs)) |>
+    inner_join(select(rows, share_id, slot, day_type, size), by = c("slot", "day_type"),
+               relationship = "many-to-many") |>
+    summarise(n = sum(size), .by = c(doctor_id, share_id))
+  ids <- unique(rows$share_id)
+
+  fair_share_members(inputs) |>
+    left_join(select(inputs$staff, doctor_id, wte, start_date, end_date), by = "doctor_id") |>
+    mutate(pool = staff_pool(inputs)[match(doctor_id, inputs$staff$doctor_id)],
+           weeks = as.numeric(pmin(end_date, inputs$period$end) -
+                                pmax(start_date, inputs$period$start) + 1) / 7) |>
+    left_join(totals, by = c("doctor_id", "share_id")) |>
+    mutate(n = round(coalesce(n, 0), 2),
+           fair = round(wte * weeks / sum(wte * weeks) * sum(n), 1), .by = c(pool, share_id)) |>
+    mutate(share_id = factor(share_id, levels = ids)) |>
+    arrange(share_id) |>
+    pivot_wider(id_cols = doctor_id, names_from = share_id, values_from = c(n, fair),
+                names_glue = "{if_else(.value == 'n', '', 'fair_')}{share_id}", values_fill = 0) |>
+    right_join(select(inputs$staff, doctor_id), by = "doctor_id")
+}
+
+# Doctors who share each row of the fair_shares sheet: in post at some point
+# in the rota, and able to work at least one of the row's slots
+fair_share_members <- function(inputs) {
+  in_post <- inputs$staff$doctor_id[inputs$staff$start_date <= inputs$period$end &
+                                      inputs$staff$end_date >= inputs$period$start]
+  fair_share_slots(inputs) |>
+    distinct(share_id, slot) |>
+    inner_join(slot_eligible(inputs), by = "slot", relationship = "many-to-many") |>
+    filter(doctor_id %in% in_post) |>
+    distinct(share_id, doctor_id)
 }
 
 # With FAIR_SLOTS on: each doctor's count of each on-call cover slot (named

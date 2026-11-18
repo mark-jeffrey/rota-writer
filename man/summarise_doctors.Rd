@@ -40,6 +40,11 @@ the nights.}
 when the \code{FAIR_SLOTS} rule is on: how many times each doctor filled
 the slot (a 24-hour shift counts towards both slots it fills), and
 their fair share among doctors who can work it.}
+\item{one column per row of the \code{fair_shares} sheet, named by its
+\code{share_id}, and \verb{fair_<share_id>}}{Only when the \code{FAIR_SHARES} rule
+is on: each doctor's shifts (or PAs, for a row measured in \code{pa}) of
+the kinds the row counts, and their fair share among doctors who can
+work any of its slots.}
 }
 }
 \description{

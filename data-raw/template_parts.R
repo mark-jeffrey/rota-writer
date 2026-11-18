@@ -69,6 +69,7 @@ rule_library <- tribble(
   "BLOCK_REST",         "Rest before and after the big blocks in the block_rest sheet (per shift in the rest)", NA, "", "soft", 1000, "Y",
   "CONSEC_NIGHT_WEEKS", "Nights in two Mon-Sun weeks running (per pair of weeks)",   NA,     "",         "soft",     500,     "Y",
   "FAIR_SLOTS",         "1st on, 2nd on and nights close to WTE-weighted share",     NA,     "",         "soft",     10,      "Y",
+  "FAIR_SHARES",        "Each row of the fair_shares sheet close to WTE-weighted share (weight per row)", NA, "", "soft", 1, "Y",
   "PREFERENCES",        "Standing preferences (weight per row in preferences sheet)", NA,    "",         "soft",     1,       "Y"
 )
 
@@ -98,6 +99,7 @@ leave_statuses <- c("approved", "requested")
 request_types <- c("no_oncall", "no_night", "no_weekend", "prefer_oncall")
 preference_types <- c("prefer_shift", "avoid_shift", "day_off", "prefer_pattern", "avoid_pattern")
 open_to_values <- c("all", "preference")
+share_measures <- c("count", "pa")
 
 # Workbook ----------------------------------------------------------------
 
@@ -142,6 +144,7 @@ sheet_guide <- tribble(
   "requests",          "edit",  "One-off requests for a date, such as no night or no on-call",
   "preferences",       "edit",  "Standing preferences, such as a usual day off or a preferred shift",
   "rules",             "rules", "Every rule: its limit, whether it is hard or soft, its weight and whether it is on",
+  "fair_shares",       "rules", "Kinds of work shared out in proportion to WTE, counted in shifts or PAs, with a weight each",
   "grades",            "setup", "Grades in order of seniority, for the skill mix rules",
   "shifts",            "setup", "Every shift: role, type, start and end times and hours",
   "cover",             "setup", "How many doctors each shift needs on weekdays, weekends and bank holidays",
@@ -194,6 +197,7 @@ column_notes <- tribble(
   "cover",             "day_type",           "weekday, weekend or bank_holiday.",
   "cover",             "n_min",              "Fewest doctors needed.",
   "cover",             "n_max",              "Most doctors allowed. Blank: no limit. Equal to n_min for on-call.",
+  "cover",             "pa",                 "Programmed activities one shift is worth on this day type, for fair_shares rows measured in pa. Blank: not counted in PAs.",
   "bank_holidays",     "name",               "The bank holiday's name.",
   "staff",             "doctor_id",          "A short unique ID, used in every other sheet.",
   "staff",             "name",               "The doctor's name, as shown on the rota.",
@@ -206,6 +210,7 @@ column_notes <- tribble(
   "staff",             "end_date",           "Last day in post (dd/mm/yyyy).",
   "staff",             "nights_exempt",      "Y: never rostered nights.",
   "staff",             "opted_out_wtr",      "Y: opted out of the Working Time Regulations 48-hour average.",
+  "staff",             "weekend_one_in",     "This doctor's own weekend limit, 1 in N, in place of WEEKEND_MAX and WEEKEND_TARGET. 1: no limit. Blank: the rules sheet's.",
   "staff",             "other_department",   "Where the rest of their time goes. For people; not read by the solver.",
   "staff",             "can_*",              "Y: signed off to work this role.",
   "placements",        "placement",          "The placement, as in the placement_roles sheet.",
@@ -232,7 +237,12 @@ column_notes <- tribble(
   "pattern_sequences", "to_pattern",         "The pattern worked in full the week after.",
   "block_rest",        "shifts",             "Shift codes that make the block, separated by ;. Blank: any shift in its slot.",
   "block_rest",        "rest_before_h",      "Hours off before the block.",
-  "block_rest",        "rest_after_h",       "Hours off after the block."
+  "block_rest",        "rest_after_h",       "Hours off after the block.",
+  "fair_shares",       "share_id",           "A short ID for this share. It names the doctors summary's columns, e.g. WE_DAYS and fair_WE_DAYS.",
+  "fair_shares",       "shifts",             "Cover slots (shift codes) counted, separated by ;. A 24-hour shift counts for each slot it fills. Blank: every on-call slot.",
+  "fair_shares",       "day_types",          "weekday, weekend or bank_holiday, separated by ;, by the day the shift starts. Blank: every day.",
+  "fair_shares",       "measure",            "count: each shift counts 1. pa: each counts its PAs from the cover sheet's pa column.",
+  "fair_shares",       "weight",             "Penalty per shift (or PA) away from the fair share, rising the further away. Higher matters more."
 )
 
 # Drop-downs every inputs workbook gets, by column name
@@ -242,7 +252,7 @@ standard_dropdowns <- list(
   open_to = open_to_values, day_type = day_types, nights_exempt = yes_no,
   opted_out_wtr = yes_no, ltft_fixed_day_off = c("Mon", "Tue", "Wed", "Thu", "Fri"),
   leave_type = leave_types, status = leave_statuses, request = request_types,
-  preference = preference_types
+  preference = preference_types, measure = share_measures
 )
 
 # Drop-downs that list another sheet's column, so a typo can't get in and a

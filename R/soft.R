@@ -127,9 +127,9 @@ weekend_target_part <- function(weekend, inputs) {
   if (weight == 0) {
     return(NULL)
   }
-  one_in <- rule_value(inputs, "WEEKEND_TARGET")
   allowed <- counted_weekends(inputs) |>
     count(doctor_id, name = "total") |>
+    mutate(one_in = weekend_one_in(inputs, "WEEKEND_TARGET")[match(doctor_id, inputs$staff$doctor_id)]) |>
     transmute(doctor_id, allowed = floor(total / one_in), aux = paste("WEEKEND_TARGET", doctor_id))
   worked <- weekend |>
     filter(counted) |>
@@ -375,18 +375,22 @@ split_weekend_part <- function(x, inputs) {
 #
 # Items may have a `group` column (e.g. the cover slot for FAIR_SLOTS) to
 # share each group separately.
-fair_part <- function(items, inputs, rule, steps = 3) {
-  weight <- soft_weight(inputs, rule)
+fair_part <- function(items, inputs, rule, steps = 3, weight = soft_weight(inputs, rule),
+                      members = NULL) {
   if (weight == 0 || nrow(items) == 0) {
     return(NULL)
   }
   if (!"group" %in% names(items)) {
     items$group <- ""
   }
+  # What each item counts for: 1 shift, or its size (e.g. PAs)
+  if (!"size" %in% names(items)) {
+    items$size <- 1
+  }
   in_group <- \(key, group) if_else(group == "", key, paste(key, group))
   share <- inputs$staff |>
     mutate(pool = staff_pool(inputs)) |>
-    inner_join(distinct(items, doctor_id, group), by = "doctor_id") |>
+    inner_join(members %||% distinct(items, doctor_id, group), by = "doctor_id") |>
     mutate(
       weeks = as.numeric(pmin(end_date, inputs$period$end) - pmax(start_date, inputs$period$start) + 1) / 7,
       share = wte * weeks / sum(wte * weeks),
@@ -406,15 +410,49 @@ fair_part <- function(items, inputs, rule, steps = 3) {
     vars = bind_rows(aux_vars(totals$total, upper = Inf), aux_vars(segments$aux, upper = segments$upper)),
     terms = bind_rows(
       # pool total = sum of the pool's items
-      transmute(items, con = total, j, coef = 1),
+      transmute(items, con = total, j, coef = size),
       transmute(totals, con = total, aux = total, coef = -1),
       # count - share x pool total - over + under = 0
-      transmute(items, con, j, coef = 1),
+      transmute(items, con, j, coef = size),
       transmute(share, con, aux = total, coef = -share),
       transmute(segments, con, aux, coef = -dir)
     ) |>
       mutate(rule = rule, lo = 0, hi = 0),
     costs = transmute(segments, rule = rule, aux, coef = cost)
+  )
+}
+
+# One fairness part per row of the fair_shares sheet, each with its own
+# weight: the slots it counts, on the day types it counts, each worth 1 or
+# its PA value. A 24-hour shift filling 2nd on and the night counts for
+# both. The share is split among the doctors who can work any of the
+# row's slots, as in summarise_doctors().
+fair_shares_part <- function(x, inputs) {
+  if (soft_weight(inputs, "FAIR_SHARES") == 0) {
+    return(NULL)
+  }
+  rows <- fair_share_slots(inputs)
+  items <- x |>
+    inner_join(shift_covers(inputs$shifts), by = "shift_code", relationship = "many-to-many") |>
+    mutate(day_type = day_type(date, inputs)) |>
+    inner_join(select(rows, share_id, slot, day_type, size), by = c("slot", "day_type"),
+               relationship = "many-to-many") |>
+    mutate(group = share_id)
+  members <- fair_share_members(inputs) |>
+    transmute(doctor_id, group = share_id)
+
+  parts <- rows |>
+    distinct(share_id, weight) |>
+    pmap(\(share_id, weight) {
+      fair_part(filter(items, group == share_id), inputs, "FAIR_SHARES",
+                weight = weight * soft_weight(inputs, "FAIR_SHARES"),
+                members = filter(members, group == share_id))
+    }) |>
+    compact()
+  list(
+    vars = list_rbind(map(parts, "vars")),
+    terms = list_rbind(map(parts, "terms")),
+    costs = list_rbind(map(parts, "costs"))
   )
 }
 

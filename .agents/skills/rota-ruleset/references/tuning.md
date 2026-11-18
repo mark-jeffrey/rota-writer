@@ -28,6 +28,7 @@ amount of harm, in the units below.
 | `SPLIT_WEEKEND` | a weekend with only one day worked |
 | `WEEKEND_TARGET` | a weekend above the 1-in-N target |
 | `FAIR_*` | the *k*-th shift away from a person's WTE share costs (2*k* − 1) × weight for *k* ≤ 3, then 7 × weight per further shift. So two people 1 off (2×) is cheaper than one person 2 off (4×). |
+| `FAIR_SHARES` | the same, per row of `fair_shares` × its row weight. For a row measured in `pa` the unit is one PA, not one shift: a 2.5-PA shift 1 off costs about 6× the row weight. |
 | `HOURS_TARGET` | an hour short: (2*k* − 1) × weight per hour for the *k*-th normal day short; an hour over costs 10 × weight |
 | `NORMAL_DAY_SPREAD` | a doctor-day away from the median staffing for that day type |
 

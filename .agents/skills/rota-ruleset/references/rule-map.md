@@ -45,7 +45,7 @@ isn't here, check `rule_registry()` in `R/rules.R` before calling it a gap.
 | Rest between shifts | `MIN_REST` | 11 h. For consultants, 11 h also gives "off the day after a night". |
 | Consecutive shifts / long shifts / late shifts, then rest | `MAX_CONSEC_SHIFTS`, `MAX_CONSEC_LONG`, `MAX_CONSEC_LATE`, `REST_AFTER_RUN` | 7 / 4 / 4, then 48 h |
 | Consecutive nights, then rest | `MAX_CONSEC_NIGHTS`, `REST_AFTER_NIGHTS` | 4, then 46 h |
-| Weekend frequency | `WEEKEND_MAX` | 1 in N (2 under the TCS; 3 in the consultant example) |
+| Weekend frequency | `WEEKEND_MAX` | 1 in N (2 under the TCS; 3 in the consultant example). `staff$weekend_one_in` sets one person's own N (1 = no limit). |
 | Approved leave | `leave` with `status` = `approved` (`LEAVE_APPROVED`) | |
 | Never X the day before Y | `sequences` row with a blank weight (`SEQUENCE`) | `days_after` counts days |
 
@@ -79,6 +79,7 @@ listed ones apply. Change a limit through its `value` in `rules`, never in code.
 | Standing preferences: prefer or avoid a shift, a regular day off, prefer or avoid a pattern | `preferences` sheet (`PREFERENCES`) | occurrence × row weight |
 | Share on-calls / nights / weekends evenly | `FAIR_ONCALL`, `FAIR_NIGHTS`, `FAIR_WEEKENDS` | roughly quadratic in the distance from the WTE share |
 | Share each slot evenly (1st on, 2nd on, nights, …) | `FAIR_SLOTS` | as above, per slot |
+| Share particular kinds of work (weekend days, weekend nights, bank holidays, a slot) or total programmed activities (PAs) | `fair_shares` sheet (slots, day types, `count` or `pa`, weight per row) + `cover$pa` + `FAIR_SHARES` | as above, per shift or PA, × row weight |
 | Hours close to contracted | `HOURS_TARGET` | hour short (rising); hour over at 10× |
 | Normal days spread evenly over the rota | `NORMAL_DAY_SPREAD` | doctor-day away from the median |
 
