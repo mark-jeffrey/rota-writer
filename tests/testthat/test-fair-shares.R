@@ -72,6 +72,10 @@ test_that("fair shares count shifts and PAs by slot and day type", {
   expect_equal(c(row("C03")$WE_NIGHTS, row("C03")$WE_DAYS), c(1, 0))
   expect_equal(row("C04")$BH, 1)
   expect_equal(row("C02")$BH, 0)
+  # The 24-hour shift fills two slots, so it is two on-calls
+  expect_equal(row("C02")$on_calls, 2)
+  expect_equal(row("C01")$on_calls, 2)
+  expect_equal(sum(d$fair_on_calls), sum(d$on_calls), tolerance = 0.5)
   # Shares follow WTE: C01 is full time, C02 three quarters
   expect_equal(sum(d$fair_FIRST), 2, tolerance = 0.5)
   expect_equal(row("C01")$fair_PAS / row("C02")$fair_PAS, 1 / 0.75, tolerance = 0.05)

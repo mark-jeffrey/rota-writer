@@ -724,7 +724,9 @@ check_requests <- function(si, inputs) {
 #'       their LTFT day off), counted as a normal day each.}
 #'     \item{avg_weekly_hours}{`hours + leave_hours` per week in post. This is
 #'       what `AVG_HOURS` limits and what `contracted_hours` is compared with.}
-#'     \item{on_calls, nights, weekends}{Counts. A weekend is worked if any
+#'     \item{on_calls, nights, weekends}{Counts. An on-call shift filling
+#'       several cover slots (its `covers`) counts once per slot, so a 24-hour
+#'       2nd on into the night is two on-calls. A weekend is worked if any
 #'       shift falls between 00:00 Saturday and 24:00 Sunday.}
 #'     \item{fair_on_calls, fair_nights, fair_weekends}{WTE-weighted fair
 #'       share of the pool's total. Nights-exempt doctors have no share of
@@ -816,8 +818,12 @@ summarise_patterns <- function(rota, inputs) {
 }
 
 doctor_summary <- function(si, inputs) {
+  # A shift filling several cover slots (a 24-hour 2nd on + night) is that
+  # many on-calls, so the on-call count matches the cover given
+  n_slots <- count(shift_covers(inputs$shifts), shift_code, name = "n_slots")
   counts <- si |>
-    summarise(hours = sum(hours), on_calls = sum(is_on_call), nights = sum(is_night),
+    left_join(n_slots, by = c(code = "shift_code")) |>
+    summarise(hours = sum(hours), on_calls = sum(is_on_call * n_slots), nights = sum(is_night),
               .by = doctor_id)
   weekends <- count(weekends_worked(si), doctor_id, name = "weekends")
 

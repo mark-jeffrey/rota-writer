@@ -31,7 +31,9 @@ the doctor would otherwise work (weekdays other than bank holidays and
 their LTFT day off), counted as a normal day each.}
 \item{avg_weekly_hours}{\code{hours + leave_hours} per week in post. This is
 what \code{AVG_HOURS} limits and what \code{contracted_hours} is compared with.}
-\item{on_calls, nights, weekends}{Counts. A weekend is worked if any
+\item{on_calls, nights, weekends}{Counts. An on-call shift filling
+several cover slots (its \code{covers}) counts once per slot, so a 24-hour
+2nd on into the night is two on-calls. A weekend is worked if any
 shift falls between 00:00 Saturday and 24:00 Sunday.}
 \item{fair_on_calls, fair_nights, fair_weekends}{WTE-weighted fair
 share of the pool's total. Nights-exempt doctors have no share of
